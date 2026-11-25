@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa Mental · Tarefas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --preto:#0B0C12;
+    --bg:#11121B;
+    --surface:#1A1B29;
+    --surface2:#2D2E47;
+    --line:#383A58;
+    --azul:#3E7996;
+    --azul-escuro:#2F5F77;
+    --azul-claro:#6FA3BE;
+    --azul-palido:#B9D6E4;
+    --branco:#FFFFFF;
+    --texto:#E9EBF3;
+    --muted:#9496B0;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--texto);font-family:'DM Sans',system-ui,sans-serif;font-size:15px;min-height:100vh}
+  h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif;letter-spacing:-.01em}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit}
+  input,textarea,select{font-family:inherit;font-size:15px}
+  .hidden{display:none!important}
+
+  /* ---------- AUTH ---------- */
+  .auth-wrap{min-height:100vh;display:grid;place-items:center;padding:24px;
+    background:radial-gradient(1200px 600px at 10% -10%, rgba(62,121,150,.35), transparent 60%),
+               radial-gradient(900px 500px at 110% 110%, rgba(45,46,71,.9), transparent 60%), var(--preto)}
+  .auth-card{width:100%;max-width:400px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:32px 28px;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+  .brand{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+  .brand-mark{width:42px;height:42px;border-radius:12px;background:var(--azul);display:grid;place-items:center}
+  .brand-mark svg{width:24px;height:24px}
+  .brand h1{font-size:20px;color:var(--branco)}
+  .brand small{display:block;color:var(--muted);font-size:12px;font-family:'DM Sans'}
+  .auth-card h2{font-size:22px;color:var(--branco);margin-bottom:6px}
+  .auth-card p.sub{color:var(--muted);font-size:14px;margin-bottom:22px;line-height:1.45}
+  .tag-first{display:inline-block;background:rgba(62,121,150,.18);color:var(--azul-palido);border:1px solid rgba(62,121,150,.5);border-radius:99px;padding:4px 10px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px}
+
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
+  .input{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--branco);border-radius:10px;padding:11px 13px;outline:none;transition:border .15s}
+  .input:focus{border-color:var(--azul-claro)}
+  textarea.input{resize:vertical;min-height:70px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 18px;border-radius:10px;font-weight:600;transition:background .15s,opacity .15s}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .btn-primary{background:var(--azul);color:var(--branco)}
+  .btn-primary:hover:not(:disabled){background:var(--azul-claro)}
+  .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--texto)}
+  .btn-ghost:hover{background:var(--surface2)}
+  .btn-danger{background:transparent;border:1px solid #6b3a4a;color:#e8b4c0}
+  .btn-danger:hover{background:#3a2030}
+  .btn-block{width:100%}
+  .msg{font-size:13px;margin-top:10px;min-height:18px;color:var(--azul-palido)}
+  .msg.err{color:#f0a3b3}
+
+  /* ---------- APP ---------- */
+  header.top{position:sticky;top:0;z-index:20;background:rgba(17,18,27,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .top-inner{max-width:980px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:16px}
+  .top-inner .brand{margin:0}
+  .top-inner .brand h1{font-size:17px}
+  .tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);padding:4px;border-radius:12px;margin-left:auto}
+  .tab{padding:8px 14px;border-radius:9px;font-weight:600;font-size:14px;color:var(--muted)}
+  .tab.active{background:var(--surface2);color:var(--branco)}
+  .icon-btn{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;color:var(--muted);border:1px solid transparent}
+  .icon-btn:hover{background:var(--surface2);color:var(--branco)}
+  .icon-btn svg{width:18px;height:18px}
+  .user-chip{display:flex;align-items:center;gap:8px}
+  .avatar{width:34px;height:34px;border-radius:50%;background:var(--surface2);display:grid;place-items:center;font-weight:700;color:var(--azul-palido);font-family:'Space Grotesk'}
+
+  main{max-width:980px;margin:0 auto;padding:24px 20px 120px}
+
+  .daybar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+  .daynav{display:flex;align-items:center;gap:6px}
+  .day-title{font-size:26px;color:var(--branco);line-height:1.1}
+  .day-title small{display:block;font-family:'DM Sans';font-size:13px;color:var(--muted);font-weight:500;margin-top:4px}
+  .pill{padding:7px 12px;border-radius:99px;border:1px solid var(--line);font-size:13px;font-weight:600;color:var(--texto)}
+  .pill:hover{background:var(--surface2)}
+  .pill.on{background:var(--azul);border-color:var(--azul);color:var(--branco)}
+  .date-input{position:relative}
+  .date-input input{position:absolute;inset:0;opacity:0;cursor:pointer}
+
+  .progress-card{background:linear-gradient(135deg,var(--surface2),var(--surface));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;display:flex;align-items:center;gap:20px;margin-bottom:18px}
+  .progress-num{font-family:'Space Grotesk';font-size:34px;font-weight:700;color:var(--branco);min-width:90px}
+  .progress-num span{font-size:16px;color:var(--muted);font-weight:500}
+  .progress-track{flex:1;height:8px;background:var(--bg);border-radius:99px;overflow:hidden}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--azul),var(--azul-palido));border-radius:99px;transition:width .4s}
+  .progress-meta{font-size:13px;color:var(--muted);margin-top:8px;display:flex;gap:14px;flex-wrap:wrap}
+
+  .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+
+  .section-title{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:26px 0 10px}
+  .section-title .count{background:var(--surface2);color:var(--azul-palido);padding:2px 8px;border-radius:99px;font-size:11px}
+  .section-title::after{content:"";flex:1;height:1px;background:var(--line)}
+
+  .task{position:relative;display:flex;gap:14px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px 14px 18px;margin-bottom:8px;overflow:hidden;transition:border .15s,opacity .2s}
+  .task:hover{border-color:#4a4d72}
+  .task::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--pcolor,var(--line))}
+  .task.p-alta{--pcolor:var(--branco)}
+  .task.p-media{--pcolor:var(--azul-claro)}
+  .task.p-baixa{--pcolor:#4b4e72}
+  .task.done{opacity:.55}
+  .task.done .t-title{text-decoration:line-through;text-decoration-color:var(--muted)}
+  .task.suggest{border-style:dashed;background:transparent}
+  .task.late{border-color:#6a6d98}
+
+  .check{flex:none;width:24px;height:24px;border-radius:50%;border:2px solid var(--azul-claro);display:grid;place-items:center;margin-top:1px;transition:background .15s}
+  .check:hover{background:rgba(62,121,150,.25)}
+  .check svg{width:14px;height:14px;opacity:0}
+  .check.on{background:var(--azul);border-color:var(--azul)}
+  .check.on svg{opacity:1}
+  .check.half{border-color:var(--azul-palido);background:linear-gradient(90deg,var(--azul) 50%,transparent 50%)}
+
+  .t-body{flex:1;min-width:0}
+  .t-title{font-weight:600;color:var(--branco);font-size:15.5px;line-height:1.35;word-wrap:break-word}
+  .t-desc{color:var(--muted);font-size:13.5px;margin-top:4px;line-height:1.45;white-space:pre-wrap;word-wrap:break-word}
+  .t-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;align-items:center}
+  .badge{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:3px 8px;border-radius:6px;background:var(--surface2);color:var(--azul-palido)}
+  .badge.outline{background:transparent;border:1px solid var(--line);color:var(--muted)}
+  .badge.strong{background:var(--branco);color:var(--preto)}
+  .badge.blue{background:var(--azul);color:var(--branco)}
+  .prio{display:inline-flex;align-items:flex-end;gap:2px;height:12px;margin-right:2px}
+  .prio i{display:block;width:3px;border-radius:1px;background:var(--line)}
+  .prio i:nth-child(1){height:5px}.prio i:nth-child(2){height:8px}.prio i:nth-child(3){height:12px}
+  .prio.l1 i:nth-child(1),.prio.l2 i:nth-child(-n+2),.prio.l3 i{background:currentColor}
+
+  .t-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+  .mini{font-size:12.5px;font-weight:600;padding:6px 11px;border-radius:8px;border:1px solid var(--line);color:var(--texto)}
+  .mini:hover{background:var(--surface2)}
+  .mini.primary{background:var(--azul);border-color:var(--azul);color:var(--branco)}
+  .mini.primary:hover{background:var(--azul-claro)}
+  .t-side{display:flex;gap:2px;flex:none}
+  .t-side .icon-btn{width:32px;height:32px}
+  .t-side .icon-btn svg{width:16px;height:16px}
+  .note{margin-top:8px;font-size:12.5px;color:var(--azul-palido);background:rgba(62,121,150,.12);border-left:2px solid var(--azul);padding:6px 10px;border-radius:0 6px 6px 0}
+
+  .empty{text-align:center;padding:50px 20px;color:var(--muted);border:1px dashed var(--line);border-radius:var(--radius)}
+  .empty h3{color:var(--branco);font-size:18px;margin-bottom:6px}
+
+  .fab{position:fixed;right:24px;bottom:24px;z-index:30;background:var(--azul);color:var(--branco);border-radius:16px;padding:15px 22px;font-weight:700;display:flex;align-items:center;gap:8px;box-shadow:0 12px 30px rgba(62,121,150,.4)}
+  .fab:hover{background:var(--azul-claro)}
+  .fab svg{width:20px;height:20px}
+
+  /* ---------- MODAL ---------- */
+  .overlay{position:fixed;inset:0;background:rgba(5,6,10,.7);backdrop-filter:blur(4px);z-index:50;display:grid;place-items:center;padding:16px;animation:fade .15s}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  .modal{width:100%;max-width:520px;max-height:92vh;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px}
+  .modal h2{font-size:20px;color:var(--branco);margin-bottom:18px}
+  .modal-foot{display:flex;justify-content:flex-end;gap:10px;margin-top:22px}
+  .seg{display:grid;gap:6px}
+  .seg.four{grid-template-columns:repeat(4,1fr)}
+  .seg.three{grid-template-columns:repeat(3,1fr)}
+  .seg button{border:1px solid var(--line);border-radius:10px;padding:10px 6px;font-size:13px;font-weight:600;color:var(--muted);background:var(--bg);text-align:center}
+  .seg button.on{border-color:var(--azul-claro);color:var(--branco);background:rgba(62,121,150,.22)}
+  .seg button small{display:block;font-weight:400;font-size:11px;margin-top:2px;opacity:.8}
+  .help{font-size:12.5px;color:var(--muted);margin-top:8px;line-height:1.45}
+  .days{display:flex;gap:6px}
+  .days button{flex:1;aspect-ratio:1;max-width:46px;border-radius:10px;border:1px solid var(--line);background:var(--bg);font-weight:700;color:var(--muted)}
+  .days button.on{background:var(--azul);border-color:var(--azul);color:var(--branco)}
+  .quick{display:flex;gap:6px;margin-top:8px}
+  .quick button{font-size:12px;color:var(--azul-palido);padding:4px 8px;border-radius:6px;border:1px solid var(--line)}
+
+  /* ---------- LIST (todas) ---------- */
+  .list-row{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:6px}
+  .list-row.off{opacity:.45}
+  .list-row .t-body .t-title{font-size:14.5px}
+  .switch{width:38px;height:22px;border-radius:99px;background:var(--line);position:relative;flex:none;transition:background .15s}
+  .switch::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--branco);transition:left .15s}
+  .switch.on{background:var(--azul)}
+  .switch.on::after{left:19px}
+
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--branco);color:var(--preto);padding:10px 18px;border-radius:10px;font-weight:600;font-size:14px;z-index:80;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+  .loader{min-height:100vh;display:grid;place-items:center;color:var(--muted)}
+  .spin{width:30px;height:30px;border:3px solid var(--line);border-top-color:var(--azul-claro);border-radius:50%;animation:sp 0.8s linear infinite;margin:0 auto 12px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+
+  @media (max-width:640px){
+    .top-inner{flex-wrap:wrap;padding:12px 14px}
+    .tabs{order:3;width:100%;margin-left:0}
+    .tab{flex:1}
+    .top-inner .brand small{display:none}
+    main{padding:18px 14px 110px}
+    .day-title{font-size:22px}
+    .progress-card{flex-direction:column;align-items:stretch;gap:10px}
+    .seg.four{grid-template-columns:repeat(2,1fr)}
+    .fab{right:16px;bottom:16px;padding:14px 18px}
+    .row2{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<div id="root"><div class="loader"><div><div class="spin"></div>Carregando…</div></div></div>
+
+<script>
+/* =========================================================
+   CONFIGURAÇÃO
+   ========================================================= */
+const DB_URL = 'https://mapa-mental-18977-default-rtdb.firebaseio.com';
+const SESSAO_KEY = 'mapaMental.sessao';
+
+/* =========================================================
+   FIREBASE (REST)
+   ========================================================= */
+async function api(path, method = 'GET', body) {
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body !== undefined) opts.body = JSON.stringify(body);
+  const r = await fetch(`${DB_URL}/${path}.json`, opts);
+  if (!r.ok) throw new Error(`Erro ${r.status} ao acessar o banco`);
+  return r.json();
+}
+
+/* =========================================================
+   UTILITÁRIOS
+   ========================================================= */
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad = n => String(n).padStart(2, '0');
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const parseD = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+const addDays = (s, n) => { const d = parseD(s); d.setDate(d.getDate() + n); return ymd(d); };
+const diffDays = (a, b) => Math.round((parseD(b) - parseD(a)) / 864e5);
+const hoje = () => ymd(new Date());
+const fmtCurta = s => parseD(s).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+const novoId = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const DIAS_CURTO = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
+const DIAS_NOME = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+const PRIO = { alta: { n: 'Alta', l: 3, o: 0 }, media: { n: 'Média', l: 2, o: 1 }, baixa: { n: 'Baixa', l: 1, o: 2 } };
+const TIPOS = { diaria: 'Diária', unica: 'Única', complexa: 'Complexa', sugestiva: 'Sugestiva' };
+
+async function sha256(txt) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(txt));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+const novoSalt = () => [...crypto.getRandomValues(new Uint8Array(16))].map(b => b.toString(16).padStart(2, '0')).join('');
+
+function lsGet(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }
+function lsSet(k, v) { try { v === null ? localStorage.removeItem(k) : localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+
+function toast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast'; t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2200);
+}
+
+const ICON = {
+  logo: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><circle cx="4.5" cy="5.5" r="2"/><circle cx="19.5" cy="5.5" r="2"/><circle cx="4.5" cy="18.5" r="2"/><circle cx="19.5" cy="18.5" r="2"/><path d="M6 7l3.8 3M18 7l-3.8 3M6 17l3.8-3M18 17l-3.8-3"/></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  prev: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>',
+  next: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>',
+  cal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>',
+  edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>',
+  trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>',
+  plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>',
+  out: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>',
+  undo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 010 10h-3"/></svg>',
+};
+const prioHTML = p => `<span class="badge outline" style="color:${p === 'alta' ? 'var(--branco)' : p === 'media' ? 'var(--azul-claro)' : 'var(--muted)'}"><span class="prio l${PRIO[p].l}"><i></i><i></i><i></i></span>${PRIO[p].n}</span>`;
+const brandHTML = sub => `<div class="brand"><div class="brand-mark">${ICON.logo}</div><div><h1>Mapa Mental</h1><small>${sub}</small></div></div>`;
+
+/* =========================================================
+   ESTADO
+   ========================================================= */
+const S = {
+  user: null,
+  tarefas: {},
+  registros: {},          // registros[YYYY-MM-DD][tarefaId]
+  dia: hoje(),
+  view: 'dia',            // 'dia' | 'todas'
+  filtro: 'todas',        // prioridade
+};
+
+/* =========================================================
+   INICIALIZAÇÃO / AUTENTICAÇÃO
+   ========================================================= */
+async function boot() {
+  try {
+    const config = await api('config');
+    if (!config || !config.adminId) return telaPrimeiroAcesso();
+    const sessao = lsGet(SESSAO_KEY);
+    if (sessao && sessao.id) {
+      const u = await api(`usuarios/${sessao.id}`);
+      if (u && u.hash === sessao.h) { S.user = { id: sessao.id, ...u }; return iniciarApp(); }
+    }
+    telaLogin();
+  } catch (e) {
+    $('#root').innerHTML = `<div class="auth-wrap"><div class="auth-card">${brandHTML('Organizador de tarefas')}
+      <h2>Não foi possível conectar</h2><p class="sub">${esc(e.message)}. Verifique a internet e se as regras do Firebase permitem leitura e escrita.</p>
+      <button class="btn btn-primary btn-block" onclick="location.reload()">Tentar novamente</button></div></div>`;
+  }
+}
+
+function telaPrimeiroAcesso() {
+  $('#root').innerHTML = `
+  <div class="auth-wrap"><form class="auth-card" id="fReg" autocomplete="off">
+    ${brandHTML('Organizador de tarefas')}
+    <span class="tag-first">Primeiro acesso</span>
+    <h2>Criar login administrativo</h2>
+    <p class="sub">Este cadastro só aparece uma vez. Depois dele, o acesso será sempre pela tela de login.</p>
+    <div class="field"><label>Nome</label><input class="input" name="nome" required></div>
+    <div class="field"><label>E-mail</label><input class="input" type="email" name="email" required></div>
+    <div class="field"><label>Usuário</label><input class="input" name="usuario" required pattern="[A-Za-z0-9._\\-]{3,}" title="Mínimo 3 caracteres, sem espaços"></div>
+    <div class="row2">
+      <div class="field"><label>Senha</label><input class="input" type="password" name="senha" required minlength="6"></div>
+      <div class="field"><label>Confirmar</label><input class="input" type="password" name="senha2" required minlength="6"></div>
+    </div>
+    <button class="btn btn-primary btn-block" type="submit">Criar administrador</button>
+    <div class="msg" id="msg"></div>
+  </form></div>`;
+  $('#fReg').onsubmit = async ev => {
+    ev.preventDefault();
+    const f = Object.fromEntries(new FormData(ev.target));
+    const msg = $('#msg'); msg.className = 'msg';
+    if (f.senha !== f.senha2) { msg.className = 'msg err'; msg.textContent = 'As senhas não conferem.'; return; }
+    const btn = ev.target.querySelector('button'); btn.disabled = true; msg.textContent = 'Criando…';
+    try {
+      const cfg = await api('config');
+      if (cfg && cfg.adminId) { msg.className = 'msg err'; msg.textContent = 'Já existe um administrador. Recarregando…'; return setTimeout(() => location.reload(), 1200); }
+      const id = novoId('u_'), salt = novoSalt();
+      const u = { nome: f.nome.trim(), email: f.email.trim().toLowerCase(), usuario: f.usuario.trim().toLowerCase(),
+                  perfil: 'admin', salt, hash: await sha256(salt + f.senha), criadoEm: Date.now() };
+      await api(`usuarios/${id}`, 'PUT', u);
+      await api('config', 'PUT', { adminId: id, criadoEm: Date.now() });
+      S.user = { id, ...u };
+      lsSet(SESSAO_KEY, { id, h: u.hash });
+      iniciarApp();
+    } catch (e) { btn.disabled = false; msg.className = 'msg err'; msg.textContent = e.message; }
+  };
+}
+
+function telaLogin() {
+  $('#root').innerHTML = `
+  <div class="auth-wrap"><form class="auth-card" id="fLog">
+    ${brandHTML('Organizador de tarefas')}
+    <h2>Entrar</h2>
+    <p class="sub">Use seu usuário ou e-mail.</p>
+    <div class="field"><label>Usuário ou e-mail</label><input class="input" name="login" required autofocus></div>
+    <div class="field"><label>Senha</label><input class="input" type="password" name="senha" required></div>
+    <button class="btn btn-primary btn-block" type="submit">Entrar</button>
+    <div class="msg" id="msg"></div>
+  </form></div>`;
+  $('#fLog').onsubmit = async ev => {
+    ev.preventDefault();
+    const f = Object.fromEntries(new FormData(ev.target));
+    const msg = $('#msg'); const btn = ev.target.querySelector('button');
+    btn.disabled = true; msg.className = 'msg'; msg.textContent = 'Verificando…';
+    try {
+      const users = await api('usuarios') || {};
+      const login = f.login.trim().toLowerCase();
+      const entry = Object.entries(users).find(([, u]) => u.usuario === login || u.email === login);
+      if (!entry || (await sha256(entry[1].salt + f.senha)) !== entry[1].hash) throw new Error('Usuário ou senha incorretos.');
+      S.user = { id: entry[0], ...entry[1] };
+      lsSet(SESSAO_KEY, { id: entry[0], h: entry[1].hash });
+      iniciarApp();
+    } catch (e) { btn.disabled = false; msg.className = 'msg err'; msg.textContent = e.message; }
+  };
+}
+
+function sair() { lsSet(SESSAO_KEY, null); S.user = null; location.reload(); }
+
+/* =========================================================
+   DADOS
+   ========================================================= */
+async function carregarTarefas() { S.tarefas = await api('tarefas') || {}; }
+async function carregarRegistros(dia) { S.registros[dia] = await api(`registros/${dia}`) || {}; }
+
+async function iniciarApp() {
+  $('#root').innerHTML = `<div class="loader"><div><div class="spin"></div>Carregando tarefas…</div></div>`;
+  await Promise.all([carregarTarefas(), carregarRegistros(S.dia)]);
+  render();
+}
+
+async function irParaDia(d) {
+  S.dia = d;
+  if (!S.registros[d]) { render(); await carregarRegistros(d); }
+  render();
+}
+
+// Sincroniza quando a aba volta a ficar visível (ex.: usou em outro dispositivo)
+document.addEventListener('visibilitychange', async () => {
+  if (document.visibilityState === 'visible' && S.user && !$('.overlay')) {
+    try { await Promise.all([carregarTarefas(), carregarRegistros(S.dia)]); render(); } catch {}
+  }
+});
+
+async function salvar(fn) {
+  try { await fn(); }
+  catch (e) { toast('Falha ao salvar — recarregando'); await Promise.all([carregarTarefas(), carregarRegistros(S.dia)]); render(); }
+}
+
+/* =========================================================
+   REGRAS: QUAIS TAREFAS APARECEM NO DIA
+   ========================================================= */
+function itensDoDia(D) {
+  const H = hoje(), reg = S.registros[D] || {}, dow = parseD(D).getDay(), out = [];
+  for (const [id, t] of Object.entries(S.tarefas)) {
+    if (t.ativa === false) continue;
+    const r = reg[id] || {};
+    const it = { id, t, status: 'pendente' };
+    switch (t.tipo) {
+      case 'diaria':
+        if (!(t.dias || []).includes(dow) || D < t.inicio) continue;
+        it.status = r.feito ? 'feito' : 'pendente';
+        break;
+      case 'unica':
+        if (t.data === D) it.status = t.concluidaEm ? 'feito' : 'pendente';
+        else if (D === H && t.data < H && (!t.concluidaEm || t.concluidaEm === H)) { it.status = t.concluidaEm ? 'feito' : 'pendente'; it.atrasada = !t.concluidaEm; }
+        else continue;
+        break;
+      case 'complexa':
+        if (D < t.data) continue;
+        if (t.concluidaEm && D > t.concluidaEm) continue;
+        it.diaN = diffDays(t.data, D) + 1;
+        it.status = t.concluidaEm === D ? 'feito' : (t.historico && t.historico[D]) ? 'parcial' : 'pendente';
+        if (it.diaN > 1 && it.status !== 'feito') it.rolou = true;
+        break;
+      case 'sugestiva':
+        if (D < t.inicio) continue;
+        if (!r.decisao) it.status = 'decidir';
+        else if (r.decisao === 'nao') it.status = 'dispensada';
+        else it.status = r.feito ? 'feito' : 'pendente';
+        break;
+      default: continue;
+    }
+    out.push(it);
+  }
+  return out;
+}
+
+const ordenar = arr => arr.sort((a, b) =>
+  (b.atrasada ? 1 : 0) - (a.atrasada ? 1 : 0) ||
+  PRIO[a.t.prioridade].o - PRIO[b.t.prioridade].o ||
+  (a.t.criadaEm || 0) - (b.t.criadaEm || 0));
+
+/* =========================================================
+   AÇÕES NAS TAREFAS
+   ========================================================= */
+function alternarFeito(id) {
+  const t = S.tarefas[id], D = S.dia;
+  const reg = (S.registros[D] = S.registros[D] || {});
+  if (t.tipo === 'diaria' || t.tipo === 'sugestiva') {
+    const atual = reg[id] || {};
+    const novo = { ...atual, feito: !atual.feito, em: Date.now() };
+    reg[id] = novo; render();
+    salvar(() => api(`registros/${D}/${id}`, 'PUT', novo));
+  } else if (t.tipo === 'unica') {
+    t.concluidaEm = t.concluidaEm ? null : D; render();
+    salvar(() => api(`tarefas/${id}`, 'PATCH', { concluidaEm: t.concluidaEm }));
+  } else if (t.tipo === 'complexa') {
+    if (t.concluidaEm === D) t.concluidaEm = null; else t.concluidaEm = D;
+    render();
+    salvar(() => api(`tarefas/${id}`, 'PATCH', { concluidaEm: t.concluidaEm }));
+    if (t.concluidaEm) toast('Tarefa complexa concluída');
+  }
+}
+
+function decidir(id, valor) {
+  const D = S.dia, reg = (S.registros[D] = S.registros[D] || {});
+  if (valor === null) { delete reg[id]; render(); return salvar(() => api(`registros/${D}/${id}`, 'DELETE')); }
+  reg[id] = { decisao: valor, feito: false, em: Date.now() }; render();
+  salvar(() => api(`registros/${D}/${id}`, 'PUT', reg[id]));
+}
+
+function marcarParcial(id) {
+  const t = S.tarefas[id], D = S.dia;
+  abrirModal(`
+    <h2>Parcialmente concluída</h2>
+    <p class="help" style="margin:-8px 0 16px">A tarefa continua aberta e aparece automaticamente no dia seguinte.</p>
+    <div class="field"><label>O que foi feito hoje? (opcional)</label>
+      <textarea class="input" id="pNota" placeholder="Ex.: levantei os dados, falta montar o relatório">${esc(t.historico?.[D]?.nota || '')}</textarea></div>
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="fecharModal()">Cancelar</button>
+      <button class="btn btn-primary" id="pOk">Salvar progresso</button></div>`);
+  $('#pOk').onclick = () => {
+    const reg = { nota: $('#pNota').value.trim(), em: Date.now() };
+    t.historico = t.historico || {}; t.historico[D] = reg;
+    if (t.concluidaEm === D) t.concluidaEm = null;
+    fecharModal(); render();
+    salvar(async () => { await api(`tarefas/${id}/historico/${D}`, 'PUT', reg); await api(`tarefas/${id}`, 'PATCH', { concluidaEm: t.concluidaEm || null }); });
+  };
+}
+
+function desfazerParcial(id) {
+  const t = S.tarefas[id], D = S.dia;
+  if (t.historico) delete t.historico[D];
+  render();
+  salvar(() => api(`tarefas/${id}/historico/${D}`, 'DELETE'));
+}
+
+/* =========================================================
+   MODAL GENÉRICO
+   ========================================================= */
+function abrirModal(html) {
+  fecharModal();
+  const o = document.createElement('div');
+  o.className = 'overlay';
+  o.innerHTML = `<div class="modal">${html}</div>`;
+  o.addEventListener('mousedown', e => { if (e.target === o) fecharModal(); });
+  document.body.appendChild(o);
+  setTimeout(() => o.querySelector('input,textarea')?.focus(), 30);
+}
+function fecharModal() { document.querySelector('.overlay')?.remove(); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharModal(); });
+
+function confirmar(titulo, texto, rotulo, acao) {
+  abrirModal(`<h2>${esc(titulo)}</h2><p class="help" style="font-size:14px">${texto}</p>
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="fecharModal()">Cancelar</button>
+    <button class="btn btn-danger" id="cOk">${esc(rotulo)}</button></div>`);
+  $('#cOk').onclick = () => { fecharModal(); acao(); };
+}
+
+/* =========================================================
+   FORMULÁRIO DE TAREFA (nova / editar)
+   ========================================================= */
+function formTarefa(id) {
+  const t = id ? S.tarefas[id] : null;
+  const f = {
+    titulo: t?.titulo || '', descricao: t?.descricao || '',
+    tipo: t?.tipo || 'unica', prioridade: t?.prioridade || 'media',
+    dias: t?.dias ? [...t.dias] : [1, 2, 3, 4, 5],
+    data: t?.data || S.dia, inicio: t?.inicio || hoje(),
+  };
+  const ajuda = {
+    diaria: 'Repete nos dias da semana selecionados.',
+    unica: 'Aparece só na data escolhida. Se não for concluída, aparece como atrasada no dia de hoje.',
+    complexa: 'Começa na data escolhida. Pode ser marcada como parcialmente concluída — enquanto não for concluída, passa automaticamente para o dia seguinte.',
+    sugestiva: 'Aparece todos os dias para você decidir se vai ser necessário fazer ou não naquele dia.',
+  };
+
+  const desenhar = () => {
+    const extra =
+      f.tipo === 'diaria' ? `
+        <div class="field"><label>Dias da semana</label>
+          <div class="days">${DIAS_CURTO.map((d, i) => `<button type="button" data-d="${i}" title="${DIAS_NOME[i]}" class="${f.dias.includes(i) ? 'on' : ''}">${d}</button>`).join('')}</div>
+          <div class="quick"><button type="button" data-q="util">Seg a Sex</button><button type="button" data-q="todos">Todos</button><button type="button" data-q="nenhum">Limpar</button></div>
+        </div>
+        <div class="field"><label>Começa em</label><input class="input" type="date" id="fInicio" value="${f.inicio}"></div>`
+      : f.tipo === 'unica' ? `<div class="field"><label>Data</label><input class="input" type="date" id="fData" value="${f.data}" required></div>`
+      : f.tipo === 'complexa' ? `<div class="field"><label>Data de início</label><input class="input" type="date" id="fData" value="${f.data}" required></div>`
+      : `<div class="field"><label>Começa a aparecer em</label><input class="input" type="date" id="fInicio" value="${f.inicio}"></div>`;
+
+    $('.modal').innerHTML = `
+      <h2>${t ? 'Editar tarefa' : 'Nova tarefa'}</h2>
+      <div class="field"><label>Tarefa</label><input class="input" id="fTitulo" value="${esc(f.titulo)}" placeholder="O que precisa ser feito?" maxlength="160"></div>
+      <div class="field"><label>Detalhes (opcional)</label><textarea class="input" id="fDesc" placeholder="Observações, links, passos…">${esc(f.descricao)}</textarea></div>
+      <div class="field"><label>Tipo</label>
+        <div class="seg four" id="segTipo">${Object.entries(TIPOS).map(([k, n]) => `<button type="button" data-v="${k}" class="${f.tipo === k ? 'on' : ''}">${n}</button>`).join('')}</div>
+        <div class="help">${ajuda[f.tipo]}</div>
+      </div>
+      ${extra}
+      <div class="field"><label>Prioridade</label>
+        <div class="seg three" id="segPrio">${Object.entries(PRIO).map(([k, p]) => `<button type="button" data-v="${k}" class="${f.prioridade === k ? 'on' : ''}"><span class="prio l${p.l}" style="color:${k === 'alta' ? 'var(--branco)' : k === 'media' ? 'var(--azul-claro)' : 'var(--muted)'}"><i></i><i></i><i></i></span> ${p.n}</button>`).join('')}</div>
+      </div>
+      <div class="msg err" id="fMsg"></div>
+      <div class="modal-foot">
+        ${t ? `<button class="btn btn-danger" id="fDel" style="margin-right:auto">Excluir</button>` : ''}
+        <button class="btn btn-ghost" onclick="fecharModal()">Cancelar</button>
+        <button class="btn btn-primary" id="fSalvar">${t ? 'Salvar' : 'Adicionar'}</button>
+      </div>`;
+
+    const ler = () => {
+      f.titulo = $('#fTitulo').value; f.descricao = $('#fDesc').value;
+      if ($('#fData')) f.data = $('#fData').value;
+      if ($('#fInicio')) f.inicio = $('#fInicio').value;
+    };
+    $('#segTipo').onclick = e => { const b = e.target.closest('button'); if (!b) return; ler(); f.tipo = b.dataset.v; desenhar(); };
+    $('#segPrio').onclick = e => { const b = e.target.closest('button'); if (!b) return; ler(); f.prioridade = b.dataset.v; desenhar(); };
+    document.querySelectorAll('.days button').forEach(b => b.onclick = () => {
+      ler(); const d = +b.dataset.d;
+      f.dias = f.dias.includes(d) ? f.dias.filter(x => x !== d) : [...f.dias, d].sort(); desenhar();
+    });
+    document.querySelectorAll('.quick button').forEach(b => b.onclick = () => {
+      ler(); f.dias = b.dataset.q === 'util' ? [1, 2, 3, 4, 5] : b.dataset.q === 'todos' ? [0, 1, 2, 3, 4, 5, 6] : []; desenhar();
+    });
+    if ($('#fDel')) $('#fDel').onclick = () => excluirTarefa(id);
+    $('#fSalvar').onclick = () => {
+      ler();
+      const titulo = f.titulo.trim();
+      if (!titulo) return $('#fMsg').textContent = 'Escreva a tarefa.';
+      if (f.tipo === 'diaria' && !f.dias.length) return $('#fMsg').textContent = 'Selecione pelo menos um dia.';
+      if ((f.tipo === 'unica' || f.tipo === 'complexa') && !f.data) return $('#fMsg').textContent = 'Escolha a data.';
+      const base = { titulo, descricao: f.descricao.trim(), tipo: f.tipo, prioridade: f.prioridade,
+                     dias: null, data: null, inicio: null };
+      if (f.tipo === 'diaria') { base.dias = f.dias; base.inicio = f.inicio || hoje(); }
+      if (f.tipo === 'sugestiva') base.inicio = f.inicio || hoje();
+      if (f.tipo === 'unica' || f.tipo === 'complexa') base.data = f.data;
+
+      fecharModal();
+      if (t) {
+        if (t.tipo !== base.tipo) { base.concluidaEm = null; base.historico = null; }
+        const novo = { ...t, ...base };
+        Object.keys(novo).forEach(k => novo[k] === null && delete novo[k]);
+        S.tarefas[id] = novo; render(); toast('Tarefa atualizada');
+        salvar(() => api(`tarefas/${id}`, 'PATCH', base));
+      } else {
+        const nid = novoId('t_');
+        const nova = { ...base, ativa: true, criadaEm: Date.now() };
+        Object.keys(nova).forEach(k => nova[k] === null && delete nova[k]);
+        S.tarefas[nid] = nova; render(); toast('Tarefa adicionada');
+        salvar(() => api(`tarefas/${nid}`, 'PUT', nova));
+      }
+    };
+  };
+
+  abrirModal('');
+  desenhar();
+  $('#fTitulo').focus();
+}
+
+function excluirTarefa(id) {
+  const t = S.tarefas[id];
+  confirmar('Excluir tarefa?', `"<b>${esc(t.titulo)}</b>" será removida de todos os dias. Essa ação não pode ser desfeita.`, 'Excluir', () => {
+    delete S.tarefas[id]; render(); toast('Tarefa excluída');
+    salvar(() => api(`tarefas/${id}`, 'DELETE'));
+  });
+}
+
+function alternarAtiva(id) {
+  const t = S.tarefas[id];
+  t.ativa = t.ativa === false; render();
+  salvar(() => api(`tarefas/${id}`, 'PATCH', { ativa: t.ativa }));
+}
+
+/* =========================================================
+   CONFIGURAÇÕES DA CONTA
+   ========================================================= */
+function abrirConta() {
+  const u = S.user;
+  abrirModal(`
+    <h2>Minha conta</h2>
+    <div class="field"><label>Nome</label><input class="input" id="cNome" value="${esc(u.nome)}"></div>
+    <div class="row2">
+      <div class="field"><label>Usuário</label><input class="input" value="${esc(u.usuario)}" disabled></div>
+      <div class="field"><label>E-mail</label><input class="input" value="${esc(u.email)}" disabled></div>
+    </div>
+    <div class="section-title" style="margin-top:8px">Trocar senha</div>
+    <div class="field"><label>Senha atual</label><input class="input" type="password" id="cAtual"></div>
+    <div class="row2">
+      <div class="field"><label>Nova senha</label><input class="input" type="password" id="cNova"></div>
+      <div class="field"><label>Confirmar</label><input class="input" type="password" id="cNova2"></div>
+    </div>
+    <div class="msg err" id="cMsg"></div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="fecharModal()">Fechar</button>
+      <button class="btn btn-primary" id="cSalvar">Salvar</button>
+    </div>`);
+  $('#cSalvar').onclick = async () => {
+    const msg = $('#cMsg'); msg.textContent = '';
+    const patch = {}, nome = $('#cNome').value.trim();
+    if (nome && nome !== u.nome) patch.nome = nome;
+    const atual = $('#cAtual').value, nova = $('#cNova').value, nova2 = $('#cNova2').value;
+    if (atual || nova || nova2) {
+      if ((await sha256(u.salt + atual)) !== u.hash) return msg.textContent = 'Senha atual incorreta.';
+      if (nova.length < 6) return msg.textContent = 'A nova senha precisa ter pelo menos 6 caracteres.';
+      if (nova !== nova2) return msg.textContent = 'As novas senhas não conferem.';
+      patch.salt = novoSalt(); patch.hash = await sha256(patch.salt + nova);
+    }
+    if (!Object.keys(patch).length) return fecharModal();
+    try {
+      await api(`usuarios/${u.id}`, 'PATCH', patch);
+      Object.assign(S.user, patch);
+      lsSet(SESSAO_KEY, { id: u.id, h: S.user.hash });
+      fecharModal(); render(); toast('Conta atualizada');
+    } catch (e) { msg.textContent = e.message; }
+  };
+}
+
+/* =========================================================
+   RENDERIZAÇÃO
+   ========================================================= */
+function render() {
+  const u = S.user;
+  $('#root').innerHTML = `
+    <header class="top"><div class="top-inner">
+      ${brandHTML('Organizador de tarefas')}
+      <nav class="tabs">
+        <button class="tab ${S.view === 'dia' ? 'active' : ''}" data-view="dia">Meu dia</button>
+        <button class="tab ${S.view === 'todas' ? 'active' : ''}" data-view="todas">Todas as tarefas</button>
+      </nav>
+      <div class="user-chip">
+        <button class="icon-btn" title="Minha conta" onclick="abrirConta()">${ICON.gear}</button>
+        <button class="icon-btn" title="Sair" onclick="sair()">${ICON.out}</button>
+        <div class="avatar" title="${esc(u.nome)}">${esc((u.nome || '?')[0].toUpperCase())}</div>
+      </div>
+    </div></header>
+    <main id="main"></main>
+    <button class="fab" onclick="formTarefa()">${ICON.plus}Nova tarefa</button>`;
+  document.querySelectorAll('.tab').forEach(b => b.onclick = () => { S.view = b.dataset.view; render(); });
+  S.view === 'dia' ? renderDia() : renderTodas();
+}
+
+function filtrosHTML() {
+  const op = [['todas', 'Todas'], ['alta', 'Alta'], ['media', 'Média'], ['baixa', 'Baixa']];
+  return `<div class="filters">${op.map(([k, n]) => `<button class="pill ${S.filtro === k ? 'on' : ''}" data-f="${k}">${k === 'todas' ? n : `Prioridade ${n.toLowerCase()}`}</button>`).join('')}</div>`;
+}
+function ligarFiltros() {
+  document.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { S.filtro = b.dataset.f; render(); });
+}
+
+function renderDia() {
+  const D = S.dia, H = hoje();
+  const dt = parseD(D);
+  const nomeDia = dt.toLocaleDateString('pt-BR', { weekday: 'long' });
+  const dataLonga = dt.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
+  const rel = D === H ? 'Hoje' : D === addDays(H, -1) ? 'Ontem' : D === addDays(H, 1) ? 'Amanhã' : nomeDia[0].toUpperCase() + nomeDia.slice(1);
+
+  let itens = itensDoDia(D);
+  const contaveis = itens.filter(i => i.status !== 'decidir' && i.status !== 'dispensada');
+  const feitos = contaveis.filter(i => i.status === 'feito').length;
+  const parciais = contaveis.filter(i => i.status === 'parcial').length;
+  const decidirN = itens.filter(i => i.status === 'decidir').length;
+  const pct = contaveis.length ? Math.round(feitos / contaveis.length * 100) : 0;
+
+  if (S.filtro !== 'todas') itens = itens.filter(i => i.t.prioridade === S.filtro);
+  const decidir = ordenar(itens.filter(i => i.status === 'decidir'));
+  const abertas = ordenar(itens.filter(i => i.status === 'pendente' || i.status === 'parcial'));
+  const feitas = ordenar(itens.filter(i => i.status === 'feito'));
+  const dispensadas = ordenar(itens.filter(i => i.status === 'dispensada'));
+  const carregando = !S.registros[D];
+
+  $('#main').innerHTML = `
+    <div class="daybar">
+      <div class="daynav">
+        <button class="icon-btn" id="dPrev" title="Dia anterior">${ICON.prev}</button>
+        <button class="icon-btn" id="dNext" title="Próximo dia">${ICON.next}</button>
+      </div>
+      <h2 class="day-title">${rel}<small>${D === H ? nomeDia + ', ' : ''}${dataLonga}</small></h2>
+      <div style="margin-left:auto;display:flex;gap:8px">
+        ${D !== H ? `<button class="pill" id="dHoje">Voltar para hoje</button>` : ''}
+        <label class="pill date-input" style="display:flex;align-items:center;gap:6px">${ICON.cal.replace('<svg', '<svg width="15" height="15"')}Escolher data<input type="date" id="dPick" value="${D}"></label>
+      </div>
+    </div>
+
+    <div class="progress-card">
+      <div class="progress-num">${feitos}<span>/${contaveis.length}</span></div>
+      <div style="flex:1">
+        <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+        <div class="progress-meta">
+          <span>${pct}% concluído</span>
+          ${parciais ? `<span>${parciais} parcial${parciais > 1 ? 'is' : ''}</span>` : ''}
+          ${decidirN ? `<span>${decidirN} sugest${decidirN > 1 ? 'ões' : 'ão'} para decidir</span>` : ''}
+        </div>
+      </div>
+    </div>
+
+    ${filtrosHTML()}
+
+    ${carregando ? `<div class="empty"><div class="spin"></div>Carregando o dia…</div>` :
+      !itens.length ? `<div class="empty"><h3>${Object.keys(S.tarefas).length ? 'Nada para este dia' : 'Nenhuma tarefa ainda'}</h3>
+        <p>${Object.keys(S.tarefas).length ? 'Nenhuma tarefa programada aqui' + (S.filtro !== 'todas' ? ' com essa prioridade' : '') + '.' : 'Clique em <b>Nova tarefa</b> para começar.'}</p></div>` : `
+      ${decidir.length ? `<div class="section-title">Sugestões · vai precisar hoje? <span class="count">${decidir.length}</span></div>${decidir.map(cardHTML).join('')}` : ''}
+      ${abertas.length ? `<div class="section-title">A fazer <span class="count">${abertas.length}</span></div>${abertas.map(cardHTML).join('')}` : ''}
+      ${feitas.length ? `<div class="section-title">Concluídas <span class="count">${feitas.length}</span></div>${feitas.map(cardHTML).join('')}` : ''}
+      ${dispensadas.length ? `<div class="section-title">Dispensadas hoje <span class="count">${dispensadas.length}</span></div>${dispensadas.map(cardHTML).join('')}` : ''}
+    `}`;
+
+  $('#dPrev').onclick = () => irParaDia(addDays(D, -1));
+  $('#dNext').onclick = () => irParaDia(addDays(D, 1));
+  if ($('#dHoje')) $('#dHoje').onclick = () => irParaDia(H);
+  $('#dPick').onchange = e => e.target.value && irParaDia(e.target.value);
+  ligarFiltros();
+}
+
+function cardHTML(it) {
+  const { id, t, status } = it, D = S.dia;
+  const cls = ['task', 'p-' + t.prioridade];
+  if (status === 'feito' || status === 'dispensada') cls.push('done');
+  if (status === 'decidir') cls.push('suggest');
+  if (it.atrasada) cls.push('late');
+
+  const badges = [prioHTML(t.prioridade)];
+  let tipoTxt = TIPOS[t.tipo];
+  if (t.tipo === 'diaria') tipoTxt += ' · ' + (t.dias.length === 7 ? 'todos os dias' : t.dias.join() === '1,2,3,4,5' ? 'seg a sex' : t.dias.map(d => DIAS_NOME[d]).join(', '));
+  if (t.tipo === 'complexa') tipoTxt += ` · dia ${it.diaN}`;
+  badges.push(`<span class="badge">${tipoTxt}</span>`);
+  if (it.atrasada) badges.push(`<span class="badge strong">Atrasada · ${fmtCurta(t.data)}</span>`);
+  if (it.rolou && status !== 'feito') badges.push(`<span class="badge blue">Desde ${fmtCurta(t.data)}</span>`);
+  if (status === 'parcial') badges.push(`<span class="badge blue">Parcial hoje</span>`);
+
+  // Última anotação de progresso (complexa)
+  let nota = '';
+  if (t.tipo === 'complexa' && t.historico) {
+    const datas = Object.keys(t.historico).filter(d => d <= D).sort();
+    const ult = datas[datas.length - 1];
+    if (ult && t.historico[ult].nota) nota = `<div class="note"><b>${ult === D ? 'Hoje' : fmtCurta(ult)}:</b> ${esc(t.historico[ult].nota)}</div>`;
+  }
+
+  let check = '', acoes = '';
+  if (status === 'decidir') {
+    acoes = `<div class="t-actions"><button class="mini primary" onclick="decidir('${id}','sim')">Sim, fazer hoje</button>
+             <button class="mini" onclick="decidir('${id}','nao')">Não precisa</button></div>`;
+  } else if (status === 'dispensada') {
+    acoes = `<div class="t-actions"><button class="mini" onclick="decidir('${id}',null)">${ICON.undo.replace('<svg', '<svg width="12" height="12" style="vertical-align:-1px"')} Rever decisão</button></div>`;
+  } else {
+    check = `<button class="check ${status === 'feito' ? 'on' : status === 'parcial' ? 'half' : ''}" title="${status === 'feito' ? 'Desmarcar' : 'Concluir'}" onclick="alternarFeito('${id}')">${ICON.check}</button>`;
+    if (t.tipo === 'complexa') {
+      acoes = status === 'feito'
+        ? `<div class="t-actions"><button class="mini" onclick="alternarFeito('${id}')">Reabrir</button></div>`
+        : `<div class="t-actions">
+             <button class="mini" onclick="marcarParcial('${id}')">${status === 'parcial' ? 'Editar progresso' : 'Parcialmente concluída'}</button>
+             ${status === 'parcial' ? `<button class="mini" onclick="desfazerParcial('${id}')">Desfazer parcial</button>` : ''}
+             <button class="mini primary" onclick="alternarFeito('${id}')">Concluir</button>
+           </div>`;
+    } else if (t.tipo === 'sugestiva' && status !== 'feito') {
+      acoes = `<div class="t-actions"><button class="mini" onclick="decidir('${id}',null)">Rever decisão</button></div>`;
+    }
+  }
+
+  return `<div class="${cls.join(' ')}">
+    ${check}
+    <div class="t-body">
+      <div class="t-title">${esc(t.titulo)}</div>
+      ${t.descricao ? `<div class="t-desc">${esc(t.descricao)}</div>` : ''}
+      <div class="t-meta">${badges.join('')}</div>
+      ${nota}${acoes}
+    </div>
+    <div class="t-side"><button class="icon-btn" title="Editar" onclick="formTarefa('${id}')">${ICON.edit}</button></div>
+  </div>`;
+}
+
+function renderTodas() {
+  let lista = Object.entries(S.tarefas).map(([id, t]) => ({ id, t }));
+  if (S.filtro !== 'todas') lista = lista.filter(i => i.t.prioridade === S.filtro);
+  const grupos = Object.keys(TIPOS).map(tipo => ({ tipo, itens: ordenar(lista.filter(i => i.t.tipo === tipo)) })).filter(g => g.itens.length);
+
+  const det = t => {
+    if (t.tipo === 'diaria') return t.dias.map(d => DIAS_NOME[d]).join(', ') + ` · desde ${fmtCurta(t.inicio)}`;
+    if (t.tipo === 'unica') return `${fmtCurta(t.data)}${t.concluidaEm ? ' · concluída' : t.data < hoje() ? ' · atrasada' : ''}`;
+    if (t.tipo === 'complexa') {
+      const n = t.historico ? Object.keys(t.historico).length : 0;
+      return `Início ${fmtCurta(t.data)}${t.concluidaEm ? ` · concluída em ${fmtCurta(t.concluidaEm)}` : ` · em andamento há ${Math.max(1, diffDays(t.data, hoje()) + 1)} dia(s)`}${n ? ` · ${n} registro(s) de progresso` : ''}`;
+    }
+    return `Aparece todo dia · desde ${fmtCurta(t.inicio)}`;
+  };
+
+  $('#main').innerHTML = `
+    <div class="daybar"><h2 class="day-title">Todas as tarefas<small>${Object.keys(S.tarefas).length} cadastrada(s) · desative para pausar sem excluir</small></h2></div>
+    ${filtrosHTML()}
+    ${!grupos.length ? `<div class="empty"><h3>Nenhuma tarefa</h3><p>Clique em <b>Nova tarefa</b> para cadastrar.</p></div>` :
+      grupos.map(g => `
+        <div class="section-title">${TIPOS[g.tipo]} <span class="count">${g.itens.length}</span></div>
+        ${g.itens.map(({ id, t }) => `
+          <div class="list-row ${t.ativa === false ? 'off' : ''}">
+            <button class="switch ${t.ativa === false ? '' : 'on'}" title="${t.ativa === false ? 'Ativar' : 'Pausar'}" onclick="alternarAtiva('${id}')"></button>
+            <div class="t-body">
+              <div class="t-title">${esc(t.titulo)}</div>
+              <div class="t-meta">${prioHTML(t.prioridade)}<span class="badge outline">${det(t)}</span></div>
+            </div>
+            <div class="t-side">
+              <button class="icon-btn" title="Editar" onclick="formTarefa('${id}')">${ICON.edit}</button>
+              <button class="icon-btn" title="Excluir" onclick="excluirTarefa('${id}')">${ICON.trash}</button>
+            </div>
+          </div>`).join('')}
+      `).join('')}`;
+  ligarFiltros();
+}
+
+boot();
+</script>
+</body>
+</html>
