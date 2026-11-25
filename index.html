@@ -328,15 +328,13 @@
   .dash .now-line::before,.dash .now-line::after{background:linear-gradient(90deg,var(--azul-claro),var(--azul-palido))}
 
   /* ---------- ABA MAPA ---------- */
-  .map-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px}
-  .map-card{background:linear-gradient(180deg,rgba(62,121,150,.18),var(--surface) 55%);border:1px solid #2f3a58;border-radius:18px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;transition:border-color .15s,transform .15s}
-  .map-card:hover{border-color:var(--azul-claro);transform:translateY(-2px)}
-  .map-card.on{border-color:var(--azul-palido);box-shadow:0 0 0 1px var(--azul-palido)}
-  .map-frame{height:330px;padding:16px 16px 0;display:flex;justify-content:center;overflow:hidden;background:radial-gradient(400px 200px at 50% 0,rgba(111,163,190,.25),transparent)}
-  .map-prev{width:330px;height:430px;border:1px solid #3a4a6b;border-radius:12px 12px 0 0;pointer-events:none;background:#11121B;box-shadow:0 18px 40px rgba(0,0,0,.45);transform-origin:top center}
-  .map-info{padding:16px 18px 18px;border-top:1px solid #2f3a58}
-  .map-info h3{color:var(--branco);font-size:18px;display:flex;align-items:center;gap:8px}
-  .map-info p{color:var(--muted);font-size:13.5px;line-height:1.45;margin:6px 0 14px}
+  .map-btns{display:flex;gap:10px;flex-wrap:wrap}
+  .map-btn{display:flex;align-items:center;gap:12px;padding:12px 18px 12px 14px;border-radius:12px;background:linear-gradient(135deg,rgba(62,121,150,.22),var(--surface));border:1px solid #2f3a58;text-align:left;transition:border-color .15s,background .15s}
+  .map-btn:hover{border-color:var(--azul-claro)}
+  .map-btn.on{border-color:var(--azul-palido);background:linear-gradient(135deg,rgba(62,121,150,.45),var(--surface))}
+  .map-btn svg{width:22px;height:22px;color:var(--azul-palido);flex:none}
+  .map-btn b{display:block;color:var(--branco);font-size:14.5px}
+  .map-btn small{display:block;color:var(--muted);font-size:12px;margin-top:1px}
 
   /* ---------- BARRA LATERAL ---------- */
   .layout{padding-left:232px}
@@ -586,22 +584,17 @@ function corPrio(n) {
   return 'rgb(240,140,140)';
 }
 const corTarefa = t => { const n = prioNum(t); return n == null ? 'var(--azul-palido)' : corPrio(n); };
-// Velocímetro (meia-lua arredondada) com ponteiro
-function gaugeSVG(n, w = 34, numero = false, agulha = '#E9EBF3') {
+// Velocímetro: meia-lua arredondada preenchida com UMA cor (a cor muda de uma tarefa para outra conforme a prioridade)
+function gaugeSVG(n, w = 34, numero = false) {
   const f = x => +x.toFixed(2);
-  const sw = w * 0.15, r = (w - sw) / 2, cx = w / 2, cy = r + sw / 2, h = cy + (numero ? w * 0.27 : sw * 0.75);
+  const sw = w * 0.17, r = (w - sw) / 2, cx = w / 2, cy = r + sw / 2, h = cy + sw / 2;
   const pt = v => { const a = Math.PI * (1 - v / 100); return [f(cx + r * Math.cos(a)), f(cy - r * Math.sin(a))]; };
-  let g = `<path d="M${pt(0)} A${f(r)} ${f(r)} 0 0 1 ${pt(100)}" fill="none" stroke="rgba(140,150,180,.25)" stroke-width="${f(sw)}" stroke-linecap="round"/>`;
-  g += `<circle cx="${pt(0)[0]}" cy="${pt(0)[1]}" r="${f(sw / 2)}" fill="${corPrio(0)}"/>`;
-  for (let v0 = 0; v0 < n; v0 += 5) {
-    const v1 = Math.min(v0 + 5, n);
-    g += `<path d="M${pt(v0)} A${f(r)} ${f(r)} 0 0 1 ${pt(Math.min(v1 + 1, n))}" fill="none" stroke="${corPrio((v0 + v1) / 2)}" stroke-width="${f(sw)}"/>`;
-  }
-  if (n > 0) g += `<circle cx="${pt(n)[0]}" cy="${pt(n)[1]}" r="${f(sw / 2)}" fill="${corPrio(n)}"/>`;
-  const a = Math.PI * (1 - n / 100);
-  g += `<line x1="${f(cx)}" y1="${f(cy)}" x2="${f(cx + r * 0.7 * Math.cos(a))}" y2="${f(cy - r * 0.7 * Math.sin(a))}" stroke="${agulha}" stroke-width="${f(Math.max(1.4, sw * 0.32))}" stroke-linecap="round"/>`;
-  g += `<circle cx="${f(cx)}" cy="${f(cy)}" r="${f(Math.max(1.6, sw * 0.42))}" fill="${agulha}"/>`;
-  if (numero) g += `<text x="${f(cx)}" y="${f(cy + w * 0.23)}" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-weight="700" font-size="${f(w * 0.19)}" fill="${corPrio(n)}">${n}</text>`;
+  const cor = corPrio(n);
+  let g = `<path d="M${pt(0)} A${f(r)} ${f(r)} 0 0 1 ${pt(100)}" fill="none" stroke="rgba(140,150,180,.22)" stroke-width="${f(sw)}" stroke-linecap="round"/>`;
+  g += n > 0
+    ? `<path d="M${pt(0)} A${f(r)} ${f(r)} 0 0 1 ${pt(n)}" fill="none" stroke="${cor}" stroke-width="${f(sw)}" stroke-linecap="round"/>`
+    : `<circle cx="${pt(0)[0]}" cy="${pt(0)[1]}" r="${f(sw / 2)}" fill="${cor}"/>`;
+  if (numero) g += `<text x="${f(cx)}" y="${f(cy - sw * 0.15)}" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-weight="700" font-size="${f(w * 0.24)}" fill="${cor}">${n}</text>`;
   return `<svg class="gauge" width="${f(w)}" height="${f(h)}" viewBox="0 0 ${f(w)} ${f(h)}" aria-hidden="true">${g}</svg>`;
 }
 function prioHTML(t) {
@@ -1655,101 +1648,128 @@ function quandoTxt(D, hm) {
   if (D === addDays(H, 1)) return `amanhã às ${hm}`;
   return `${parseD(D).toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit' })} às ${hm}`;
 }
-const PIP_FONTES = '<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=DM+Sans:wght@400;500;600&family=Caveat:wght@600;700&display=swap" rel="stylesheet">';
+const PIP_FONTES = '<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">';
 const PIP_CSS = `
   *{box-sizing:border-box;margin:0;padding:0}
-  body{background:#11121B;color:#E9EBF3;font-family:'DM Sans',system-ui,sans-serif;font-size:14px;min-height:100vh}
+  body{background:#11121B;color:#E9EBF3;font-family:'DM Sans',system-ui,sans-serif;font-size:14px;min-height:100vh;padding:12px}
   button{font-family:inherit;cursor:pointer}
-  .hd{display:flex;align-items:flex-end;justify-content:space-between;padding:14px 14px 10px;background:linear-gradient(135deg,#3E7996,#2D2E47)}
-  .hd .ttl{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#B9D6E4}
-  .hd b{display:block;font-family:'Space Grotesk',sans-serif;font-size:26px;color:#fff;line-height:1.05}
-  .hd small{color:#D6E7EF;font-size:12px;text-align:right}
-  .bar{height:4px;background:rgba(0,0,0,.3)}
-  .bar i{display:block;height:100%;background:linear-gradient(90deg,#B9D6E4,#fff)}
-  .sec{padding:12px 14px 4px}
-  .lbl{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9496B0;margin:0 0 8px}
-  .vazio{color:#9496B0;font-size:13px;padding:4px 0 12px}
+  /* informações que aparecem só ao passar o mouse */
+  .info{position:fixed;top:0;left:0;right:0;z-index:5;padding:10px 12px 12px;background:rgba(45,46,71,.97);border-bottom:1px solid #383A58;
+    box-shadow:0 8px 24px rgba(0,0,0,.45);opacity:0;transform:translateY(-100%);transition:opacity .18s,transform .18s;pointer-events:none}
+  body:hover .info{opacity:1;transform:none;pointer-events:auto}
+  .info-top{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12.5px;color:#B9D6E4}
+  .info-top b{color:#fff;font-weight:600;text-transform:capitalize}
+  .info .bar{height:4px;background:#11121B;border-radius:9px;overflow:hidden;margin-top:8px}
+  .info .bar i{display:block;height:100%;background:linear-gradient(90deg,#3E7996,#B9D6E4)}
+  .info button{margin-top:9px;background:none;border:1px solid #4a4d72;color:#B9D6E4;border-radius:8px;padding:5px 10px;font-size:12px}
+  .info button:hover{background:#3E7996;color:#fff}
+  /* timer */
+  .timer{background:linear-gradient(135deg,#3E7996,#2D2E47);border:1px solid #4f8aa6;border-radius:14px;padding:12px 14px;margin-bottom:12px}
+  .timer .l{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#B9D6E4}
+  .timer .v{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;color:#fff;line-height:1.1;font-variant-numeric:tabular-nums}
+  .timer .s{font-size:13px;color:#D6E7EF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .timer.vazio .v{font-size:16px;color:#B9D6E4;padding:4px 0}
+  .lbl{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9496B0;margin:4px 0 8px}
+  .vz{color:#9496B0;font-size:13px;padding:2px 0 12px}
   /* agenda */
   .ag{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:10px;margin-bottom:6px;background:#1A1B29;border:1px solid #2d3150}
-  .ag .hr{font-family:'Space Grotesk',sans-serif;font-weight:700;color:#B9D6E4;font-size:15px;min-width:46px}
+  .ag .hr{font-family:'Space Grotesk',sans-serif;font-weight:700;color:#B9D6E4;font-size:14px;min-width:44px}
   .ag .tt{flex:1;min-width:0;font-weight:600;color:#fff;font-size:14px;line-height:1.3}
   .ag .tt small{display:block;font-weight:500;color:#9496B0;font-size:11.5px}
-  .ag.next{background:linear-gradient(135deg,rgba(62,121,150,.45),#1A1B29);border-color:#6FA3BE}
+  .ag.next{background:linear-gradient(135deg,rgba(62,121,150,.4),#1A1B29);border-color:#6FA3BE}
   .ag.feito{opacity:.45}.ag.feito .tt{text-decoration:line-through}
-  .ok{flex:none;width:22px;height:22px;border-radius:50%;border:2px solid #6FA3BE;background:transparent;display:grid;place-items:center;color:#fff;font-size:12px}
-  .ok:hover{background:rgba(62,121,150,.35)}
-  .ok.on{background:#3E7996;border-color:#3E7996}
   .now{display:flex;align-items:center;gap:6px;color:#B9D6E4;font-size:11px;font-weight:700;margin:4px 0 8px}
   .now::after{content:"";flex:1;height:1.5px;background:#6FA3BE}
-  /* caderninho */
-  .caderno{position:relative;margin:12px;background:#FBF8F0;border-radius:6px 12px 12px 6px;color:#2D2E47;padding:26px 14px 14px 46px;box-shadow:0 10px 30px rgba(0,0,0,.45);
-    background-image:linear-gradient(90deg,transparent 36px,#f2b8b8 36px,#f2b8b8 38px,transparent 38px),repeating-linear-gradient(180deg,transparent 0,transparent 27px,#cfe0ea 27px,#cfe0ea 28px);background-position:0 0,0 30px}
-  .caderno::before{content:"";position:absolute;top:8px;left:14px;right:14px;height:10px;background:radial-gradient(circle,#11121B 3.5px,transparent 4px) 0 0/22px 10px repeat-x}
-  .caderno h4{font-family:'Caveat',cursive;font-size:26px;color:#2F5F77;line-height:28px;margin-bottom:0}
-  .cd-next{display:flex;gap:10px;align-items:flex-start;padding:4px 0 6px}
-  .cd-next .tt{flex:1;font-family:'Caveat',cursive;font-size:25px;font-weight:700;line-height:28px;color:#1d2033}
-  .cd-next .meta{font-size:11.5px;color:#5d6178;margin-top:2px;font-family:'DM Sans',sans-serif;font-weight:500}
-  .cd-row{display:flex;gap:8px;align-items:center;height:28px;font-family:'Caveat',cursive;font-size:21px;color:#2D2E47}
-  .cd-row .tt{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .cd-row .pn{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:#5d6178}
-  .caderno .ok{border-color:#3E7996;width:20px;height:20px}
-  .caderno .vazio{color:#5d6178;font-family:'Caveat',cursive;font-size:22px}
-  .caderno .sub{font-family:'DM Sans',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8a8ea6;height:28px;line-height:34px}
-  body.so-caderno{background:#1F3D4F}
-  .rod{padding:4px 14px 14px}
-  .rod button{background:none;border:1px solid #383A58;color:#B9D6E4;border-radius:8px;padding:6px 10px;font-size:12px}
-  .rod button:hover{background:#2D2E47}`;
+  /* tarefas por prioridade (mesmo padrão do app) */
+  .tk{position:relative;display:flex;gap:10px;align-items:center;padding:9px 10px 9px 13px;border-radius:10px;margin-bottom:6px;background:#1A1B29;border:1px solid #2d3150;overflow:hidden}
+  .tk::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--pc,#383A58)}
+  .tk .tt{flex:1;min-width:0;font-weight:600;color:#fff;font-size:14px;line-height:1.3}
+  .tk .tt small{display:block;font-weight:500;color:#9496B0;font-size:11.5px}
+  .tk.top{background:linear-gradient(135deg,rgba(62,121,150,.32),#1A1B29);border-color:#4f8aa6;padding:12px 12px 12px 15px}
+  .tk.top .tt{font-size:15.5px}
+  .tk .pn{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px}
+  .ok{flex:none;width:22px;height:22px;border-radius:50%;border:2px solid #6FA3BE;background:transparent;display:grid;place-items:center;color:#fff;font-size:12px}
+  .ok:hover{background:rgba(62,121,150,.35)}
+  .ok.on{background:#3E7996;border-color:#3E7996}`;
 
-function pipAgendaHTML(limite) {
+// Próximo compromisso com horário ainda por vir (hoje ou nos próximos dias)
+function proximoHorario() {
+  const agora = Date.now(), H = hoje();
+  for (let k = 0; k <= 30; k++) {
+    const D = addDays(H, k);
+    const c = itensDoDia(D).filter(i => i.t.horario && ['pendente', 'parcial', 'decidir'].includes(i.status)).sort(cmpHora);
+    for (const it of c) {
+      const dt = parseD(D), [hh, mm] = it.t.horario.split(':').map(Number);
+      dt.setHours(hh, mm, 0, 0);
+      if (dt.getTime() > agora) return { it, D, ts: dt.getTime() };
+    }
+  }
+  return null;
+}
+function fmtTimer(ms) {
+  if (ms <= 0) return '00:00:00';
+  const t = Math.floor(ms / 1000), d = Math.floor(t / 86400), h = Math.floor(t % 86400 / 3600), m = Math.floor(t % 3600 / 60), sg = t % 60;
+  return (d ? d + 'd ' : '') + `${pad(h)}:${pad(m)}:${pad(sg)}`;
+}
+function pipTimerHTML() {
+  const px = proximoHorario();
+  if (!px) return `<div class="timer vazio"><div class="l">Próxima tarefa com horário</div><div class="v">Nada agendado pela frente</div></div>`;
+  const quando = px.D === hoje() ? '' : px.D === addDays(hoje(), 1) ? ' · amanhã' : ' · ' + parseD(px.D).toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit' });
+  return `<div class="timer"><div class="l">Falta para a próxima${px.it.t.reuniao ? ' reunião' : ''}</div>
+    <div class="v" data-alvo="${px.ts}">${fmtTimer(px.ts - Date.now())}</div>
+    <div class="s">${esc(px.it.t.titulo)}${quando}</div></div>`;
+}
+function pipAgendaHTML() {
   const H = hoje(), a = new Date(), nowHM = `${pad(a.getHours())}:${pad(a.getMinutes())}`;
-  let itens = itensDoDia(H).filter(i => i.t.horario && i.status !== 'dispensada').sort(cmpHora);
-  if (limite) itens = itens.filter(i => i.status !== 'feito' && minutos(i.t.horario) >= minutos(nowHM) - 30).slice(0, limite);
-  const prox = itens.find(i => i.status !== 'feito' && i.t.horario >= nowHM);
+  const itens = itensDoDia(H).filter(i => i.t.horario && i.status !== 'dispensada').sort(cmpHora);
+  const prox = itens.find(i => i.status !== 'feito' && i.t.horario > nowHM);
   let html = '', linha = false;
   for (const it of itens) {
-    if (!linha && it.t.horario > nowHM) { html += `<div class="now">agora · ${nowHM}</div>`; linha = true; }
+    if (!linha && it.t.horario > nowHM) { html += `<div class="now">agora</div>`; linha = true; }
     const feito = it.status === 'feito';
     html += `<div class="ag ${feito ? 'feito' : ''} ${it === prox ? 'next' : ''}">
       <span class="hr">${esc(it.t.horario)}</span>
-      <span class="tt">${esc(it.t.titulo)}<small>${it === prox ? quandoTxt(H, it.t.horario) + (it.t.reuniao ? ' · reunião' : '') : it.t.reuniao ? 'Reunião' : TIPOS[it.t.tipo]}</small></span>
+      <span class="tt">${esc(it.t.titulo)}<small>${it === prox ? 'próxima' + (it.t.reuniao ? ' · reunião' : '') : it.t.reuniao ? 'Reunião' : TIPOS[it.t.tipo]}</small></span>
       ${it.status === 'decidir' ? '' : `<button class="ok ${feito ? 'on' : ''}" data-ok="${it.id}" title="${feito ? 'Desfazer' : 'Concluir'}">${feito ? '✓' : ''}</button>`}
     </div>`;
   }
-  if (!linha && itens.length) html += `<div class="now">agora · ${nowHM}</div>`;
-  return html || `<div class="vazio">${limite ? 'Nada com horário pela frente hoje.' : 'Nenhuma tarefa com horário hoje.'}</div>`;
+  if (!linha && itens.length) html += `<div class="now">agora</div>`;
+  return html || `<div class="vz">Nenhuma tarefa com horário hoje.</div>`;
 }
-function pipCadernoHTML() {
+function pipTarefasHTML() {
   const { tarefas } = proximos();
-  const t1 = tarefas[0], resto = tarefas.slice(1, 6);
-  return `<div class="caderno">
-    <h4>Minhas tarefas</h4>
-    ${t1 ? `<div class="cd-next">
-        <button class="ok" data-ok="${t1.id}" title="Concluir" style="margin-top:4px"></button>
-        <div style="flex:1"><div class="tt">${esc(t1.t.titulo)}</div>
-          <div class="meta">próxima por prioridade${t1.atrasada ? ' · atrasada' : ''}${t1.status === 'parcial' ? ' · parcial' : ''}</div></div>
-        ${gaugeSVG(prioNum(t1.t), 54, true, '#2D2E47')}
-      </div>
-      ${resto.length ? `<div class="sub">Depois</div>${resto.map(i => `<div class="cd-row"><button class="ok" data-ok="${i.id}" title="Concluir"></button><span class="tt">${esc(i.t.titulo)}</span>${gaugeSVG(prioNum(i.t), 26, false, '#2D2E47')}<span class="pn">${prioNum(i.t)}</span></div>`).join('')}` : ''}`
-      : `<div class="vazio">Nada pendente por hoje!</div>`}
-  </div>`;
+  if (!tarefas.length) return `<div class="vz">Nada pendente por prioridade hoje.</div>`;
+  return tarefas.slice(0, 6).map((i, k) => {
+    const n = prioNum(i.t);
+    return `<div class="tk ${k === 0 ? 'top' : ''}" style="--pc:${corPrio(n)}">
+      <button class="ok" data-ok="${i.id}" title="Concluir"></button>
+      <span class="tt">${esc(i.t.titulo)}${k === 0 ? `<small>próxima por prioridade${i.atrasada ? ' · atrasada' : ''}${i.status === 'parcial' ? ' · parcial' : ''}</small>` : ''}</span>
+      ${gaugeSVG(n, k === 0 ? 36 : 26)}<span class="pn" style="color:${corPrio(n)}">${n}</span>
+    </div>`;
+  }).join('');
 }
 function pipConteudo(modo) {
-  const H = hoje(), a = new Date(), r = resumoDia(H), pct = r.total ? Math.round(r.feitos / r.total * 100) : 0;
-  const hd = titulo => `<div class="hd"><div><span class="ttl">${titulo}</span><b>${pad(a.getHours())}:${pad(a.getMinutes())}</b></div>
-      <small>${parseD(H).toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit' })}<br>${r.feitos}/${r.total} concluída(s)</small></div>
-    <div class="bar"><i style="width:${pct}%"></i></div>`;
-  const rod = `<div class="rod"><button data-abrir>Abrir o app</button></div>`;
-  if (modo === 'agenda') return { cls: '', titulo: 'Meu dia', html: `${hd('Meu dia · agenda')}<div class="sec">${pipAgendaHTML()}</div>${rod}` };
-  if (modo === 'tarefas') return { cls: 'so-caderno', titulo: 'Minhas tarefas', html: `${pipCadernoHTML()}${rod}` };
-  return { cls: '', titulo: 'Meu dia completo', html: `${hd('Meu dia completo')}<div class="sec"><div class="lbl">Próximos horários</div>${pipAgendaHTML(4)}</div>${pipCadernoHTML()}${rod}` };
+  const H = hoje(), r = resumoDia(H), pct = r.total ? Math.round(r.feitos / r.total * 100) : 0;
+  const info = `<div class="info">
+      <div class="info-top"><b>${parseD(H).toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}</b><span>${r.feitos}/${r.total} concluída(s)</span></div>
+      <div class="bar"><i style="width:${pct}%"></i></div>
+      <button data-abrir>Abrir o app</button>
+    </div>`;
+  const tit = { agenda: 'Meu dia', tarefas: 'Minhas tarefas', completo: 'Meu dia completo' }[modo];
+  let corpo;
+  if (modo === 'agenda') corpo = pipTimerHTML() + `<div class="lbl">Agenda de hoje</div>` + pipAgendaHTML();
+  else if (modo === 'tarefas') corpo = pipTimerHTML() + `<div class="lbl">Por prioridade</div>` + pipTarefasHTML();
+  else corpo = pipTimerHTML() + `<div class="lbl">Agenda de hoje</div>` + pipAgendaHTML() + `<div class="lbl" style="margin-top:12px">Por prioridade</div>` + pipTarefasHTML();
+  return { titulo: tit, html: info + corpo };
 }
-const PIP_TAM = { agenda: [330, 470], tarefas: [330, 430], completo: [350, 640] };
+const PIP_TAM = { agenda: [320, 440], tarefas: [320, 420], completo: [340, 620] };
 
 async function abrirFlutuante(modo = 'completo') {
   if (S.pip && !S.pip.closed) {            // já aberta: só troca o conteúdo
     S.pipModo = modo; atualizarFlutuante();
     try { S.pip.resizeTo(...PIP_TAM[modo]); } catch {}
     try { S.pip.focus(); } catch {}
+    if (S.view === 'mapa') render();
     return;
   }
   let pw = null;
@@ -1772,11 +1792,24 @@ async function abrirFlutuante(modo = 'completo') {
   });
   if (!S.registros[hoje()]) { try { await carregarRegistros(hoje()); } catch {} }
   atualizarFlutuante();
-  clearInterval(S.pipTimer); clearInterval(S.pipSync);
+  clearInterval(S.pipTimer); clearInterval(S.pipSync); clearInterval(S.pipTick);
   S.pipTimer = setInterval(atualizarFlutuante, 30000);
+  S.pipTick = setInterval(tickFlutuante, 1000);
   S.pipSync = setInterval(async () => { try { await Promise.all([carregarTarefas(), carregarRegistros(hoje())]); render(); } catch {} }, 120000);
-  pw.addEventListener('pagehide', () => { clearInterval(S.pipTimer); clearInterval(S.pipSync); S.pip = null; if (S.view === 'mapa') render(); });
+  pw.addEventListener('pagehide', () => { clearInterval(S.pipTimer); clearInterval(S.pipSync); clearInterval(S.pipTick); S.pip = null; if (S.view === 'mapa') render(); });
   if (S.view === 'mapa') render();
+}
+// Atualiza o timer a cada segundo; quando zera, passa para o próximo compromisso
+function tickFlutuante() {
+  const pw = S.pip;
+  if (!pw || pw.closed) return;
+  let zerou = false;
+  pw.document.querySelectorAll('[data-alvo]').forEach(el => {
+    const ms = +el.dataset.alvo - Date.now();
+    el.textContent = fmtTimer(ms);
+    if (ms <= 0) zerou = true;
+  });
+  if (zerou) setTimeout(atualizarFlutuante, 1500);
 }
 async function concluirDoFlutuante(id) {
   if (!S.tarefas[id]) return;
@@ -1789,7 +1822,6 @@ function atualizarFlutuante() {
   if (!pw || pw.closed) return;
   const el = pw.document.getElementById('pip'); if (!el) return;
   const c = pipConteudo(S.pipModo || 'completo');
-  pw.document.body.className = c.cls;
   pw.document.title = `Mapa Mental · ${c.titulo}`;
   el.innerHTML = c.html;
 }
@@ -1797,33 +1829,19 @@ function atualizarFlutuante() {
 /* ---------- ABA MAPA ---------- */
 function renderMapa() {
   const ops = [
-    { modo: 'agenda', nome: 'Meu dia', desc: 'Agenda do dia só com o que tem horário, com a linha do "agora" e o próximo compromisso em destaque.' },
-    { modo: 'tarefas', nome: 'Minhas tarefas', desc: 'Um caderninho com a próxima tarefa por prioridade e as seguintes, para ir riscando.' },
-    { modo: 'completo', nome: 'Meu dia completo', desc: 'Os dois juntos: próximos horários e o caderninho de tarefas por prioridade.' },
+    { modo: 'agenda', nome: 'Meu dia', desc: 'Agenda só com o que tem horário' },
+    { modo: 'tarefas', nome: 'Minhas tarefas', desc: 'Próxima tarefa por prioridade' },
+    { modo: 'completo', nome: 'Meu dia completo', desc: 'Agenda + tarefas por prioridade' },
   ];
   const aberta = S.pip && !S.pip.closed ? S.pipModo : null;
-  const previa = modo => {
-    const c = pipConteudo(modo);
-    const doc = `<!DOCTYPE html><html><head><meta charset="UTF-8">${PIP_FONTES}<style>${PIP_CSS} html,body{overflow:hidden}</style></head><body class="${c.cls}">${c.html}</body></html>`;
-    return `<iframe class="map-prev" srcdoc="${esc(doc)}" tabindex="-1" aria-hidden="true"></iframe>`;
-  };
-  const suporta = 'documentPictureInPicture' in window;
   $('#main').innerHTML = `
-    <div class="daybar"><h2 class="day-title">Mapa<small>Janelas que ficam fora do app, por cima de tudo — arraste para onde quiser</small></h2></div>
-    ${suporta ? '' : `<div class="note" style="margin-bottom:16px">Seu navegador atual não permite janela fixa por cima de tudo. No Chrome ou Edge do computador ela fica sempre visível; aqui ela abre como uma janela comum.</div>`}
-    <div class="map-grid">
-      ${ops.map(o => `
-        <article class="map-card ${aberta === o.modo ? 'on' : ''}" data-pip="${o.modo}">
-          <div class="map-frame">${previa(o.modo)}</div>
-          <div class="map-info">
-            <h3>${o.nome}${aberta === o.modo ? ' <span class="badge blue">aberta</span>' : ''}</h3>
-            <p>${o.desc}</p>
-            <button class="btn btn-primary" data-pip="${o.modo}">${ICON.pip.replace('<svg', '<svg width="16" height="16"')} ${aberta ? (aberta === o.modo ? 'Trazer para frente' : 'Trocar para esta') : 'Abrir janela'}</button>
-          </div>
-        </article>`).join('')}
+    <div class="daybar"><h2 class="day-title">Mapa<small>Abre uma janela que fica fora do app, por cima de tudo. Passe o mouse nela para ver o resumo do dia.</small></h2></div>
+    <div class="map-btns">
+      ${ops.map(o => `<button class="map-btn ${aberta === o.modo ? 'on' : ''}" data-pip="${o.modo}">
+        ${ICON.pip}<span><b>${o.nome}</b><small>${aberta === o.modo ? 'aberta agora' : o.desc}</small></span></button>`).join('')}
     </div>
-    <p class="help" style="margin-top:14px">Só existe uma janela flutuante por vez — escolher outra opção troca o conteúdo da que já está aberta.</p>`;
-  document.querySelectorAll('.map-card').forEach(c => c.onclick = () => abrirFlutuante(c.dataset.pip));
+    ${'documentPictureInPicture' in window ? '' : `<p class="help" style="margin-top:14px">Neste navegador a janela abre como uma janela comum. No Chrome ou Edge do computador ela fica sempre por cima.</p>`}`;
+  document.querySelectorAll('.map-btn').forEach(b => b.onclick = () => abrirFlutuante(b.dataset.pip));
 }
 
 function cardHTML(it) {
