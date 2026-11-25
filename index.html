@@ -289,6 +289,55 @@
   @media (max-width:1100px){ .kpis{grid-template-columns:repeat(3,1fr)} .kpi-prog{grid-column:span 2} }
   @media (max-width:820px){ .dash{grid-template-columns:1fr} .panel.agenda{grid-row:auto} .kpis{grid-template-columns:repeat(2,1fr)} .kpi-prog{grid-column:1/-1} .alarme{flex-direction:column;gap:8px} }
 
+  /* ---------- PRIORIDADE (velocímetro) ---------- */
+  .gauge-b{display:inline-flex;align-items:flex-end;gap:5px;padding:2px 8px 3px 5px;border:1px solid var(--line);border-radius:8px;background:rgba(0,0,0,.18)}
+  .gauge-b b{font-family:'Space Grotesk';font-size:12.5px;line-height:1}
+  .gauge-prev{display:flex;justify-content:center;margin:2px 0 8px}
+  .lig-box{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13.5px;color:var(--muted)}
+  .lig-box b{color:var(--azul-palido)}
+  .lig-box span{flex:1}
+  [data-edit]{cursor:pointer}
+  .list-row{position:relative;overflow:hidden}
+  .list-row::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--pcolor,var(--line))}
+  .list-row:hover,.pop-row[data-edit]:hover,.done-row[data-edit]:hover{background:rgba(62,121,150,.1)}
+  .pop-row{border-radius:8px;padding-left:6px;padding-right:6px}
+
+  /* ---------- DIÁRIO: tons de azul ---------- */
+  .kpis .kpi{border-color:#33476a}
+  .kpis .kpi:nth-child(1){background:linear-gradient(135deg,#3E7996 0%,#2F5F77 45%,#2D2E47 100%);border-color:#4f8aa6}
+  .kpis .kpi:nth-child(2){background:linear-gradient(135deg,#2F5F77,#22324a)}
+  .kpis .kpi:nth-child(3){background:linear-gradient(135deg,#2D2E47,#263a55)}
+  .kpis .kpi:nth-child(4){background:linear-gradient(135deg,#1F4257,#2D2E47)}
+  .kpis .kpi:nth-child(5){background:linear-gradient(135deg,rgba(111,163,190,.35),#2D2E47);border-color:#6FA3BE}
+  .kpis .kpi-l{color:var(--azul-palido)}
+  .kpis .kpi-s{color:#c3d6e2}
+  .kpis .progress-track{background:rgba(0,0,0,.3)}
+  .kpis .progress-fill{background:linear-gradient(90deg,var(--azul-palido),#fff)}
+  .dash .panel{--pc:var(--azul);border-top:3px solid var(--pc);background:linear-gradient(180deg,rgba(62,121,150,.16),var(--surface) 160px);border-color:#2f3a58;border-top-color:var(--pc)}
+  .dash .panel.agenda{--pc:var(--azul-claro)}
+  .dash .panel:nth-of-type(3){--pc:var(--azul)}
+  .dash .panel:nth-of-type(4){--pc:var(--azul-palido)}
+  .dash .panel.full:last-child{--pc:var(--azul-escuro)}
+  .dash .panel.full:first-child:not(:last-child){--pc:var(--azul-palido);border-style:dashed;border-top-style:solid}
+  .dash .panel-head h3{display:flex;align-items:center;gap:8px}
+  .dash .panel-head h3::before{content:"";width:9px;height:9px;border-radius:3px;background:var(--pc)}
+  .dash .panel-head .count{background:rgba(62,121,150,.3);color:#fff}
+  .dash .panel .task{background:rgba(14,18,30,.75);border-color:#2c3756}
+  .dash .panel .task:hover{border-color:var(--azul-claro);background:rgba(31,61,79,.55)}
+  .dash .now-line{color:#fff}
+  .dash .now-line::before,.dash .now-line::after{background:linear-gradient(90deg,var(--azul-claro),var(--azul-palido))}
+
+  /* ---------- ABA MAPA ---------- */
+  .map-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px}
+  .map-card{background:linear-gradient(180deg,rgba(62,121,150,.18),var(--surface) 55%);border:1px solid #2f3a58;border-radius:18px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;transition:border-color .15s,transform .15s}
+  .map-card:hover{border-color:var(--azul-claro);transform:translateY(-2px)}
+  .map-card.on{border-color:var(--azul-palido);box-shadow:0 0 0 1px var(--azul-palido)}
+  .map-frame{height:330px;padding:16px 16px 0;display:flex;justify-content:center;overflow:hidden;background:radial-gradient(400px 200px at 50% 0,rgba(111,163,190,.25),transparent)}
+  .map-prev{width:330px;height:430px;border:1px solid #3a4a6b;border-radius:12px 12px 0 0;pointer-events:none;background:#11121B;box-shadow:0 18px 40px rgba(0,0,0,.45);transform-origin:top center}
+  .map-info{padding:16px 18px 18px;border-top:1px solid #2f3a58}
+  .map-info h3{color:var(--branco);font-size:18px;display:flex;align-items:center;gap:8px}
+  .map-info p{color:var(--muted);font-size:13.5px;line-height:1.45;margin:6px 0 14px}
+
   /* ---------- BARRA LATERAL ---------- */
   .layout{padding-left:232px}
   .side{position:fixed;left:0;top:0;bottom:0;width:232px;background:var(--preto);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:22px 14px 16px;z-index:25}
@@ -501,6 +550,8 @@ function toast(msg) {
 }
 
 const ICON = {
+  copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg>',
+  globe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3.5 9h17M3.5 15h17M12 3c2.6 2.6 3.9 5.6 3.9 9s-1.3 6.4-3.9 9M12 3C9.4 5.6 8.1 8.6 8.1 12s1.3 6.4 3.9 9"/></svg>',
   link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13.5a4 4 0 005.7.3l3-3a4 4 0 00-5.7-5.7l-1.2 1.2"/><path d="M14 10.5a4 4 0 00-5.7-.3l-3 3a4 4 0 005.7 5.7l1.2-1.2"/></svg>',
   bell: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1112 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10.3 20a1.9 1.9 0 003.4 0"/></svg>',
   home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>',
@@ -524,11 +575,39 @@ const ICON = {
   out: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>',
   undo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 010 10h-3"/></svg>',
 };
+// Cor da prioridade: 0 = branco clarinho … 100 = vermelho pastel, com transição gradual
+const PSTOPS = [[0, [255, 255, 255]], [30, [255, 241, 204]], [60, [255, 207, 168]], [100, [240, 140, 140]]];
+function corPrio(n) {
+  n = Math.max(0, Math.min(100, n));
+  for (let k = 1; k < PSTOPS.length; k++) {
+    const [v1, c1] = PSTOPS[k], [v0, c0] = PSTOPS[k - 1];
+    if (n <= v1) { const f = (n - v0) / (v1 - v0); return `rgb(${c0.map((c, i) => Math.round(c + (c1[i] - c) * f)).join(',')})`; }
+  }
+  return 'rgb(240,140,140)';
+}
+const corTarefa = t => { const n = prioNum(t); return n == null ? 'var(--azul-palido)' : corPrio(n); };
+// Velocímetro (meia-lua arredondada) com ponteiro
+function gaugeSVG(n, w = 34, numero = false, agulha = '#E9EBF3') {
+  const f = x => +x.toFixed(2);
+  const sw = w * 0.15, r = (w - sw) / 2, cx = w / 2, cy = r + sw / 2, h = cy + (numero ? w * 0.27 : sw * 0.75);
+  const pt = v => { const a = Math.PI * (1 - v / 100); return [f(cx + r * Math.cos(a)), f(cy - r * Math.sin(a))]; };
+  let g = `<path d="M${pt(0)} A${f(r)} ${f(r)} 0 0 1 ${pt(100)}" fill="none" stroke="rgba(140,150,180,.25)" stroke-width="${f(sw)}" stroke-linecap="round"/>`;
+  g += `<circle cx="${pt(0)[0]}" cy="${pt(0)[1]}" r="${f(sw / 2)}" fill="${corPrio(0)}"/>`;
+  for (let v0 = 0; v0 < n; v0 += 5) {
+    const v1 = Math.min(v0 + 5, n);
+    g += `<path d="M${pt(v0)} A${f(r)} ${f(r)} 0 0 1 ${pt(Math.min(v1 + 1, n))}" fill="none" stroke="${corPrio((v0 + v1) / 2)}" stroke-width="${f(sw)}"/>`;
+  }
+  if (n > 0) g += `<circle cx="${pt(n)[0]}" cy="${pt(n)[1]}" r="${f(sw / 2)}" fill="${corPrio(n)}"/>`;
+  const a = Math.PI * (1 - n / 100);
+  g += `<line x1="${f(cx)}" y1="${f(cy)}" x2="${f(cx + r * 0.7 * Math.cos(a))}" y2="${f(cy - r * 0.7 * Math.sin(a))}" stroke="${agulha}" stroke-width="${f(Math.max(1.4, sw * 0.32))}" stroke-linecap="round"/>`;
+  g += `<circle cx="${f(cx)}" cy="${f(cy)}" r="${f(Math.max(1.6, sw * 0.42))}" fill="${agulha}"/>`;
+  if (numero) g += `<text x="${f(cx)}" y="${f(cy + w * 0.23)}" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-weight="700" font-size="${f(w * 0.19)}" fill="${corPrio(n)}">${n}</text>`;
+  return `<svg class="gauge" width="${f(w)}" height="${f(h)}" viewBox="0 0 ${f(w)} ${f(h)}" aria-hidden="true">${g}</svg>`;
+}
 function prioHTML(t) {
   const n = prioNum(t);
   if (n == null) return '';
-  const f = FAIXAS[faixa(n)];
-  return `<span class="badge outline" title="Prioridade ${n} de 100" style="color:${f.c}"><span class="prio l${f.l}"><i></i><i></i><i></i></span>Prioridade ${n}</span>`;
+  return `<span class="gauge-b" title="Prioridade ${n} de 100">${gaugeSVG(n, 30)}<b style="color:${corPrio(n)}">${n}</b></span>`;
 }
 const horaHTML = t => t.horario ? `<span class="hora">${esc(t.horario)}</span>` : '';
 function passaFiltro(t) {
@@ -812,16 +891,8 @@ function verPautas(id) {
     <div class="modal-foot"><button class="btn btn-ghost" onclick="fecharModal(this)">Fechar</button></div>`);
 }
 
-// Conclui/desfaz a tarefa e as tarefas ligadas a ela que aparecem no mesmo dia
-function aplicarFeito(id) {
-  aplicarFeitoUm(id);
-  const D = S.dia, alvo = estaFeito(id, D), doDia = itensDoDia(D);
-  for (const oid of ligadas(id)) {
-    const it = doDia.find(i => i.id === oid);
-    if (!it || it.status === 'decidir' || it.status === 'dispensada') continue;
-    if (estaFeito(oid, D) !== alvo) aplicarFeitoUm(oid);
-  }
-}
+// Tarefas ligadas são concluídas separadamente (a ligação só indica que uma é cópia da outra)
+function aplicarFeito(id) { aplicarFeitoUm(id); }
 
 function aplicarFeitoUm(id) {
   const t = S.tarefas[id], D = S.dia;
@@ -908,10 +979,13 @@ function abrirModal(html, titulo) {
   w.querySelector('.win-title').textContent = tit;
   w.dataset.titulo = tit;
 
-  // posição inicial: centralizada, em cascata
-  const r = w.getBoundingClientRect(), off = (CASCATA++ % 6) * 26;
-  w.style.left = Math.max(8, (innerWidth - r.width) / 2 + off) + 'px';
-  w.style.top = Math.max(8, Math.min((innerHeight - r.height) / 2 - 30, 90) + off) + 'px';
+  // posição inicial: centro da tela (recentraliza depois que o conteúdo é desenhado)
+  const centralizar = () => {
+    const r = w.getBoundingClientRect();
+    w.style.left = Math.max(8, (innerWidth - r.width) / 2) + 'px';
+    w.style.top = Math.max(8, (innerHeight - r.height) / 2) + 'px';
+  };
+  centralizar(); requestAnimationFrame(centralizar);
   focarJanela(w);
 
   w.addEventListener('pointerdown', () => focarJanela(w));
@@ -957,6 +1031,12 @@ function fecharModal(x) {
   w.remove();
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharModal(); });
+// Clicar numa tarefa abre a edição (botões dentro dela continuam com a própria ação)
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-edit]');
+  if (!el || e.target.closest('button, a, input, select, textarea, label')) return;
+  if (S.tarefas[el.dataset.edit]) formTarefa(el.dataset.edit);
+});
 
 function confirmar(titulo, texto, rotulo, acao) {
   let W; const q = sel => W.querySelector(sel);
@@ -979,7 +1059,7 @@ function formTarefa(id, opts = {}) {
     dias: t?.dias ? [...t.dias] : [1, 2, 3, 4, 5],
     data: t?.data || S.dia, inicio: t?.inicio || hoje(),
     reuniao: !!t?.reuniao,
-    ligada: t ? (ligadas(id)[0] || '') : '',
+    ligada: '', desligar: false,
   };
   const copiarDe = oid => {
     const o = S.tarefas[oid]; if (!o) return;
@@ -987,7 +1067,8 @@ function formTarefa(id, opts = {}) {
       dias: o.dias ? [...o.dias] : f.dias, data: o.data || f.data, inicio: o.inicio || f.inicio,
       reuniao: !!o.reuniao, prioridade: prioNum({ ...o, reuniao: false, horario: null }) });
   };
-  if (!t && opts.ligada) { copiarDe(opts.ligada); f.ligada = opts.ligada; }
+  const origem = opts.duplicar || opts.ligada;
+  if (!t && origem) { copiarDe(origem); f.ligada = origem; }
   const ajuda = {
     diaria: 'Repete nos dias da semana selecionados.',
     unica: 'Aparece só na data escolhida. Se não for concluída, aparece como atrasada no dia de hoje.',
@@ -1008,7 +1089,7 @@ function formTarefa(id, opts = {}) {
       : `<div class="field"><label>Começa a aparecer em</label><input class="input" type="date" id="fInicio" value="${f.inicio}"></div>`;
 
     q('.modal').innerHTML = `
-      <h2>${t ? 'Editar tarefa' : 'Nova tarefa'}</h2>
+      <h2>${t ? 'Editar tarefa' : f.ligada ? 'Duplicar tarefa' : 'Nova tarefa'}</h2>
       <div class="field"><label>Tarefa</label><input class="input" id="fTitulo" value="${esc(f.titulo)}" placeholder="O que precisa ser feito?" maxlength="160"></div>
       <div class="field"><label>Detalhes (opcional)</label><textarea class="input" id="fDesc" placeholder="Observações, links, passos…">${esc(f.descricao)}</textarea></div>
       <div class="field"><label>Tipo</label>
@@ -1025,23 +1106,21 @@ function formTarefa(id, opts = {}) {
         </button>
       </div>
       ${f.reuniao || f.horario ? '' : `<div class="field"><label>Prioridade (0 a 100, de 5 em 5)</label>
+        <div class="gauge-prev" id="fGauge">${gaugeSVG(f.prioridade, 150, true)}</div>
         <div class="prio-ctl"><input type="range" id="fPrioR" min="0" max="100" step="5" value="${f.prioridade}">
           <input class="input" type="number" id="fPrio" min="0" max="100" step="5" value="${f.prioridade}"></div>
         <div class="prio-marks"><span>0 · baixa</span><span>50</span><span>100 · máxima</span></div>
       </div>`}
-      <div class="field"><label>Ligar a uma tarefa existente (opcional)</label>
-        <select class="input" id="fLig"><option value="">— Nenhuma —</option>
-          ${Object.entries(S.tarefas).filter(([k]) => k !== id).sort((a, b) => (a[1].titulo || '').localeCompare(b[1].titulo || '', 'pt-BR'))
-            .map(([k, o]) => `<option value="${k}" ${f.ligada === k ? 'selected' : ''}>${esc(o.titulo)} · ${TIPOS[o.tipo]}${o.horario ? ' · ' + esc(o.horario) : ''}</option>`).join('')}
-        </select>
-        <div class="help">Tarefas ligadas são concluídas juntas no mesmo dia.${!t ? ' Se o campo "Tarefa" estiver vazio, os dados da escolhida são copiados para você só ajustar.' : ''}
-          ${t && ligadas(id).length ? `<br>Ligada a: <b style="color:var(--azul-palido)">${ligadas(id).map(k => esc(S.tarefas[k].titulo)).join(', ')}</b>` : ''}</div>
-      </div>
+      ${!t && f.ligada && S.tarefas[f.ligada] ? `<div class="note" style="margin:0 0 14px">${ICON.copy.replace('<svg', '<svg width="13" height="13" style="vertical-align:-2px"')} Cópia de <b>${esc(S.tarefas[f.ligada].titulo)}</b> — ajuste o que precisar. As duas ficam ligadas, mas cada uma é concluída separadamente.</div>` : ''}
+      ${t && ligadas(id).length && !f.desligar ? `<div class="field"><label>Ligações</label>
+        <div class="lig-box">${ICON.link.replace('<svg', '<svg width="15" height="15"')}<span>Ligada a: <b>${ligadas(id).map(k => esc(S.tarefas[k].titulo)).join(', ')}</b></span>
+          <button type="button" class="mini" id="fDesl">Desfazer ligação</button></div></div>` : ''}
       <div class="msg err" id="fMsg"></div>
       <div class="modal-foot">
-        ${t ? `<button class="btn btn-danger" id="fDel" style="margin-right:auto">Excluir</button>` : ''}
+        ${t ? `<button class="btn btn-danger" id="fDel">Excluir</button>
+               <button class="btn btn-ghost" id="fDup" style="margin-right:auto" title="Cria uma cópia ligada a esta tarefa">${ICON.copy.replace('<svg', '<svg width="15" height="15"')} Duplicar</button>` : ''}
         <button class="btn btn-ghost" onclick="fecharModal(this)">Cancelar</button>
-        <button class="btn btn-primary" id="fSalvar">${t ? 'Salvar' : 'Adicionar'}</button>
+        <button class="btn btn-primary" id="fSalvar">${t ? 'Salvar' : f.ligada ? 'Criar cópia' : 'Adicionar'}</button>
       </div>`;
 
     const ler = () => {
@@ -1050,15 +1129,15 @@ function formTarefa(id, opts = {}) {
       if (q('#fInicio')) f.inicio = q('#fInicio').value;
       f.horario = q('#fHora').value;
       if (q('#fPrio')) f.prioridade = arred5(q('#fPrio').value);
-      f.ligada = q('#fLig').value;
     };
     q('#fHora').onchange = () => { ler(); desenhar(); };
-    q('#fLig').onchange = () => { ler(); if (!t && f.ligada && !f.titulo.trim()) copiarDe(f.ligada); desenhar(); };
+    if (q('#fDesl')) q('#fDesl').onclick = () => { ler(); f.desligar = true; desenhar(); };
+    if (q('#fDup')) q('#fDup').onclick = () => { fecharModal(W); formTarefa(null, { duplicar: id }); };
     q('#segTipo').onclick = e => { const b = e.target.closest('button'); if (!b) return; ler(); f.tipo = b.dataset.v; desenhar(); };
     q('#fReu').onclick = () => { ler(); f.reuniao = !f.reuniao; desenhar(); };
     if (q('#fPrioR')) {
-      q('#fPrioR').oninput = e => { q('#fPrio').value = e.target.value; };
-      q('#fPrio').onchange = e => { e.target.value = arred5(e.target.value); q('#fPrioR').value = e.target.value; };
+      q('#fPrioR').oninput = e => { q('#fPrio').value = e.target.value; q('#fGauge').innerHTML = gaugeSVG(+e.target.value, 150, true); };
+      q('#fPrio').onchange = e => { e.target.value = arred5(e.target.value); q('#fPrioR').value = e.target.value; q('#fGauge').innerHTML = gaugeSVG(+e.target.value, 150, true); };
     }
     W.querySelectorAll('.days button').forEach(b => b.onclick = () => {
       ler(); const d = +b.dataset.d;
@@ -1081,11 +1160,11 @@ function formTarefa(id, opts = {}) {
       if (f.tipo === 'unica' || f.tipo === 'complexa') base.data = f.data;
       // ligação com outra tarefa
       let marcarOutra = null;
-      base.grupo = null;
-      if (f.ligada && S.tarefas[f.ligada]) {
-        base.grupo = S.tarefas[f.ligada].grupo || (t && t.grupo) || novoId('g_');
-        if (S.tarefas[f.ligada].grupo !== base.grupo) marcarOutra = f.ligada;
-      }
+      if (t) base.grupo = f.desligar ? null : (t.grupo || null);
+      else if (f.ligada && S.tarefas[f.ligada]) {          // duplicação: as duas ficam ligadas
+        base.grupo = S.tarefas[f.ligada].grupo || novoId('g_');
+        if (!S.tarefas[f.ligada].grupo) marcarOutra = f.ligada;
+      } else base.grupo = null;
       const ligarOutra = () => { if (marcarOutra) { S.tarefas[marcarOutra].grupo = base.grupo; salvar(() => api(`tarefas/${marcarOutra}`, 'PATCH', { grupo: base.grupo })); } };
 
       fecharModal(W);
@@ -1105,7 +1184,7 @@ function formTarefa(id, opts = {}) {
     };
   };
 
-  W = abrirModal('', t ? 'Editar tarefa' : 'Nova tarefa');
+  W = abrirModal('', t ? 'Editar tarefa' : f.ligada ? 'Duplicar tarefa' : 'Nova tarefa');
   desenhar();
   q('#fTitulo').focus();
 }
@@ -1182,6 +1261,7 @@ function render() {
         <nav class="side-nav">
           ${nav('inicio', ICON.home, 'Início')}
           ${nav('dia', ICON.pen, 'Diário')}
+          ${nav('mapa', ICON.globe, 'Mapa')}
           ${nav('todas', ICON.list, 'Todas as tarefas')}
         </nav>
         <div class="side-foot">
@@ -1200,6 +1280,7 @@ function render() {
   document.querySelectorAll('.nav-item').forEach(b => b.onclick = () => { S.view = b.dataset.view; render(); });
   if (S.view === 'inicio') renderInicio();
   else if (S.view === 'dia') renderDia();
+  else if (S.view === 'mapa') renderMapa();
   else renderTodas();
   atualizarFlutuante();
 }
@@ -1272,7 +1353,7 @@ function renderDia() {
 
   const concluidasHTML = concluidas.map(it => {
     const pauta = it.t.reuniao && S.pautas[it.id] && S.pautas[it.id][D];
-    return `<div class="done-row ${it.status}">
+    return `<div class="done-row ${it.status}" data-edit="${it.id}" title="Clique para editar">
       ${it.status === 'feito' ? `<button class="check on" title="Desfazer" onclick="alternarFeito('${it.id}')">${ICON.check}</button>` : `<span class="pop-st dispensada">–</span>`}
       <span class="dr-t">${esc(it.t.titulo)}</span>
       ${it.status === 'dispensada' ? `<button class="mini" onclick="decidir('${it.id}',null)">Rever</button>` : ''}
@@ -1438,7 +1519,7 @@ function calSemana() {
     const its = r.itens.sort(cmpHora);
     return `<div class="wcol ${k === hoje() ? 'today' : ''}">
       <button class="whead" data-d="${k}"><span>${DIAS_NOME[i]}</span><b>${dt.getDate()}/${pad(dt.getMonth() + 1)}</b>${r.total ? `<small>${r.feitos}/${r.total}</small>` : ''}</button>
-      <div class="witems">${its.length ? its.map(it => `<button class="witem ${it.status} p-${faixa(prioNum(it.t))}" data-d="${k}">
+      <div class="witems">${its.length ? its.map(it => `<button class="witem ${it.status}" style="--pcolor:${corTarefa(it.t)}" data-d="${k}">
           ${it.t.horario ? `<span class="wh">${esc(it.t.horario)}</span>` : ''}<span class="wt">${esc(it.t.titulo)}</span>
           ${it.t.reuniao ? '<span class="wtag">Reunião</span>' : ''}</button>`).join('') : '<div class="wempty">—</div>'}</div>
     </div>`;
@@ -1464,7 +1545,7 @@ async function abrirPopupDia(D) {
     let extra = TIPOS[t.tipo];
     if (t.tipo === 'complexa') extra += ` · dia ${it.diaN}`;
     if (it.atrasada) extra += ` · atrasada desde ${fmtCurta(t.data)}`;
-    return `<div class="pop-row ${status === 'dispensada' ? 'off' : ''}">
+    return `<div class="pop-row ${status === 'dispensada' ? 'off' : ''}" data-edit="${id}" title="Clique para editar">
       <span class="pop-st ${status}">${sim[status]}</span>
       <div class="t-body">
         <div class="t-title" style="font-size:14.5px">${horaHTML(t)}${esc(t.titulo)}</div>
@@ -1485,7 +1566,7 @@ async function abrirPopupDia(D) {
       <button class="btn btn-primary" id="popAbrir">Abrir este dia</button>
     </div>`);
   q('#popAbrir').onclick = () => { fecharModal(W); S.view = 'dia'; irParaDia(D); };
-  q('#popPip').onclick = () => abrirFlutuante();
+  q('#popPip').onclick = () => abrirFlutuante('completo');
   q('#popNova').onclick = async () => { fecharModal(W); S.dia = D; formTarefa(); };
 }
 
@@ -1574,71 +1655,175 @@ function quandoTxt(D, hm) {
   if (D === addDays(H, 1)) return `amanhã às ${hm}`;
   return `${parseD(D).toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit' })} às ${hm}`;
 }
+const PIP_FONTES = '<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=DM+Sans:wght@400;500;600&family=Caveat:wght@600;700&display=swap" rel="stylesheet">';
 const PIP_CSS = `
   *{box-sizing:border-box;margin:0;padding:0}
-  body{background:#11121B;color:#E9EBF3;font-family:'DM Sans',system-ui,sans-serif;font-size:14px;padding:14px;min-height:100vh}
-  .hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-  .hd b{font-family:'Space Grotesk',sans-serif;font-size:22px;color:#fff}
-  .hd small{color:#9496B0;font-size:12px;text-align:right}
-  .bar{height:5px;background:#2D2E47;border-radius:9px;overflow:hidden;margin-bottom:14px}
-  .bar i{display:block;height:100%;background:linear-gradient(90deg,#3E7996,#B9D6E4)}
-  .lbl{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9496B0;margin:0 0 6px}
-  .card{background:#1A1B29;border:1px solid #383A58;border-left:4px solid #6FA3BE;border-radius:10px;padding:10px 12px;margin-bottom:12px}
-  .card.ev{border-left-color:#B9D6E4}
-  .card.p-alta{border-left-color:#fff}.card.p-baixa{border-left-color:#4b4e72}
-  .t{font-weight:600;color:#fff;font-size:15px;line-height:1.3}
-  .m{color:#B9D6E4;font-size:12.5px;margin-top:4px}
-  .m.muted{color:#9496B0}
-  .h{font-family:'Space Grotesk',sans-serif;font-weight:700;color:#B9D6E4;margin-right:6px}
-  .nx{font-size:12.5px;color:#9496B0;padding:3px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .nx b{color:#E9EBF3;font-weight:600}
-  .vazio{color:#9496B0;font-size:13px;padding:6px 0 12px}
-  button{font-family:inherit;background:none;border:1px solid #383A58;color:#B9D6E4;border-radius:8px;padding:5px 10px;font-size:12px;cursor:pointer;margin-top:4px}
-  button:hover{background:#2D2E47}`;
-async function abrirFlutuante() {
-  if (S.pip && !S.pip.closed) { try { S.pip.focus(); } catch {} return; }
-  let pw = null, sempreNoTopo = false;
+  body{background:#11121B;color:#E9EBF3;font-family:'DM Sans',system-ui,sans-serif;font-size:14px;min-height:100vh}
+  button{font-family:inherit;cursor:pointer}
+  .hd{display:flex;align-items:flex-end;justify-content:space-between;padding:14px 14px 10px;background:linear-gradient(135deg,#3E7996,#2D2E47)}
+  .hd .ttl{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#B9D6E4}
+  .hd b{display:block;font-family:'Space Grotesk',sans-serif;font-size:26px;color:#fff;line-height:1.05}
+  .hd small{color:#D6E7EF;font-size:12px;text-align:right}
+  .bar{height:4px;background:rgba(0,0,0,.3)}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,#B9D6E4,#fff)}
+  .sec{padding:12px 14px 4px}
+  .lbl{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9496B0;margin:0 0 8px}
+  .vazio{color:#9496B0;font-size:13px;padding:4px 0 12px}
+  /* agenda */
+  .ag{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:10px;margin-bottom:6px;background:#1A1B29;border:1px solid #2d3150}
+  .ag .hr{font-family:'Space Grotesk',sans-serif;font-weight:700;color:#B9D6E4;font-size:15px;min-width:46px}
+  .ag .tt{flex:1;min-width:0;font-weight:600;color:#fff;font-size:14px;line-height:1.3}
+  .ag .tt small{display:block;font-weight:500;color:#9496B0;font-size:11.5px}
+  .ag.next{background:linear-gradient(135deg,rgba(62,121,150,.45),#1A1B29);border-color:#6FA3BE}
+  .ag.feito{opacity:.45}.ag.feito .tt{text-decoration:line-through}
+  .ok{flex:none;width:22px;height:22px;border-radius:50%;border:2px solid #6FA3BE;background:transparent;display:grid;place-items:center;color:#fff;font-size:12px}
+  .ok:hover{background:rgba(62,121,150,.35)}
+  .ok.on{background:#3E7996;border-color:#3E7996}
+  .now{display:flex;align-items:center;gap:6px;color:#B9D6E4;font-size:11px;font-weight:700;margin:4px 0 8px}
+  .now::after{content:"";flex:1;height:1.5px;background:#6FA3BE}
+  /* caderninho */
+  .caderno{position:relative;margin:12px;background:#FBF8F0;border-radius:6px 12px 12px 6px;color:#2D2E47;padding:26px 14px 14px 46px;box-shadow:0 10px 30px rgba(0,0,0,.45);
+    background-image:linear-gradient(90deg,transparent 36px,#f2b8b8 36px,#f2b8b8 38px,transparent 38px),repeating-linear-gradient(180deg,transparent 0,transparent 27px,#cfe0ea 27px,#cfe0ea 28px);background-position:0 0,0 30px}
+  .caderno::before{content:"";position:absolute;top:8px;left:14px;right:14px;height:10px;background:radial-gradient(circle,#11121B 3.5px,transparent 4px) 0 0/22px 10px repeat-x}
+  .caderno h4{font-family:'Caveat',cursive;font-size:26px;color:#2F5F77;line-height:28px;margin-bottom:0}
+  .cd-next{display:flex;gap:10px;align-items:flex-start;padding:4px 0 6px}
+  .cd-next .tt{flex:1;font-family:'Caveat',cursive;font-size:25px;font-weight:700;line-height:28px;color:#1d2033}
+  .cd-next .meta{font-size:11.5px;color:#5d6178;margin-top:2px;font-family:'DM Sans',sans-serif;font-weight:500}
+  .cd-row{display:flex;gap:8px;align-items:center;height:28px;font-family:'Caveat',cursive;font-size:21px;color:#2D2E47}
+  .cd-row .tt{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .cd-row .pn{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:#5d6178}
+  .caderno .ok{border-color:#3E7996;width:20px;height:20px}
+  .caderno .vazio{color:#5d6178;font-family:'Caveat',cursive;font-size:22px}
+  .caderno .sub{font-family:'DM Sans',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8a8ea6;height:28px;line-height:34px}
+  body.so-caderno{background:#1F3D4F}
+  .rod{padding:4px 14px 14px}
+  .rod button{background:none;border:1px solid #383A58;color:#B9D6E4;border-radius:8px;padding:6px 10px;font-size:12px}
+  .rod button:hover{background:#2D2E47}`;
+
+function pipAgendaHTML(limite) {
+  const H = hoje(), a = new Date(), nowHM = `${pad(a.getHours())}:${pad(a.getMinutes())}`;
+  let itens = itensDoDia(H).filter(i => i.t.horario && i.status !== 'dispensada').sort(cmpHora);
+  if (limite) itens = itens.filter(i => i.status !== 'feito' && minutos(i.t.horario) >= minutos(nowHM) - 30).slice(0, limite);
+  const prox = itens.find(i => i.status !== 'feito' && i.t.horario >= nowHM);
+  let html = '', linha = false;
+  for (const it of itens) {
+    if (!linha && it.t.horario > nowHM) { html += `<div class="now">agora · ${nowHM}</div>`; linha = true; }
+    const feito = it.status === 'feito';
+    html += `<div class="ag ${feito ? 'feito' : ''} ${it === prox ? 'next' : ''}">
+      <span class="hr">${esc(it.t.horario)}</span>
+      <span class="tt">${esc(it.t.titulo)}<small>${it === prox ? quandoTxt(H, it.t.horario) + (it.t.reuniao ? ' · reunião' : '') : it.t.reuniao ? 'Reunião' : TIPOS[it.t.tipo]}</small></span>
+      ${it.status === 'decidir' ? '' : `<button class="ok ${feito ? 'on' : ''}" data-ok="${it.id}" title="${feito ? 'Desfazer' : 'Concluir'}">${feito ? '✓' : ''}</button>`}
+    </div>`;
+  }
+  if (!linha && itens.length) html += `<div class="now">agora · ${nowHM}</div>`;
+  return html || `<div class="vazio">${limite ? 'Nada com horário pela frente hoje.' : 'Nenhuma tarefa com horário hoje.'}</div>`;
+}
+function pipCadernoHTML() {
+  const { tarefas } = proximos();
+  const t1 = tarefas[0], resto = tarefas.slice(1, 6);
+  return `<div class="caderno">
+    <h4>Minhas tarefas</h4>
+    ${t1 ? `<div class="cd-next">
+        <button class="ok" data-ok="${t1.id}" title="Concluir" style="margin-top:4px"></button>
+        <div style="flex:1"><div class="tt">${esc(t1.t.titulo)}</div>
+          <div class="meta">próxima por prioridade${t1.atrasada ? ' · atrasada' : ''}${t1.status === 'parcial' ? ' · parcial' : ''}</div></div>
+        ${gaugeSVG(prioNum(t1.t), 54, true, '#2D2E47')}
+      </div>
+      ${resto.length ? `<div class="sub">Depois</div>${resto.map(i => `<div class="cd-row"><button class="ok" data-ok="${i.id}" title="Concluir"></button><span class="tt">${esc(i.t.titulo)}</span>${gaugeSVG(prioNum(i.t), 26, false, '#2D2E47')}<span class="pn">${prioNum(i.t)}</span></div>`).join('')}` : ''}`
+      : `<div class="vazio">Nada pendente por hoje!</div>`}
+  </div>`;
+}
+function pipConteudo(modo) {
+  const H = hoje(), a = new Date(), r = resumoDia(H), pct = r.total ? Math.round(r.feitos / r.total * 100) : 0;
+  const hd = titulo => `<div class="hd"><div><span class="ttl">${titulo}</span><b>${pad(a.getHours())}:${pad(a.getMinutes())}</b></div>
+      <small>${parseD(H).toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit' })}<br>${r.feitos}/${r.total} concluída(s)</small></div>
+    <div class="bar"><i style="width:${pct}%"></i></div>`;
+  const rod = `<div class="rod"><button data-abrir>Abrir o app</button></div>`;
+  if (modo === 'agenda') return { cls: '', titulo: 'Meu dia', html: `${hd('Meu dia · agenda')}<div class="sec">${pipAgendaHTML()}</div>${rod}` };
+  if (modo === 'tarefas') return { cls: 'so-caderno', titulo: 'Minhas tarefas', html: `${pipCadernoHTML()}${rod}` };
+  return { cls: '', titulo: 'Meu dia completo', html: `${hd('Meu dia completo')}<div class="sec"><div class="lbl">Próximos horários</div>${pipAgendaHTML(4)}</div>${pipCadernoHTML()}${rod}` };
+}
+const PIP_TAM = { agenda: [330, 470], tarefas: [330, 430], completo: [350, 640] };
+
+async function abrirFlutuante(modo = 'completo') {
+  if (S.pip && !S.pip.closed) {            // já aberta: só troca o conteúdo
+    S.pipModo = modo; atualizarFlutuante();
+    try { S.pip.resizeTo(...PIP_TAM[modo]); } catch {}
+    try { S.pip.focus(); } catch {}
+    return;
+  }
+  let pw = null;
+  const [lw, lh] = PIP_TAM[modo];
   if ('documentPictureInPicture' in window) {
-    try { pw = await documentPictureInPicture.requestWindow({ width: 340, height: 360 }); sempreNoTopo = true; } catch {}
+    try { pw = await documentPictureInPicture.requestWindow({ width: lw, height: lh }); } catch {}
   }
   if (!pw) {
-    pw = window.open('', 'mapaMentalFlutuante', 'width=360,height=400');
+    pw = window.open('', 'mapaMentalFlutuante', `width=${lw},height=${lh}`);
     if (!pw) return toast('O navegador bloqueou a janela. Libere pop-ups para este site.');
     toast('Este navegador não deixa a janela fixa por cima — use Chrome ou Edge no computador');
   }
-  S.pip = pw;
-  pw.document.head.innerHTML = `<meta charset="UTF-8"><title>Mapa Mental · Próximos</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"><style>${PIP_CSS}</style>`;
+  S.pip = pw; S.pipModo = modo;
+  pw.document.head.innerHTML = `<meta charset="UTF-8"><title>Mapa Mental</title>${PIP_FONTES}<style>${PIP_CSS}</style>`;
   pw.document.body.innerHTML = '<div id="pip"></div>';
+  pw.document.addEventListener('click', e => {
+    const ok = e.target.closest('[data-ok]');
+    if (ok) return concluirDoFlutuante(ok.dataset.ok);
+    if (e.target.closest('[data-abrir]')) { try { window.focus(); } catch {} S.view = 'dia'; irParaDia(hoje()); }
+  });
   if (!S.registros[hoje()]) { try { await carregarRegistros(hoje()); } catch {} }
   atualizarFlutuante();
   clearInterval(S.pipTimer); clearInterval(S.pipSync);
   S.pipTimer = setInterval(atualizarFlutuante, 30000);
   S.pipSync = setInterval(async () => { try { await Promise.all([carregarTarefas(), carregarRegistros(hoje())]); render(); } catch {} }, 120000);
-  pw.addEventListener('pagehide', () => { clearInterval(S.pipTimer); clearInterval(S.pipSync); S.pip = null; });
+  pw.addEventListener('pagehide', () => { clearInterval(S.pipTimer); clearInterval(S.pipSync); S.pip = null; if (S.view === 'mapa') render(); });
+  if (S.view === 'mapa') render();
+}
+async function concluirDoFlutuante(id) {
+  if (!S.tarefas[id]) return;
+  if (S.dia !== hoje()) await irParaDia(hoje());
+  if (S.tarefas[id].reuniao && !estaFeito(id, hoje())) { try { window.focus(); } catch {} }   // pauta abre no app
+  alternarFeito(id);
 }
 function atualizarFlutuante() {
   const pw = S.pip;
   if (!pw || pw.closed) return;
   const el = pw.document.getElementById('pip'); if (!el) return;
-  const { evento, tarefas } = proximos();
-  const r = resumoDia(hoje()), pct = r.total ? Math.round(r.feitos / r.total * 100) : 0;
-  const agora = new Date();
-  const t1 = tarefas[0], resto = tarefas.slice(1, 4);
-  el.innerHTML = `
-    <div class="hd"><b>${pad(agora.getHours())}:${pad(agora.getMinutes())}</b><small>Hoje: ${r.feitos}/${r.total} concluída(s)</small></div>
-    <div class="bar"><i style="width:${pct}%"></i></div>
-    <div class="lbl">Próximo evento</div>
-    ${evento ? `<div class="card ev"><div class="t"><span class="h">${esc(evento.t.horario)}</span>${esc(evento.t.titulo)}</div>
-        <div class="m">${quandoTxt(evento.D, evento.t.horario)}${evento.t.reuniao ? ' · reunião' : ''}</div></div>`
-      : `<div class="vazio">Nenhum evento com horário nos próximos dias.</div>`}
-    <div class="lbl">Próxima tarefa · por prioridade</div>
-    ${t1 ? `<div class="card p-${faixa(prioNum(t1.t))}"><div class="t">${t1.t.horario ? `<span class="h">${esc(t1.t.horario)}</span>` : ''}${esc(t1.t.titulo)}</div>
-        <div class="m muted">Prioridade ${prioNum(t1.t)}${t1.atrasada ? ' · atrasada' : ''}${t1.status === 'parcial' ? ' · parcial' : ''}</div></div>
-        ${resto.length ? `<div class="lbl" style="margin-top:4px">Depois</div>${resto.map(i => `<div class="nx"><b>${prioNum(i.t)}</b> · ${esc(i.t.titulo)}</div>`).join('')}` : ''}`
-      : `<div class="vazio">Nenhuma tarefa pendente hoje. 🎉</div>`}
-    <button id="pipAbrir">Abrir o app</button>`;
-  pw.document.getElementById('pipAbrir').onclick = () => { try { window.focus(); } catch {} S.view = 'dia'; irParaDia(hoje()); };
+  const c = pipConteudo(S.pipModo || 'completo');
+  pw.document.body.className = c.cls;
+  pw.document.title = `Mapa Mental · ${c.titulo}`;
+  el.innerHTML = c.html;
+}
+
+/* ---------- ABA MAPA ---------- */
+function renderMapa() {
+  const ops = [
+    { modo: 'agenda', nome: 'Meu dia', desc: 'Agenda do dia só com o que tem horário, com a linha do "agora" e o próximo compromisso em destaque.' },
+    { modo: 'tarefas', nome: 'Minhas tarefas', desc: 'Um caderninho com a próxima tarefa por prioridade e as seguintes, para ir riscando.' },
+    { modo: 'completo', nome: 'Meu dia completo', desc: 'Os dois juntos: próximos horários e o caderninho de tarefas por prioridade.' },
+  ];
+  const aberta = S.pip && !S.pip.closed ? S.pipModo : null;
+  const previa = modo => {
+    const c = pipConteudo(modo);
+    const doc = `<!DOCTYPE html><html><head><meta charset="UTF-8">${PIP_FONTES}<style>${PIP_CSS} html,body{overflow:hidden}</style></head><body class="${c.cls}">${c.html}</body></html>`;
+    return `<iframe class="map-prev" srcdoc="${esc(doc)}" tabindex="-1" aria-hidden="true"></iframe>`;
+  };
+  const suporta = 'documentPictureInPicture' in window;
+  $('#main').innerHTML = `
+    <div class="daybar"><h2 class="day-title">Mapa<small>Janelas que ficam fora do app, por cima de tudo — arraste para onde quiser</small></h2></div>
+    ${suporta ? '' : `<div class="note" style="margin-bottom:16px">Seu navegador atual não permite janela fixa por cima de tudo. No Chrome ou Edge do computador ela fica sempre visível; aqui ela abre como uma janela comum.</div>`}
+    <div class="map-grid">
+      ${ops.map(o => `
+        <article class="map-card ${aberta === o.modo ? 'on' : ''}" data-pip="${o.modo}">
+          <div class="map-frame">${previa(o.modo)}</div>
+          <div class="map-info">
+            <h3>${o.nome}${aberta === o.modo ? ' <span class="badge blue">aberta</span>' : ''}</h3>
+            <p>${o.desc}</p>
+            <button class="btn btn-primary" data-pip="${o.modo}">${ICON.pip.replace('<svg', '<svg width="16" height="16"')} ${aberta ? (aberta === o.modo ? 'Trazer para frente' : 'Trocar para esta') : 'Abrir janela'}</button>
+          </div>
+        </article>`).join('')}
+    </div>
+    <p class="help" style="margin-top:14px">Só existe uma janela flutuante por vez — escolher outra opção troca o conteúdo da que já está aberta.</p>`;
+  document.querySelectorAll('.map-card').forEach(c => c.onclick = () => abrirFlutuante(c.dataset.pip));
 }
 
 function cardHTML(it) {
@@ -1697,7 +1882,7 @@ function cardHTML(it) {
     acoes = acoes ? acoes.replace('<div class="t-actions">', '<div class="t-actions">' + btn) : `<div class="t-actions">${btn}</div>`;
   }
 
-  return `<div class="${cls.join(' ')}">
+  return `<div class="${cls.join(' ')}" data-edit="${id}" title="Clique para editar" style="--pcolor:${corTarefa(t)}">
     ${check}
     <div class="t-body">
       <div class="t-title">${horaHTML(t)}${esc(t.titulo)}</div>
@@ -1705,7 +1890,6 @@ function cardHTML(it) {
       <div class="t-meta">${badges.join('')}</div>
       ${nota}${acoes}
     </div>
-    <div class="t-side"><button class="icon-btn" title="Editar" onclick="formTarefa('${id}')">${ICON.edit}</button></div>
   </div>`;
 }
 
@@ -1731,16 +1915,15 @@ function renderTodas() {
       grupos.map(g => `
         <div class="section-title">${TIPOS[g.tipo]} <span class="count">${g.itens.length}</span></div>
         ${g.itens.map(({ id, t }) => `
-          <div class="list-row ${t.ativa === false ? 'off' : ''}">
+          <div class="list-row ${t.ativa === false ? 'off' : ''}" data-edit="${id}" title="Clique para editar" style="--pcolor:${corTarefa(t)}">
             <button class="switch ${t.ativa === false ? '' : 'on'}" title="${t.ativa === false ? 'Ativar' : 'Pausar'}" onclick="alternarAtiva('${id}')"></button>
             <div class="t-body">
               <div class="t-title">${horaHTML(t)}${esc(t.titulo)}</div>
-              <div class="t-meta">${prioHTML(t)}${t.reuniao ? '<span class="badge meet">Reunião</span>' : ''}<span class="badge outline">${det(t)}</span></div>
+              <div class="t-meta">${prioHTML(t)}${t.reuniao ? '<span class="badge meet">Reunião</span>' : ''}${ligadas(id).length ? `<span class="badge outline">${ICON.link.replace('<svg', '<svg width="12" height="12"')} Ligada</span>` : ''}<span class="badge outline">${det(t)}</span></div>
             </div>
             ${t.reuniao ? `<button class="mini" onclick="verPautas('${id}')">Pautas (${Object.keys(S.pautas[id] || {}).length})</button>` : ''}
             <div class="t-side">
-              <button class="icon-btn" title="Criar tarefa igual, ligada a esta" onclick="formTarefa(null,{ligada:'${id}'})">${ICON.link}</button>
-              <button class="icon-btn" title="Editar" onclick="formTarefa('${id}')">${ICON.edit}</button>
+              <button class="icon-btn" title="Duplicar (cria uma cópia ligada)" onclick="formTarefa(null,{duplicar:'${id}'})">${ICON.copy}</button>
               <button class="icon-btn" title="Excluir" onclick="excluirTarefa('${id}')">${ICON.trash}</button>
             </div>
           </div>`).join('')}
