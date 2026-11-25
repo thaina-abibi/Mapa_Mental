@@ -249,6 +249,46 @@
   .pop-row.off{opacity:.5}
 
 
+  /* ---------- DIÁRIO (dashboard) ---------- */
+  .kpis{display:grid;grid-template-columns:1.4fr repeat(3,1fr) 1.3fr;gap:12px;margin-bottom:18px}
+  .kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+  .kpi-prog{background:linear-gradient(135deg,var(--surface2),var(--surface))}
+  .kpi-l{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+  .kpi-v{font-family:'Space Grotesk';font-size:30px;font-weight:700;color:var(--branco);line-height:1.1}
+  .kpi-v small{font-size:15px;color:var(--muted);font-weight:500}
+  .kpi-v.alerta{color:#f0c2cd}
+  .kpi-s{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .kpi-next .kpi-v{color:var(--azul-palido)}
+  .kpi .progress-track{margin:4px 0 2px}
+  .dash{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 14px 10px;min-width:0}
+  .panel.full{grid-column:1/-1}
+  .panel.agenda{grid-row:span 2}
+  .panel-head{display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:0 2px}
+  .panel-head h3{font-size:15px;color:var(--branco)}
+  .panel-head .count{background:var(--surface2);color:var(--azul-palido);padding:1px 8px;border-radius:99px;font-size:11.5px;font-weight:700}
+  .panel-head small{margin-left:auto;font-size:11.5px;color:var(--muted)}
+  .panel .task{background:var(--bg);padding:11px 12px 11px 15px;margin-bottom:7px}
+  .panel .task .t-title{font-size:14.5px}
+  .panel-empty{color:var(--muted);font-size:13px;padding:14px 4px 16px}
+  .now-line{display:flex;align-items:center;gap:8px;margin:8px 0 10px;color:var(--azul-palido);font-size:11.5px;font-weight:700}
+  .now-line::before,.now-line::after{content:"";flex:1;height:1.5px;background:var(--azul-claro)}
+  .now-line::before{flex:0 0 10px}
+  .done-row{display:flex;align-items:center;gap:10px;padding:7px 4px;border-bottom:1px solid var(--line)}
+  .done-row:last-child{border-bottom:none}
+  .done-row .check{width:20px;height:20px}
+  .done-row .check svg{width:12px;height:12px}
+  .dr-t{flex:1;min-width:0;color:var(--muted);text-decoration:line-through;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .done-row.dispensada .dr-t{text-decoration:none;font-style:italic}
+  .done-row .mini{padding:4px 9px;font-size:12px}
+  .alarme{display:flex;gap:16px;align-items:flex-start;padding:4px 0 6px}
+  .alarme-h{font-family:'Space Grotesk';font-size:34px;font-weight:700;color:var(--azul-palido);line-height:1}
+  .icon-btn.bell.off{color:var(--muted);position:relative}
+  .icon-btn.bell.off::after{content:"";position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:50%;background:#f0a3b3}
+  .icon-btn.bell.on{color:var(--azul-palido)}
+  @media (max-width:1100px){ .kpis{grid-template-columns:repeat(3,1fr)} .kpi-prog{grid-column:span 2} }
+  @media (max-width:820px){ .dash{grid-template-columns:1fr} .panel.agenda{grid-row:auto} .kpis{grid-template-columns:repeat(2,1fr)} .kpi-prog{grid-column:1/-1} .alarme{flex-direction:column;gap:8px} }
+
   /* ---------- BARRA LATERAL ---------- */
   .layout{padding-left:232px}
   .side{position:fixed;left:0;top:0;bottom:0;width:232px;background:var(--preto);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:22px 14px 16px;z-index:25}
@@ -431,11 +471,15 @@ const DIAS_CURTO = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
 const DIAS_NOME = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 // Prioridade numérica 0–100 (reuniões não têm prioridade)
 const PRIO_ANTIGA = { alta: 80, media: 50, baixa: 20 };   // compatibilidade com tarefas antigas
+// Reuniões e tarefas com horário não têm prioridade; prioridade anda de 5 em 5
+const arred5 = n => Math.max(0, Math.min(100, Math.round((+n || 0) / 5) * 5));
 function prioNum(t) {
-  if (t.reuniao) return null;
-  if (typeof t.prioridade === 'number') return t.prioridade;
+  if (t.reuniao || t.horario) return null;
+  if (typeof t.prioridade === 'number') return arred5(t.prioridade);
   return PRIO_ANTIGA[t.prioridade] ?? 50;
 }
+// Tarefas ligadas (mesmo grupo)
+const ligadas = id => { const g = S.tarefas[id] && S.tarefas[id].grupo; return g ? Object.keys(S.tarefas).filter(k => k !== id && S.tarefas[k].grupo === g) : []; };
 const faixa = n => n == null ? 'meet' : n >= 70 ? 'alta' : n >= 40 ? 'media' : 'baixa';
 const FAIXAS = { alta: { n: '70–100', l: 3, c: 'var(--branco)' }, media: { n: '40–69', l: 2, c: 'var(--azul-claro)' }, baixa: { n: '0–39', l: 1, c: 'var(--muted)' } };
 const TIPOS = { diaria: 'Diária', unica: 'Única', complexa: 'Complexa', sugestiva: 'Sugestiva' };
@@ -457,6 +501,8 @@ function toast(msg) {
 }
 
 const ICON = {
+  link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13.5a4 4 0 005.7.3l3-3a4 4 0 00-5.7-5.7l-1.2 1.2"/><path d="M14 10.5a4 4 0 00-5.7-.3l-3 3a4 4 0 005.7 5.7l1.2-1.2"/></svg>',
+  bell: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1112 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10.3 20a1.9 1.9 0 003.4 0"/></svg>',
   home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>',
   pen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 013 3L8 18l-4 1 1-4 11.5-11.5z"/><path d="M14.5 5.5l3 3"/></svg>',
   list: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg>',
@@ -626,6 +672,13 @@ async function iniciarApp() {
   S.calMes = S.dia.slice(0, 7);
   await Promise.all([carregarTarefas(), carregarRegistros(S.dia), carregarMes(S.calMes)]);
   render();
+  verificarAvisos();
+  clearInterval(S.avisoTimer);
+  S.avisoTimer = setInterval(verificarAvisos, 20000);
+  // pede permissão de notificação no primeiro clique (o navegador exige uma ação do usuário)
+  if (notifSuportada() && Notification.permission === 'default') {
+    document.addEventListener('click', () => { if (Notification.permission === 'default') Notification.requestPermission().then(() => render()); }, { once: true });
+  }
 }
 
 async function irParaDia(d) {
@@ -759,7 +812,18 @@ function verPautas(id) {
     <div class="modal-foot"><button class="btn btn-ghost" onclick="fecharModal(this)">Fechar</button></div>`);
 }
 
+// Conclui/desfaz a tarefa e as tarefas ligadas a ela que aparecem no mesmo dia
 function aplicarFeito(id) {
+  aplicarFeitoUm(id);
+  const D = S.dia, alvo = estaFeito(id, D), doDia = itensDoDia(D);
+  for (const oid of ligadas(id)) {
+    const it = doDia.find(i => i.id === oid);
+    if (!it || it.status === 'decidir' || it.status === 'dispensada') continue;
+    if (estaFeito(oid, D) !== alvo) aplicarFeitoUm(oid);
+  }
+}
+
+function aplicarFeitoUm(id) {
   const t = S.tarefas[id], D = S.dia;
   const reg = (S.registros[D] = S.registros[D] || {});
   if (t.tipo === 'diaria' || t.tipo === 'sugestiva') {
@@ -905,17 +969,25 @@ function confirmar(titulo, texto, rotulo, acao) {
 /* =========================================================
    FORMULÁRIO DE TAREFA (nova / editar)
    ========================================================= */
-function formTarefa(id) {
+function formTarefa(id, opts = {}) {
   let W; const q = sel => W.querySelector(sel);
   const t = id ? S.tarefas[id] : null;
   const f = {
     titulo: t?.titulo || '', descricao: t?.descricao || '',
-    tipo: t?.tipo || 'unica', prioridade: t ? (prioNum({ ...t, reuniao: false })) : 50,
+    tipo: t?.tipo || 'unica', prioridade: t ? (prioNum({ ...t, reuniao: false, horario: null })) : 50,
     horario: t?.horario || '',
     dias: t?.dias ? [...t.dias] : [1, 2, 3, 4, 5],
     data: t?.data || S.dia, inicio: t?.inicio || hoje(),
     reuniao: !!t?.reuniao,
+    ligada: t ? (ligadas(id)[0] || '') : '',
   };
+  const copiarDe = oid => {
+    const o = S.tarefas[oid]; if (!o) return;
+    Object.assign(f, { titulo: o.titulo || '', descricao: o.descricao || '', tipo: o.tipo, horario: o.horario || '',
+      dias: o.dias ? [...o.dias] : f.dias, data: o.data || f.data, inicio: o.inicio || f.inicio,
+      reuniao: !!o.reuniao, prioridade: prioNum({ ...o, reuniao: false, horario: null }) });
+  };
+  if (!t && opts.ligada) { copiarDe(opts.ligada); f.ligada = opts.ligada; }
   const ajuda = {
     diaria: 'Repete nos dias da semana selecionados.',
     unica: 'Aparece só na data escolhida. Se não for concluída, aparece como atrasada no dia de hoje.',
@@ -944,18 +1016,27 @@ function formTarefa(id) {
         <div class="help">${ajuda[f.tipo]}</div>
       </div>
       ${extra}
-      <div class="field"><label>Horário (opcional)</label><input class="input" type="time" id="fHora" value="${esc(f.horario)}" style="max-width:160px"></div>
+      <div class="field"><label>Horário (opcional)</label><input class="input" type="time" id="fHora" value="${esc(f.horario)}" style="max-width:160px">
+        <div class="help">Tarefas com horário não usam prioridade — seguem o horário e avisam quando chegar a hora.</div></div>
       <div class="field">
         <button type="button" class="toggle-row" id="fReu">
           <span class="switch ${f.reuniao ? 'on' : ''}"></span>
           <span><b>É uma reunião</b><span class="h">Ao concluir, abre um campo para registrar a pauta. Reuniões não têm prioridade.</span></span>
         </button>
       </div>
-      ${f.reuniao ? '' : `<div class="field"><label>Prioridade (0 a 100)</label>
-        <div class="prio-ctl"><input type="range" id="fPrioR" min="0" max="100" step="1" value="${f.prioridade}">
-          <input class="input" type="number" id="fPrio" min="0" max="100" value="${f.prioridade}"></div>
+      ${f.reuniao || f.horario ? '' : `<div class="field"><label>Prioridade (0 a 100, de 5 em 5)</label>
+        <div class="prio-ctl"><input type="range" id="fPrioR" min="0" max="100" step="5" value="${f.prioridade}">
+          <input class="input" type="number" id="fPrio" min="0" max="100" step="5" value="${f.prioridade}"></div>
         <div class="prio-marks"><span>0 · baixa</span><span>50</span><span>100 · máxima</span></div>
       </div>`}
+      <div class="field"><label>Ligar a uma tarefa existente (opcional)</label>
+        <select class="input" id="fLig"><option value="">— Nenhuma —</option>
+          ${Object.entries(S.tarefas).filter(([k]) => k !== id).sort((a, b) => (a[1].titulo || '').localeCompare(b[1].titulo || '', 'pt-BR'))
+            .map(([k, o]) => `<option value="${k}" ${f.ligada === k ? 'selected' : ''}>${esc(o.titulo)} · ${TIPOS[o.tipo]}${o.horario ? ' · ' + esc(o.horario) : ''}</option>`).join('')}
+        </select>
+        <div class="help">Tarefas ligadas são concluídas juntas no mesmo dia.${!t ? ' Se o campo "Tarefa" estiver vazio, os dados da escolhida são copiados para você só ajustar.' : ''}
+          ${t && ligadas(id).length ? `<br>Ligada a: <b style="color:var(--azul-palido)">${ligadas(id).map(k => esc(S.tarefas[k].titulo)).join(', ')}</b>` : ''}</div>
+      </div>
       <div class="msg err" id="fMsg"></div>
       <div class="modal-foot">
         ${t ? `<button class="btn btn-danger" id="fDel" style="margin-right:auto">Excluir</button>` : ''}
@@ -968,13 +1049,16 @@ function formTarefa(id) {
       if (q('#fData')) f.data = q('#fData').value;
       if (q('#fInicio')) f.inicio = q('#fInicio').value;
       f.horario = q('#fHora').value;
-      if (q('#fPrio')) f.prioridade = Math.max(0, Math.min(100, Math.round(+q('#fPrio').value || 0)));
+      if (q('#fPrio')) f.prioridade = arred5(q('#fPrio').value);
+      f.ligada = q('#fLig').value;
     };
+    q('#fHora').onchange = () => { ler(); desenhar(); };
+    q('#fLig').onchange = () => { ler(); if (!t && f.ligada && !f.titulo.trim()) copiarDe(f.ligada); desenhar(); };
     q('#segTipo').onclick = e => { const b = e.target.closest('button'); if (!b) return; ler(); f.tipo = b.dataset.v; desenhar(); };
     q('#fReu').onclick = () => { ler(); f.reuniao = !f.reuniao; desenhar(); };
     if (q('#fPrioR')) {
       q('#fPrioR').oninput = e => { q('#fPrio').value = e.target.value; };
-      q('#fPrio').oninput = e => { q('#fPrioR').value = e.target.value; };
+      q('#fPrio').onchange = e => { e.target.value = arred5(e.target.value); q('#fPrioR').value = e.target.value; };
     }
     W.querySelectorAll('.days button').forEach(b => b.onclick = () => {
       ler(); const d = +b.dataset.d;
@@ -990,24 +1074,32 @@ function formTarefa(id) {
       if (!titulo) return q('#fMsg').textContent = 'Escreva a tarefa.';
       if (f.tipo === 'diaria' && !f.dias.length) return q('#fMsg').textContent = 'Selecione pelo menos um dia.';
       if ((f.tipo === 'unica' || f.tipo === 'complexa') && !f.data) return q('#fMsg').textContent = 'Escolha a data.';
-      const base = { titulo, descricao: f.descricao.trim(), tipo: f.tipo, prioridade: f.reuniao ? null : f.prioridade, horario: f.horario || null,
+      const base = { titulo, descricao: f.descricao.trim(), tipo: f.tipo, prioridade: (f.reuniao || f.horario) ? null : f.prioridade, horario: f.horario || null,
                      dias: null, data: null, inicio: null, reuniao: f.reuniao || null };
       if (f.tipo === 'diaria') { base.dias = f.dias; base.inicio = f.inicio || hoje(); }
       if (f.tipo === 'sugestiva') base.inicio = f.inicio || hoje();
       if (f.tipo === 'unica' || f.tipo === 'complexa') base.data = f.data;
+      // ligação com outra tarefa
+      let marcarOutra = null;
+      base.grupo = null;
+      if (f.ligada && S.tarefas[f.ligada]) {
+        base.grupo = S.tarefas[f.ligada].grupo || (t && t.grupo) || novoId('g_');
+        if (S.tarefas[f.ligada].grupo !== base.grupo) marcarOutra = f.ligada;
+      }
+      const ligarOutra = () => { if (marcarOutra) { S.tarefas[marcarOutra].grupo = base.grupo; salvar(() => api(`tarefas/${marcarOutra}`, 'PATCH', { grupo: base.grupo })); } };
 
       fecharModal(W);
       if (t) {
         if (t.tipo !== base.tipo) { base.concluidaEm = null; base.historico = null; }
         const novo = { ...t, ...base };
         Object.keys(novo).forEach(k => novo[k] === null && delete novo[k]);
-        S.tarefas[id] = novo; render(); toast('Tarefa atualizada');
+        S.tarefas[id] = novo; ligarOutra(); render(); toast('Tarefa atualizada');
         salvar(() => api(`tarefas/${id}`, 'PATCH', base));
       } else {
         const nid = novoId('t_');
         const nova = { ...base, ativa: true, criadaEm: Date.now() };
         Object.keys(nova).forEach(k => nova[k] === null && delete nova[k]);
-        S.tarefas[nid] = nova; render(); toast('Tarefa adicionada');
+        S.tarefas[nid] = nova; ligarOutra(); render(); toast('Tarefa adicionada');
         salvar(() => api(`tarefas/${nid}`, 'PUT', nova));
       }
     };
@@ -1096,6 +1188,7 @@ function render() {
           <div class="side-user"><div class="avatar">${esc((u.nome || '?')[0].toUpperCase())}</div>
             <div class="side-user-txt"><b>${esc(u.nome)}</b><small>${esc(u.usuario)}</small></div></div>
           <div class="side-acts">
+            ${notifSuportada() ? `<button class="icon-btn bell ${Notification.permission === 'granted' ? 'on' : 'off'}" title="${Notification.permission === 'granted' ? 'Avisos de horário ativados' : 'Ativar avisos de horário'}" onclick="pedirPermissaoAvisos()">${ICON.bell}</button>` : ''}
             <button class="icon-btn" title="Minha conta" onclick="abrirConta()">${ICON.gear}</button>
             <button class="icon-btn" title="Sair" onclick="sair()">${ICON.out}</button>
           </div>
@@ -1138,20 +1231,54 @@ function renderDia() {
   const nomeDia = dt.toLocaleDateString('pt-BR', { weekday: 'long' });
   const dataLonga = dt.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
   const rel = D === H ? 'Hoje' : D === addDays(H, -1) ? 'Ontem' : D === addDays(H, 1) ? 'Amanhã' : nomeDia[0].toUpperCase() + nomeDia.slice(1);
+  const agora = new Date(), nowHM = `${pad(agora.getHours())}:${pad(agora.getMinutes())}`;
 
-  let itens = itensDoDia(D);
+  const itens = itensDoDia(D);
   const contaveis = itens.filter(i => i.status !== 'decidir' && i.status !== 'dispensada');
   const feitos = contaveis.filter(i => i.status === 'feito').length;
-  const parciais = contaveis.filter(i => i.status === 'parcial').length;
-  const decidirN = itens.filter(i => i.status === 'decidir').length;
   const pct = contaveis.length ? Math.round(feitos / contaveis.length * 100) : 0;
+  const abertasN = contaveis.filter(i => i.status === 'pendente' || i.status === 'parcial').length;
+  const atrasadasN = itens.filter(i => i.atrasada || (i.rolou && i.status !== 'feito')).length;
+  const reun = itens.filter(i => i.t.reuniao && i.status !== 'dispensada');
+  const reunFeitas = reun.filter(i => i.status === 'feito').length;
 
-  if (S.filtro !== 'todas') itens = itens.filter(i => passaFiltro(i.t));
-  const decidir = ordenarDia(itens.filter(i => i.status === 'decidir'));
-  const abertas = ordenarDia(itens.filter(i => i.status === 'pendente' || i.status === 'parcial'));
-  const feitas = ordenarDia(itens.filter(i => i.status === 'feito'));
-  const dispensadas = ordenarDia(itens.filter(i => i.status === 'dispensada'));
+  // Distribuição pelos painéis
+  const aberto = i => i.status === 'pendente' || i.status === 'parcial';
+  const sugestoes = itens.filter(i => i.status === 'decidir').sort(cmpHora);
+  const agenda = itens.filter(i => i.t.horario && i.status !== 'decidir' && i.status !== 'dispensada').sort(cmpHora);
+  const reunSemHora = itens.filter(i => !i.t.horario && i.t.reuniao && aberto(i));
+  const complexas = itens.filter(i => !i.t.horario && !i.t.reuniao && i.t.tipo === 'complexa' && aberto(i)).sort(cmpPrio);
+  const prioridades = itens.filter(i => !i.t.horario && !i.t.reuniao && i.t.tipo !== 'complexa' && aberto(i)).sort(cmpPrio);
+  const concluidas = itens.filter(i => !i.t.horario && (i.status === 'feito' || i.status === 'dispensada')).sort(cmpPrio);
+
+  const proximo = agenda.find(i => aberto(i) && (D !== H || i.t.horario >= nowHM));
   const carregando = !S.registros[D];
+
+  // Agenda com a linha do "agora"
+  let agendaHTML = '', linhaPosta = D !== H;
+  for (const it of agenda) {
+    if (!linhaPosta && it.t.horario > nowHM) { agendaHTML += `<div class="now-line"><span>agora · ${nowHM}</span></div>`; linhaPosta = true; }
+    agendaHTML += cardHTML(it);
+  }
+  if (!linhaPosta && agenda.length) agendaHTML += `<div class="now-line"><span>agora · ${nowHM}</span></div>`;
+  if (reunSemHora.length) agendaHTML += `<div class="sub-title">Reuniões sem horário</div>${reunSemHora.map(cardHTML).join('')}`;
+
+  const vazio = txt => `<div class="panel-empty">${txt}</div>`;
+  const painel = (cls, titulo, n, corpo, sub = '') => `
+    <section class="panel ${cls}">
+      <div class="panel-head"><h3>${titulo}</h3>${n !== null ? `<span class="count">${n}</span>` : ''}${sub ? `<small>${sub}</small>` : ''}</div>
+      <div class="panel-body">${corpo}</div>
+    </section>`;
+
+  const concluidasHTML = concluidas.map(it => {
+    const pauta = it.t.reuniao && S.pautas[it.id] && S.pautas[it.id][D];
+    return `<div class="done-row ${it.status}">
+      ${it.status === 'feito' ? `<button class="check on" title="Desfazer" onclick="alternarFeito('${it.id}')">${ICON.check}</button>` : `<span class="pop-st dispensada">–</span>`}
+      <span class="dr-t">${esc(it.t.titulo)}</span>
+      ${it.status === 'dispensada' ? `<button class="mini" onclick="decidir('${it.id}',null)">Rever</button>` : ''}
+      ${it.t.reuniao && it.status === 'feito' ? `<button class="mini" onclick="abrirPauta('${it.id}','${D}',false)">${pauta ? 'Pauta' : 'Registrar pauta'}</button>` : ''}
+    </div>`;
+  }).join('');
 
   $('#main').innerHTML = `
     <div class="daybar">
@@ -1160,40 +1287,35 @@ function renderDia() {
         <button class="icon-btn" id="dNext" title="Próximo dia">${ICON.next}</button>
       </div>
       <h2 class="day-title">${rel}<small>${D === H ? nomeDia + ', ' : ''}${dataLonga}</small></h2>
-      <div style="margin-left:auto;display:flex;gap:8px">
-        ${D !== H ? `<button class="pill" id="dHoje">Voltar para hoje</button>` : ''}
-        <label class="pill date-input" style="display:flex;align-items:center;gap:6px">${ICON.cal.replace('<svg', '<svg width="15" height="15"')}Escolher data<input type="date" id="dPick" value="${D}"></label>
-      </div>
+      ${D !== H ? `<button class="pill" id="dHoje" style="margin-left:auto">Voltar para hoje</button>` : ''}
     </div>
 
-    <div class="progress-card">
-      <div class="progress-num">${feitos}<span>/${contaveis.length}</span></div>
-      <div style="flex:1">
+    <div class="kpis">
+      <div class="kpi kpi-prog">
+        <span class="kpi-l">Progresso do dia</span>
+        <div class="kpi-v">${feitos}<small>/${contaveis.length}</small></div>
         <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
-        <div class="progress-meta">
-          <span>${pct}% concluído</span>
-          ${parciais ? `<span>${parciais} parcial${parciais > 1 ? 'is' : ''}</span>` : ''}
-          ${decidirN ? `<span>${decidirN} sugest${decidirN > 1 ? 'ões' : 'ão'} para decidir</span>` : ''}
-        </div>
+        <span class="kpi-s">${pct}% concluído</span>
       </div>
+      <div class="kpi"><span class="kpi-l">A fazer</span><div class="kpi-v">${abertasN}</div><span class="kpi-s">${sugestoes.length ? sugestoes.length + ' sugestão(ões) p/ decidir' : 'pendentes ou parciais'}</span></div>
+      <div class="kpi"><span class="kpi-l">Atrasadas</span><div class="kpi-v ${atrasadasN ? 'alerta' : ''}">${atrasadasN}</div><span class="kpi-s">vindas de dias anteriores</span></div>
+      <div class="kpi"><span class="kpi-l">Reuniões</span><div class="kpi-v">${reunFeitas}<small>/${reun.length}</small></div><span class="kpi-s">realizadas</span></div>
+      <div class="kpi kpi-next"><span class="kpi-l">${D === H ? 'Próximo horário' : 'Primeiro horário'}</span>
+        ${proximo ? `<div class="kpi-v">${esc(proximo.t.horario)}</div><span class="kpi-s">${esc(proximo.t.titulo)}</span>` : `<div class="kpi-v">—</div><span class="kpi-s">nada com horário${D === H ? ' pela frente' : ''}</span>`}</div>
     </div>
 
-    ${filtrosHTML(true)}
-
-    ${carregando ? `<div class="empty"><div class="spin"></div>Carregando o dia…</div>` :
-      !itens.length ? `<div class="empty"><h3>${Object.keys(S.tarefas).length ? 'Nada para este dia' : 'Nenhuma tarefa ainda'}</h3>
-        <p>${Object.keys(S.tarefas).length ? 'Nenhuma tarefa programada aqui' + (S.filtro !== 'todas' ? ' com esse filtro' : '') + '.' : 'Clique em <b>Nova tarefa</b> para começar.'}</p></div>` : `
-      ${decidir.length ? `<div class="section-title">Sugestões · vai precisar hoje? <span class="count">${decidir.length}</span></div>${decidir.map(cardHTML).join('')}` : ''}
-      ${abertas.length ? `<div class="section-title">A fazer <span class="count">${abertas.length}</span></div>${listaAbertas(abertas)}` : ''}
-      ${feitas.length ? `<div class="section-title">Concluídas <span class="count">${feitas.length}</span></div>${feitas.map(cardHTML).join('')}` : ''}
-      ${dispensadas.length ? `<div class="section-title">Dispensadas hoje <span class="count">${dispensadas.length}</span></div>${dispensadas.map(cardHTML).join('')}` : ''}
-    `}`;
+    ${carregando ? `<div class="empty"><div class="spin"></div>Carregando o dia…</div>` : `
+    <div class="dash">
+      ${sugestoes.length ? painel('full', 'Sugestões · vai precisar hoje?', sugestoes.length, sugestoes.map(cardHTML).join('')) : ''}
+      ${painel('agenda', 'Agenda', agenda.length + reunSemHora.length, agendaHTML || vazio('Nenhuma tarefa com horário neste dia.'), 'por horário')}
+      ${painel('', 'Prioridades', prioridades.length, prioridades.map(cardHTML).join('') || vazio('Nada pendente sem horário.'), 'da maior para a menor')}
+      ${painel('', 'Complexas em andamento', complexas.length, complexas.map(cardHTML).join('') || vazio('Nenhuma tarefa complexa aberta.'))}
+      ${painel('full', 'Concluídas', concluidas.filter(i => i.status === 'feito').length, concluidasHTML || vazio('Nada concluído ainda.'), 'sem horário · as com horário ficam riscadas na agenda')}
+    </div>`}`;
 
   $('#dPrev').onclick = () => irParaDia(addDays(D, -1));
   $('#dNext').onclick = () => irParaDia(addDays(D, 1));
   if ($('#dHoje')) $('#dHoje').onclick = () => irParaDia(H);
-  $('#dPick').onchange = e => e.target.value && irParaDia(e.target.value);
-  ligarFiltros();
 }
 
 /* ---------- TELA INICIAL + CALENDÁRIO (ano / mês / semana) ---------- */
@@ -1367,6 +1489,66 @@ async function abrirPopupDia(D) {
   q('#popNova').onclick = async () => { fecharModal(W); S.dia = D; formTarefa(); };
 }
 
+/* ---------- AVISOS QUANDO CHEGA O HORÁRIO ---------- */
+const AVISOS_KEY = 'mapaMental.avisados';
+function notifSuportada() { return 'Notification' in window; }
+function pedirPermissaoAvisos() {
+  if (!notifSuportada()) return toast('Este navegador não suporta notificações');
+  if (Notification.permission === 'denied') return toast('Avisos bloqueados — libere notificações nas configurações do site (cadeado na barra de endereço)');
+  Notification.requestPermission().then(p => { toast(p === 'granted' ? 'Avisos ativados' : 'Avisos não ativados'); render(); });
+}
+function bipe() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [0, 0.25].forEach((t0, k) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.frequency.value = k ? 1046 : 784; o.connect(g); g.connect(ctx.destination);
+      g.gain.setValueAtTime(0.0001, ctx.currentTime + t0);
+      g.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime + t0 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + t0 + 0.22);
+      o.start(ctx.currentTime + t0); o.stop(ctx.currentTime + t0 + 0.24);
+    });
+  } catch {}
+}
+function verificarAvisos() {
+  if (!S.user || !S.registros[hoje()]) return;
+  const H = hoje(), a = new Date(), nowMin = a.getHours() * 60 + a.getMinutes();
+  let avisados = lsGet(AVISOS_KEY) || {};
+  Object.keys(avisados).forEach(k => { if (!k.startsWith(H)) delete avisados[k]; });
+  for (const it of itensDoDia(H)) {
+    if (!it.t.horario || it.status === 'feito' || it.status === 'dispensada') continue;
+    const m = minutos(it.t.horario), chave = `${H}|${it.id}|${it.t.horario}`;
+    if (nowMin >= m && nowMin - m <= 10 && !avisados[chave]) { avisados[chave] = 1; avisar(it); }
+  }
+  lsSet(AVISOS_KEY, avisados);
+}
+function avisar(it) {
+  const { id, t } = it, H = hoje();
+  bipe();
+  if (notifSuportada() && Notification.permission === 'granted') {
+    try {
+      const n = new Notification(`⏰ ${t.titulo}`, { body: `${t.horario}${t.reuniao ? ' · reunião' : ''}${t.descricao ? ' — ' + t.descricao.slice(0, 80) : ''}`, tag: id + H, requireInteraction: true, icon: document.getElementById('favicon')?.href });
+      n.onclick = () => { window.focus(); S.view = 'dia'; irParaDia(H); n.close(); };
+    } catch {}
+  }
+  let W; const q = sel => W.querySelector(sel);
+  W = abrirModal(`
+    <h2>⏰ Está na hora</h2>
+    <div class="alarme">
+      <div class="alarme-h">${esc(t.horario)}</div>
+      <div><div class="t-title" style="font-size:17px">${esc(t.titulo)}</div>
+        ${t.descricao ? `<div class="t-desc">${esc(t.descricao)}</div>` : ''}
+        <div class="t-meta">${t.reuniao ? '<span class="badge meet">Reunião</span>' : ''}<span class="badge">${TIPOS[t.tipo]}</span></div></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="fecharModal(this)">Fechar</button>
+      <button class="btn btn-ghost" id="avDia">Abrir no Diário</button>
+      <button class="btn btn-primary" id="avOk">${t.reuniao ? 'Concluir e registrar pauta' : 'Concluir'}</button>
+    </div>`, '⏰ Está na hora');
+  q('#avDia').onclick = () => { fecharModal(W); S.view = 'dia'; irParaDia(H); };
+  q('#avOk').onclick = async () => { fecharModal(W); if (S.dia !== H) await irParaDia(H); if (!estaFeito(id, H)) alternarFeito(id); };
+}
+
 /* ---------- JANELA FLUTUANTE (fica por cima de tudo) ---------- */
 const minutos = hm => { const [h, m] = hm.split(':').map(Number); return h * 60 + m; };
 function proximos() {
@@ -1378,7 +1560,7 @@ function proximos() {
     c.sort(cmpHora);
     if (c.length) evento = { ...c[0], D };
   }
-  const tarefas = itensDoDia(H).filter(i => !i.t.reuniao && (i.status === 'pendente' || i.status === 'parcial')).sort(cmpPrio);
+  const tarefas = itensDoDia(H).filter(i => !i.t.reuniao && !i.t.horario && (i.status === 'pendente' || i.status === 'parcial')).sort(cmpPrio);
   return { evento, tarefas };
 }
 function quandoTxt(D, hm) {
@@ -1472,6 +1654,8 @@ function cardHTML(it) {
   if (t.tipo === 'complexa') tipoTxt += ` · dia ${it.diaN}`;
   badges.push(`<span class="badge">${tipoTxt}</span>`);
   if (t.reuniao) badges.push(`<span class="badge meet">Reunião</span>`);
+  const lig = ligadas(id);
+  if (lig.length) badges.push(`<span class="badge outline" title="Ligada a: ${esc(lig.map(k => S.tarefas[k].titulo).join(', '))}">${ICON.link.replace('<svg', '<svg width="12" height="12"')} ${lig.length === 1 ? 'Ligada a ' + esc(S.tarefas[lig[0]].titulo) : 'Ligada a ' + lig.length + ' tarefas'}</span>`);
   if (it.atrasada) badges.push(`<span class="badge strong">Atrasada · ${fmtCurta(t.data)}</span>`);
   if (it.rolou && status !== 'feito') badges.push(`<span class="badge blue">Desde ${fmtCurta(t.data)}</span>`);
   if (status === 'parcial') badges.push(`<span class="badge blue">Parcial hoje</span>`);
@@ -1555,6 +1739,7 @@ function renderTodas() {
             </div>
             ${t.reuniao ? `<button class="mini" onclick="verPautas('${id}')">Pautas (${Object.keys(S.pautas[id] || {}).length})</button>` : ''}
             <div class="t-side">
+              <button class="icon-btn" title="Criar tarefa igual, ligada a esta" onclick="formTarefa(null,{ligada:'${id}'})">${ICON.link}</button>
               <button class="icon-btn" title="Editar" onclick="formTarefa('${id}')">${ICON.edit}</button>
               <button class="icon-btn" title="Excluir" onclick="excluirTarefa('${id}')">${ICON.trash}</button>
             </div>
