@@ -248,6 +248,131 @@
   .pop-st.dispensada{border-color:var(--line);color:var(--muted)}
   .pop-row.off{opacity:.5}
 
+
+  /* ---------- BARRA LATERAL ---------- */
+  .layout{padding-left:232px}
+  .side{position:fixed;left:0;top:0;bottom:0;width:232px;background:var(--preto);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:22px 14px 16px;z-index:25}
+  .side .brand{margin:0 6px 28px}
+  .side .brand h1{font-size:17px}
+  .nav-item{display:flex;align-items:center;gap:12px;width:100%;padding:11px 12px;border-radius:10px;color:var(--muted);font-weight:600;margin-bottom:4px;text-align:left;transition:background .15s,color .15s}
+  .nav-item svg{width:20px;height:20px;flex:none}
+  .nav-item:hover{background:var(--surface);color:var(--texto)}
+  .nav-item.active{background:var(--surface2);color:var(--branco)}
+  .nav-item.active svg{color:var(--azul-palido)}
+  .side-foot{margin-top:auto;border-top:1px solid var(--line);padding-top:14px;display:flex;align-items:center;justify-content:space-between;gap:6px}
+  .side-user{display:flex;gap:10px;align-items:center;min-width:0}
+  .side-user-txt{min-width:0}
+  .side-user-txt b{display:block;color:var(--branco);font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .side-user-txt small{display:block;color:var(--muted);font-size:12px}
+  .side-acts{display:flex}
+  .side-acts .icon-btn{width:34px;height:34px}
+
+  /* ---------- JANELAS (pop-ups) ---------- */
+  .win{position:fixed;width:min(540px,94vw);max-height:88vh;min-width:300px;min-height:120px;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.55);resize:both;overflow:hidden;animation:fade .15s}
+  .win.ativa{border-color:#4d5080}
+  .win.min{display:none}
+  .win.max{left:12px!important;top:12px!important;width:calc(100vw - 24px)!important;height:calc(100vh - 24px)!important;max-height:none;resize:none}
+  .win-bar{flex:none;display:flex;align-items:center;gap:10px;padding:8px 8px 8px 16px;background:var(--surface2);cursor:grab;user-select:none;touch-action:none}
+  .win-bar:active{cursor:grabbing}
+  .win-title{flex:1;font-family:'Space Grotesk';font-weight:600;font-size:14px;color:var(--branco);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:none}
+  .win-btns{display:flex;gap:2px}
+  .win-btns button{width:30px;height:28px;border-radius:7px;display:grid;place-items:center;color:var(--azul-palido)}
+  .win-btns button:hover{background:rgba(255,255,255,.08);color:var(--branco)}
+  .win-btns button[data-a=fechar]:hover{background:#5a2a3a}
+  .win-btns svg{width:15px;height:15px}
+  .win .modal{flex:1;overflow:auto;max-width:none;max-height:none;border:none;border-radius:0;background:transparent;padding:20px 22px 22px}
+  .win .modal > h2:first-child{display:none}
+  #dock{position:fixed;left:248px;bottom:16px;z-index:60;display:flex;gap:8px;flex-wrap:wrap;max-width:calc(100vw - 460px)}
+  .dock-chip{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:8px 8px 8px 12px;font-size:13px;font-weight:600;color:var(--branco);box-shadow:0 8px 24px rgba(0,0,0,.4);max-width:240px}
+  .dock-chip span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dock-chip i{display:grid;place-items:center;width:22px;height:22px;border-radius:6px;color:var(--muted)}
+  .dock-chip i:hover{background:#5a2a3a;color:var(--branco)}
+  .dock-chip i svg{width:13px;height:13px}
+  .dock-chip:hover{border-color:var(--azul-claro)}
+
+  /* ---------- TELA INICIAL: CALENDÁRIO ---------- */
+  .calbox{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px 18px}
+  .calbox.is-min{padding-bottom:16px}
+  .calbox-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .calbox-title{font-size:20px;color:var(--branco);margin-right:auto}
+  .calbox-body{margin-top:16px}
+  .seg-inline{display:flex;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:3px}
+  .seg-inline button{padding:6px 12px;border-radius:7px;font-size:13px;font-weight:600;color:var(--muted)}
+  .seg-inline button.on{background:var(--azul);color:var(--branco)}
+  .cal-legend i.lt{background:transparent;border:1.5px solid var(--branco)}
+
+  .mgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+  .mcell{min-height:108px;border-radius:10px;background:var(--bg);border:1px solid transparent;padding:7px;text-align:left;display:flex;flex-direction:column;gap:4px;overflow:hidden}
+  .mcell.blank{background:transparent}
+  .mcell:not(.blank):hover{border-color:var(--azul-claro)}
+  .mcell.today{border-color:var(--azul);box-shadow:inset 0 0 0 1px var(--azul)}
+  .mcell.late .cnt{color:var(--branco);background:#4a3a52}
+  .mcell.full .cnt{background:var(--azul);color:var(--branco)}
+  .mcell-top{display:flex;align-items:center;gap:5px}
+  .mcell-top .n{font-family:'Space Grotesk';font-weight:700;font-size:14px;color:var(--texto)}
+  .mcell.today .n{background:var(--azul);color:var(--branco);border-radius:6px;padding:0 6px}
+  .mcell-top .mt{width:6px;height:6px;border-radius:50%;background:var(--azul-palido)}
+  .mcell-top .cnt{margin-left:auto;font-size:10.5px;font-weight:700;color:var(--azul-palido);background:var(--surface2);border-radius:5px;padding:1px 5px}
+  .mchips{display:flex;flex-direction:column;gap:3px;min-width:0}
+  .mchip{font-size:11px;line-height:1.3;color:var(--texto);background:var(--surface2);border-radius:5px;padding:2px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mchip b{color:var(--azul-palido);font-weight:700}
+  .mchip.feito{opacity:.5;text-decoration:line-through}
+  .mchip.decidir{background:transparent;border:1px dashed var(--line)}
+  .more{font-size:10.5px;color:var(--muted);padding-left:2px}
+
+  .ygrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:18px}
+  .ymonth-name{font-family:'Space Grotesk';font-weight:700;color:var(--branco);font-size:14px;margin-bottom:6px;padding:2px 4px;border-radius:6px}
+  .ymonth-name:hover{background:var(--surface2)}
+  .ydays{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+  .ydow{font-size:9.5px;color:var(--muted);text-align:center;font-weight:700;padding-bottom:2px}
+  .ycell{aspect-ratio:1;border-radius:5px;font-size:10.5px;font-weight:600;color:var(--muted);display:grid;place-items:center;border:1px solid transparent}
+  .ycell:hover{border-color:var(--azul-claro)}
+  .ycell.has{background:var(--surface2);color:var(--texto)}
+  .ycell.full{background:var(--azul);color:var(--branco)}
+  .ycell.late{border-color:var(--branco)}
+  .ycell.today{background:var(--branco);color:var(--preto)}
+
+  .wgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+  .wcol{background:var(--bg);border:1px solid transparent;border-radius:12px;padding:8px;min-height:220px;display:flex;flex-direction:column;gap:6px}
+  .wcol.today{border-color:var(--azul)}
+  .whead{display:flex;align-items:baseline;gap:6px;padding:4px 4px 8px;border-bottom:1px solid var(--line);text-align:left;width:100%}
+  .whead span{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase}
+  .whead b{font-family:'Space Grotesk';color:var(--branco);font-size:15px}
+  .wcol.today .whead b{color:var(--azul-palido)}
+  .whead small{margin-left:auto;font-size:10.5px;color:var(--azul-palido);font-weight:700}
+  .witems{display:flex;flex-direction:column;gap:5px}
+  .witem{text-align:left;background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--pcolor,var(--line));border-radius:8px;padding:6px 7px;font-size:12px;line-height:1.3;display:flex;flex-direction:column;gap:2px}
+  .witem:hover{border-color:var(--azul-claro)}
+  .witem.p-alta{--pcolor:var(--branco)}.witem.p-media{--pcolor:var(--azul-claro)}.witem.p-baixa{--pcolor:#4b4e72}.witem.p-meet{--pcolor:var(--azul-palido)}
+  .witem .wh{font-family:'Space Grotesk';font-weight:700;color:var(--azul-palido);font-size:11.5px}
+  .witem .wt{color:var(--texto);font-weight:600;word-break:break-word}
+  .witem .wtag{font-size:10px;color:var(--azul-palido)}
+  .witem.feito{opacity:.5}.witem.feito .wt{text-decoration:line-through}
+  .witem.decidir{border-style:dashed}
+  .wempty{color:var(--line);text-align:center;padding:10px 0}
+
+  @media (max-width:1000px){
+    .wgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .mcell{min-height:84px}
+  }
+  @media (max-width:760px){
+    .layout{padding-left:0;padding-bottom:72px}
+    .side{top:auto;width:100%;height:64px;flex-direction:row;align-items:center;padding:6px 8px;border-right:none;border-top:1px solid var(--line)}
+    .side .brand{display:none}
+    .side-nav{display:flex;flex:1;gap:4px}
+    .nav-item{flex-direction:column;gap:3px;font-size:10.5px;padding:7px 4px;margin:0;justify-content:center;text-align:center}
+    .side-foot{margin:0;border:none;padding:0}
+    .side-user{display:none}
+    .fab{bottom:80px}
+    #dock{left:12px;bottom:80px;max-width:calc(100vw - 180px)}
+    .mchips{display:none}
+    .mcell{min-height:52px;padding:5px}
+    .mcell-top{flex-direction:column;align-items:flex-start;gap:2px}
+    .mcell-top .cnt{margin-left:0}
+    .wgrid{grid-template-columns:1fr}
+    .wcol{min-height:0}
+    .win{min-width:0}
+  }
   @media (max-width:900px){
     .dia-grid{grid-template-columns:1fr}
     .dia-aside{position:static;order:-1}
@@ -332,6 +457,15 @@ function toast(msg) {
 }
 
 const ICON = {
+  home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>',
+  pen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 013 3L8 18l-4 1 1-4 11.5-11.5z"/><path d="M14.5 5.5l3 3"/></svg>',
+  list: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg>',
+  chevUp: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 15l6-6 6 6"/></svg>',
+  chevDown: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>',
+  wmin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 17h12"/></svg>',
+  wmax: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>',
+  wclose: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  pip: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="15" rx="2"/><rect x="12" y="11" width="7" height="6" rx="1" fill="currentColor"/></svg>',
   logo: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><circle cx="4.5" cy="5.5" r="2"/><circle cx="19.5" cy="5.5" r="2"/><circle cx="4.5" cy="18.5" r="2"/><circle cx="19.5" cy="18.5" r="2"/><path d="M6 7l3.8 3M18 7l-3.8 3M6 17l3.8-3M18 17l-3.8-3"/></svg>',
   check: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
   prev: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>',
@@ -367,9 +501,12 @@ const S = {
   registros: {},          // registros[YYYY-MM-DD][tarefaId]
   pautas: {},             // pautas[tarefaId][YYYY-MM-DD] = {texto, em}
   dia: hoje(),
+  view: 'inicio',          // sempre abre na Tela inicial
+  calModo: lsGet('mapaMental.calModo') || 'mes',   // 'ano' | 'mes' | 'semana'
+  calMin: lsGet('mapaMental.calMin') === true,
+  calRef: hoje(),
   calMes: hoje().slice(0, 7),   // mês exibido no calendário (YYYY-MM)
   mesesCarregados: {},
-  view: 'dia',            // 'dia' | 'todas'
   filtro: 'todas',        // 'todas' | 'alta' | 'media' | 'baixa' | 'reuniao'
   ordem: lsGet('mapaMental.ordem') || 'horario',   // 'horario' | 'prioridade'
 };
@@ -512,7 +649,7 @@ async function irParaMes(delta) {
 
 // Sincroniza quando a aba volta a ficar visível (ex.: usou em outro dispositivo)
 document.addEventListener('visibilitychange', async () => {
-  if (document.visibilityState === 'visible' && S.user && !$('.overlay')) {
+  if (document.visibilityState === 'visible' && S.user && !janelaTopo()) {
     try { await Promise.all([carregarTarefas(), carregarRegistros(S.dia), carregarMes(S.calMes, true)]); render(); } catch {}
   }
 });
@@ -589,35 +726,37 @@ function alternarFeito(id) {
 }
 
 function abrirPauta(id, D, concluir) {
+  let W; const q = sel => W.querySelector(sel);
   const t = S.tarefas[id];
   const atual = (S.pautas[id] && S.pautas[id][D] && S.pautas[id][D].texto) || '';
-  abrirModal(`
+  W = abrirModal(`
     <h2>Pauta da reunião</h2>
     <p class="help" style="margin:-8px 0 16px"><b style="color:var(--branco)">${esc(t.titulo)}</b> · ${parseD(D).toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}</p>
     <div class="field"><label>Pauta / o que foi tratado</label>
       <textarea class="input" id="ptTexto" style="min-height:160px" placeholder="- Assunto 1&#10;- Decisões&#10;- Próximos passos / responsáveis">${esc(atual)}</textarea></div>
     <div class="modal-foot">
-      <button class="btn btn-ghost" onclick="fecharModal()">Cancelar</button>
+      <button class="btn btn-ghost" onclick="fecharModal(this)">Cancelar</button>
       <button class="btn btn-primary" id="ptOk">${concluir ? 'Salvar e concluir' : 'Salvar pauta'}</button>
     </div>`);
-  $('#ptOk').onclick = () => {
-    const texto = $('#ptTexto').value.trim();
+  q('#ptOk').onclick = () => {
+    const texto = q('#ptTexto').value.trim();
     S.pautas[id] = S.pautas[id] || {};
     if (texto) S.pautas[id][D] = { texto, em: Date.now() }; else delete S.pautas[id][D];
-    fecharModal();
+    fecharModal(W);
     salvar(() => texto ? api(`pautas/${id}/${D}`, 'PUT', S.pautas[id][D]) : api(`pautas/${id}/${D}`, 'DELETE'));
     if (concluir) aplicarFeito(id); else render();
   };
 }
 
 function verPautas(id) {
+  let W; const q = sel => W.querySelector(sel);
   const t = S.tarefas[id], p = S.pautas[id] || {};
   const datas = Object.keys(p).sort().reverse();
-  abrirModal(`
+  W = abrirModal(`
     <h2>Pautas · ${esc(t.titulo)}</h2>
     ${datas.length ? datas.map(d => `<div class="pauta-item"><div class="d">${parseD(d).toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' })}</div><div class="x">${esc(p[d].texto)}</div></div>`).join('')
       : `<p class="help">Nenhuma pauta registrada ainda.</p>`}
-    <div class="modal-foot"><button class="btn btn-ghost" onclick="fecharModal()">Fechar</button></div>`);
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="fecharModal(this)">Fechar</button></div>`);
 }
 
 function aplicarFeito(id) {
@@ -647,19 +786,20 @@ function decidir(id, valor) {
 }
 
 function marcarParcial(id) {
+  let W; const q = sel => W.querySelector(sel);
   const t = S.tarefas[id], D = S.dia;
-  abrirModal(`
+  W = abrirModal(`
     <h2>Parcialmente concluída</h2>
     <p class="help" style="margin:-8px 0 16px">A tarefa continua aberta e aparece automaticamente no dia seguinte.</p>
     <div class="field"><label>O que foi feito hoje? (opcional)</label>
       <textarea class="input" id="pNota" placeholder="Ex.: levantei os dados, falta montar o relatório">${esc(t.historico?.[D]?.nota || '')}</textarea></div>
-    <div class="modal-foot"><button class="btn btn-ghost" onclick="fecharModal()">Cancelar</button>
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="fecharModal(this)">Cancelar</button>
       <button class="btn btn-primary" id="pOk">Salvar progresso</button></div>`);
-  $('#pOk').onclick = () => {
-    const reg = { nota: $('#pNota').value.trim(), em: Date.now() };
+  q('#pOk').onclick = () => {
+    const reg = { nota: q('#pNota').value.trim(), em: Date.now() };
     t.historico = t.historico || {}; t.historico[D] = reg;
     if (t.concluidaEm === D) t.concluidaEm = null;
-    fecharModal(); render();
+    fecharModal(W); render();
     salvar(async () => { await api(`tarefas/${id}/historico/${D}`, 'PUT', reg); await api(`tarefas/${id}`, 'PATCH', { concluidaEm: t.concluidaEm || null }); });
   };
 }
@@ -674,29 +814,99 @@ function desfazerParcial(id) {
 /* =========================================================
    MODAL GENÉRICO
    ========================================================= */
-function abrirModal(html) {
-  fecharModal();
-  const o = document.createElement('div');
-  o.className = 'overlay';
-  o.innerHTML = `<div class="modal">${html}</div>`;
-  o.addEventListener('mousedown', e => { if (e.target === o) fecharModal(); });
-  document.body.appendChild(o);
-  setTimeout(() => o.querySelector('input,textarea')?.focus(), 30);
+// Todas as janelas (pop-ups): arrastar pela tela, redimensionar, maximizar, minimizar e fechar
+let Z = 100, CASCATA = 0;
+function dock() {
+  let d = document.getElementById('dock');
+  if (!d) { d = document.createElement('div'); d.id = 'dock'; document.body.appendChild(d); }
+  return d;
 }
-function fecharModal() { document.querySelector('.overlay')?.remove(); }
+function focarJanela(w) { w.style.zIndex = ++Z; document.querySelectorAll('.win').forEach(x => x.classList.toggle('ativa', x === w)); }
+function janelaTopo() {
+  return [...document.querySelectorAll('.win:not(.min)')].sort((a, b) => (+b.style.zIndex) - (+a.style.zIndex))[0];
+}
+function abrirModal(html, titulo) {
+  const w = document.createElement('div');
+  w.className = 'win';
+  w.innerHTML = `
+    <div class="win-bar">
+      <span class="win-title"></span>
+      <div class="win-btns">
+        <button title="Minimizar" data-a="min">${ICON.wmin}</button>
+        <button title="Maximizar / restaurar" data-a="max">${ICON.wmax}</button>
+        <button title="Fechar" data-a="fechar">${ICON.wclose}</button>
+      </div>
+    </div>
+    <div class="modal">${html}</div>`;
+  document.body.appendChild(w);
+  const h2 = w.querySelector('.modal h2');
+  const tit = titulo || (h2 ? h2.textContent.trim() : 'Janela');
+  w.querySelector('.win-title').textContent = tit;
+  w.dataset.titulo = tit;
+
+  // posição inicial: centralizada, em cascata
+  const r = w.getBoundingClientRect(), off = (CASCATA++ % 6) * 26;
+  w.style.left = Math.max(8, (innerWidth - r.width) / 2 + off) + 'px';
+  w.style.top = Math.max(8, Math.min((innerHeight - r.height) / 2 - 30, 90) + off) + 'px';
+  focarJanela(w);
+
+  w.addEventListener('pointerdown', () => focarJanela(w));
+  w.querySelector('.win-btns').onclick = e => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.a === 'fechar') fecharModal(w);
+    if (b.dataset.a === 'min') minimizarJanela(w);
+    if (b.dataset.a === 'max') w.classList.toggle('max');
+  };
+  // arrastar pela barra de título
+  const bar = w.querySelector('.win-bar');
+  bar.addEventListener('dblclick', e => { if (!e.target.closest('button')) w.classList.toggle('max'); });
+  bar.addEventListener('pointerdown', e => {
+    if (e.target.closest('button') || w.classList.contains('max')) return;
+    const sx = e.clientX, sy = e.clientY, ox = w.offsetLeft, oy = w.offsetTop;
+    try { bar.setPointerCapture(e.pointerId); } catch {}
+    const mover = ev => {
+      const nx = Math.min(Math.max(ox + ev.clientX - sx, 60 - w.offsetWidth), innerWidth - 60);
+      const ny = Math.min(Math.max(oy + ev.clientY - sy, 0), innerHeight - 40);
+      w.style.left = nx + 'px'; w.style.top = ny + 'px';
+    };
+    const soltar = () => { bar.removeEventListener('pointermove', mover); bar.removeEventListener('pointerup', soltar); };
+    bar.addEventListener('pointermove', mover); bar.addEventListener('pointerup', soltar);
+  });
+  setTimeout(() => w.querySelector('.modal input:not([type=range]),.modal textarea')?.focus(), 30);
+  return w;
+}
+function minimizarJanela(w) {
+  w.classList.add('min');
+  const c = document.createElement('button');
+  c.className = 'dock-chip'; c.title = 'Restaurar';
+  c.innerHTML = `<span>${esc(w.dataset.titulo)}</span><i data-x title="Fechar">${ICON.wclose}</i>`;
+  c.onclick = e => {
+    if (e.target.closest('[data-x]')) return fecharModal(w);
+    w.classList.remove('min'); c.remove(); w._chip = null; focarJanela(w);
+  };
+  w._chip = c; dock().appendChild(c);
+}
+function fecharModal(x) {
+  const w = x instanceof Element ? (x.closest('.win') || x) : janelaTopo();
+  if (!w) return;
+  if (w._chip) w._chip.remove();
+  w.remove();
+}
 document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharModal(); });
 
 function confirmar(titulo, texto, rotulo, acao) {
-  abrirModal(`<h2>${esc(titulo)}</h2><p class="help" style="font-size:14px">${texto}</p>
-    <div class="modal-foot"><button class="btn btn-ghost" onclick="fecharModal()">Cancelar</button>
+  let W; const q = sel => W.querySelector(sel);
+  W = abrirModal(`<h2>${esc(titulo)}</h2><p class="help" style="font-size:14px">${texto}</p>
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="fecharModal(this)">Cancelar</button>
     <button class="btn btn-danger" id="cOk">${esc(rotulo)}</button></div>`);
-  $('#cOk').onclick = () => { fecharModal(); acao(); };
+  q('#cOk').onclick = () => { fecharModal(W); acao(); };
 }
 
 /* =========================================================
    FORMULÁRIO DE TAREFA (nova / editar)
    ========================================================= */
 function formTarefa(id) {
+  let W; const q = sel => W.querySelector(sel);
   const t = id ? S.tarefas[id] : null;
   const f = {
     titulo: t?.titulo || '', descricao: t?.descricao || '',
@@ -725,7 +935,7 @@ function formTarefa(id) {
       : f.tipo === 'complexa' ? `<div class="field"><label>Data de início</label><input class="input" type="date" id="fData" value="${f.data}" required></div>`
       : `<div class="field"><label>Começa a aparecer em</label><input class="input" type="date" id="fInicio" value="${f.inicio}"></div>`;
 
-    $('.modal').innerHTML = `
+    q('.modal').innerHTML = `
       <h2>${t ? 'Editar tarefa' : 'Nova tarefa'}</h2>
       <div class="field"><label>Tarefa</label><input class="input" id="fTitulo" value="${esc(f.titulo)}" placeholder="O que precisa ser feito?" maxlength="160"></div>
       <div class="field"><label>Detalhes (opcional)</label><textarea class="input" id="fDesc" placeholder="Observações, links, passos…">${esc(f.descricao)}</textarea></div>
@@ -749,44 +959,44 @@ function formTarefa(id) {
       <div class="msg err" id="fMsg"></div>
       <div class="modal-foot">
         ${t ? `<button class="btn btn-danger" id="fDel" style="margin-right:auto">Excluir</button>` : ''}
-        <button class="btn btn-ghost" onclick="fecharModal()">Cancelar</button>
+        <button class="btn btn-ghost" onclick="fecharModal(this)">Cancelar</button>
         <button class="btn btn-primary" id="fSalvar">${t ? 'Salvar' : 'Adicionar'}</button>
       </div>`;
 
     const ler = () => {
-      f.titulo = $('#fTitulo').value; f.descricao = $('#fDesc').value;
-      if ($('#fData')) f.data = $('#fData').value;
-      if ($('#fInicio')) f.inicio = $('#fInicio').value;
-      f.horario = $('#fHora').value;
-      if ($('#fPrio')) f.prioridade = Math.max(0, Math.min(100, Math.round(+$('#fPrio').value || 0)));
+      f.titulo = q('#fTitulo').value; f.descricao = q('#fDesc').value;
+      if (q('#fData')) f.data = q('#fData').value;
+      if (q('#fInicio')) f.inicio = q('#fInicio').value;
+      f.horario = q('#fHora').value;
+      if (q('#fPrio')) f.prioridade = Math.max(0, Math.min(100, Math.round(+q('#fPrio').value || 0)));
     };
-    $('#segTipo').onclick = e => { const b = e.target.closest('button'); if (!b) return; ler(); f.tipo = b.dataset.v; desenhar(); };
-    $('#fReu').onclick = () => { ler(); f.reuniao = !f.reuniao; desenhar(); };
-    if ($('#fPrioR')) {
-      $('#fPrioR').oninput = e => { $('#fPrio').value = e.target.value; };
-      $('#fPrio').oninput = e => { $('#fPrioR').value = e.target.value; };
+    q('#segTipo').onclick = e => { const b = e.target.closest('button'); if (!b) return; ler(); f.tipo = b.dataset.v; desenhar(); };
+    q('#fReu').onclick = () => { ler(); f.reuniao = !f.reuniao; desenhar(); };
+    if (q('#fPrioR')) {
+      q('#fPrioR').oninput = e => { q('#fPrio').value = e.target.value; };
+      q('#fPrio').oninput = e => { q('#fPrioR').value = e.target.value; };
     }
-    document.querySelectorAll('.days button').forEach(b => b.onclick = () => {
+    W.querySelectorAll('.days button').forEach(b => b.onclick = () => {
       ler(); const d = +b.dataset.d;
       f.dias = f.dias.includes(d) ? f.dias.filter(x => x !== d) : [...f.dias, d].sort(); desenhar();
     });
-    document.querySelectorAll('.quick button').forEach(b => b.onclick = () => {
+    W.querySelectorAll('.quick button').forEach(b => b.onclick = () => {
       ler(); f.dias = b.dataset.q === 'util' ? [1, 2, 3, 4, 5] : b.dataset.q === 'todos' ? [0, 1, 2, 3, 4, 5, 6] : []; desenhar();
     });
-    if ($('#fDel')) $('#fDel').onclick = () => excluirTarefa(id);
-    $('#fSalvar').onclick = () => {
+    if (q('#fDel')) q('#fDel').onclick = () => excluirTarefa(id);
+    q('#fSalvar').onclick = () => {
       ler();
       const titulo = f.titulo.trim();
-      if (!titulo) return $('#fMsg').textContent = 'Escreva a tarefa.';
-      if (f.tipo === 'diaria' && !f.dias.length) return $('#fMsg').textContent = 'Selecione pelo menos um dia.';
-      if ((f.tipo === 'unica' || f.tipo === 'complexa') && !f.data) return $('#fMsg').textContent = 'Escolha a data.';
+      if (!titulo) return q('#fMsg').textContent = 'Escreva a tarefa.';
+      if (f.tipo === 'diaria' && !f.dias.length) return q('#fMsg').textContent = 'Selecione pelo menos um dia.';
+      if ((f.tipo === 'unica' || f.tipo === 'complexa') && !f.data) return q('#fMsg').textContent = 'Escolha a data.';
       const base = { titulo, descricao: f.descricao.trim(), tipo: f.tipo, prioridade: f.reuniao ? null : f.prioridade, horario: f.horario || null,
                      dias: null, data: null, inicio: null, reuniao: f.reuniao || null };
       if (f.tipo === 'diaria') { base.dias = f.dias; base.inicio = f.inicio || hoje(); }
       if (f.tipo === 'sugestiva') base.inicio = f.inicio || hoje();
       if (f.tipo === 'unica' || f.tipo === 'complexa') base.data = f.data;
 
-      fecharModal();
+      fecharModal(W);
       if (t) {
         if (t.tipo !== base.tipo) { base.concluidaEm = null; base.historico = null; }
         const novo = { ...t, ...base };
@@ -803,9 +1013,9 @@ function formTarefa(id) {
     };
   };
 
-  abrirModal('');
+  W = abrirModal('', t ? 'Editar tarefa' : 'Nova tarefa');
   desenhar();
-  $('#fTitulo').focus();
+  q('#fTitulo').focus();
 }
 
 function excluirTarefa(id) {
@@ -826,8 +1036,9 @@ function alternarAtiva(id) {
    CONFIGURAÇÕES DA CONTA
    ========================================================= */
 function abrirConta() {
+  let W; const q = sel => W.querySelector(sel);
   const u = S.user;
-  abrirModal(`
+  W = abrirModal(`
     <h2>Minha conta</h2>
     <div class="field"><label>Nome</label><input class="input" id="cNome" value="${esc(u.nome)}"></div>
     <div class="row2">
@@ -842,26 +1053,26 @@ function abrirConta() {
     </div>
     <div class="msg err" id="cMsg"></div>
     <div class="modal-foot">
-      <button class="btn btn-ghost" onclick="fecharModal()">Fechar</button>
+      <button class="btn btn-ghost" onclick="fecharModal(this)">Fechar</button>
       <button class="btn btn-primary" id="cSalvar">Salvar</button>
     </div>`);
-  $('#cSalvar').onclick = async () => {
-    const msg = $('#cMsg'); msg.textContent = '';
-    const patch = {}, nome = $('#cNome').value.trim();
+  q('#cSalvar').onclick = async () => {
+    const msg = q('#cMsg'); msg.textContent = '';
+    const patch = {}, nome = q('#cNome').value.trim();
     if (nome && nome !== u.nome) patch.nome = nome;
-    const atual = $('#cAtual').value, nova = $('#cNova').value, nova2 = $('#cNova2').value;
+    const atual = q('#cAtual').value, nova = q('#cNova').value, nova2 = q('#cNova2').value;
     if (atual || nova || nova2) {
       if ((await sha256(u.salt + atual)) !== u.hash) return msg.textContent = 'Senha atual incorreta.';
       if (nova.length < 6) return msg.textContent = 'A nova senha precisa ter pelo menos 6 caracteres.';
       if (nova !== nova2) return msg.textContent = 'As novas senhas não conferem.';
       patch.salt = novoSalt(); patch.hash = await sha256(patch.salt + nova);
     }
-    if (!Object.keys(patch).length) return fecharModal();
+    if (!Object.keys(patch).length) return fecharModal(W);
     try {
       await api(`usuarios/${u.id}`, 'PATCH', patch);
       Object.assign(S.user, patch);
       lsSet(SESSAO_KEY, { id: u.id, h: S.user.hash });
-      fecharModal(); render(); toast('Conta atualizada');
+      fecharModal(W); render(); toast('Conta atualizada');
     } catch (e) { msg.textContent = e.message; }
   };
 }
@@ -871,23 +1082,33 @@ function abrirConta() {
    ========================================================= */
 function render() {
   const u = S.user;
+  const nav = (v, ic, n) => `<button class="nav-item ${S.view === v ? 'active' : ''}" data-view="${v}" title="${n}">${ic}<span>${n}</span></button>`;
   $('#root').innerHTML = `
-    <header class="top"><div class="top-inner">
-      ${brandHTML('Organizador de tarefas')}
-      <nav class="tabs">
-        <button class="tab ${S.view === 'dia' ? 'active' : ''}" data-view="dia">Meu dia</button>
-        <button class="tab ${S.view === 'todas' ? 'active' : ''}" data-view="todas">Todas as tarefas</button>
-      </nav>
-      <div class="user-chip">
-        <button class="icon-btn" title="Minha conta" onclick="abrirConta()">${ICON.gear}</button>
-        <button class="icon-btn" title="Sair" onclick="sair()">${ICON.out}</button>
-        <div class="avatar" title="${esc(u.nome)}">${esc((u.nome || '?')[0].toUpperCase())}</div>
-      </div>
-    </div></header>
-    <main id="main"></main>
-    <button class="fab" onclick="formTarefa()">${ICON.plus}Nova tarefa</button>`;
-  document.querySelectorAll('.tab').forEach(b => b.onclick = () => { S.view = b.dataset.view; render(); });
-  S.view === 'dia' ? renderDia() : renderTodas();
+    <div class="layout">
+      <aside class="side">
+        ${brandHTML('Organizador de tarefas')}
+        <nav class="side-nav">
+          ${nav('inicio', ICON.home, 'Início')}
+          ${nav('dia', ICON.pen, 'Diário')}
+          ${nav('todas', ICON.list, 'Todas as tarefas')}
+        </nav>
+        <div class="side-foot">
+          <div class="side-user"><div class="avatar">${esc((u.nome || '?')[0].toUpperCase())}</div>
+            <div class="side-user-txt"><b>${esc(u.nome)}</b><small>${esc(u.usuario)}</small></div></div>
+          <div class="side-acts">
+            <button class="icon-btn" title="Minha conta" onclick="abrirConta()">${ICON.gear}</button>
+            <button class="icon-btn" title="Sair" onclick="sair()">${ICON.out}</button>
+          </div>
+        </div>
+      </aside>
+      <main id="main"></main>
+    </div>
+    <button class="fab" onclick="formTarefa()">${ICON.plus}<span>Nova tarefa</span></button>`;
+  document.querySelectorAll('.nav-item').forEach(b => b.onclick = () => { S.view = b.dataset.view; render(); });
+  if (S.view === 'inicio') renderInicio();
+  else if (S.view === 'dia') renderDia();
+  else renderTodas();
+  atualizarFlutuante();
 }
 
 function filtrosHTML(comOrdem) {
@@ -945,7 +1166,6 @@ function renderDia() {
       </div>
     </div>
 
-    <div class="dia-grid"><div>
     <div class="progress-card">
       <div class="progress-num">${feitos}<span>/${contaveis.length}</span></div>
       <div style="flex:1">
@@ -967,14 +1187,8 @@ function renderDia() {
       ${abertas.length ? `<div class="section-title">A fazer <span class="count">${abertas.length}</span></div>${listaAbertas(abertas)}` : ''}
       ${feitas.length ? `<div class="section-title">Concluídas <span class="count">${feitas.length}</span></div>${feitas.map(cardHTML).join('')}` : ''}
       ${dispensadas.length ? `<div class="section-title">Dispensadas hoje <span class="count">${dispensadas.length}</span></div>${dispensadas.map(cardHTML).join('')}` : ''}
-    `}
-    </div>
-    <aside class="dia-aside">${calendarioHTML()}</aside>
-    </div>`;
+    `}`;
 
-  $('#cPrev').onclick = () => irParaMes(-1);
-  $('#cNext').onclick = () => irParaMes(1);
-  document.querySelectorAll('.cal-day[data-d]').forEach(b => b.onclick = () => abrirPopupDia(b.dataset.d));
   $('#dPrev').onclick = () => irParaDia(addDays(D, -1));
   $('#dNext').onclick = () => irParaDia(addDays(D, 1));
   if ($('#dHoje')) $('#dHoje').onclick = () => irParaDia(H);
@@ -982,40 +1196,135 @@ function renderDia() {
   ligarFiltros();
 }
 
-/* ---------- CALENDÁRIO ---------- */
-function calendarioHTML() {
-  const H = hoje();
-  const [y, m] = S.calMes.split('-').map(Number);
-  const primeiro = new Date(y, m - 1, 1), n = new Date(y, m, 0).getDate();
-  const titulo = primeiro.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
-  const carregado = S.mesesCarregados[S.calMes];
-  let cells = DIAS_CURTO.map(d => `<div class="cal-dow">${d}</div>`).join('');
-  cells += '<div></div>'.repeat(primeiro.getDay());
-  for (let d = 1; d <= n; d++) {
-    const k = `${S.calMes}-${pad(d)}`;
-    const itens = itensDoDia(k).filter(i => i.status !== 'dispensada');
-    const total = itens.length, feitos = itens.filter(i => i.status === 'feito').length;
-    const cls = ['cal-day'];
-    if (k === H) cls.push('today');
-    if (k === S.dia) cls.push('sel');
-    if (total && feitos === total) cls.push('full');
-    if (total && k < H && feitos < total) cls.push('late');
-    const temReuniao = itens.some(i => i.t.reuniao);
-    cells += `<button class="${cls.join(' ')}" data-d="${k}" title="${total ? `${feitos} de ${total} concluída(s)` : 'Sem tarefas'}">
-      ${temReuniao ? '<span class="mt"></span>' : ''}${d}${total && carregado ? `<small>${feitos}/${total}</small>` : total ? `<small>${total}</small>` : ''}</button>`;
+/* ---------- TELA INICIAL + CALENDÁRIO (ano / mês / semana) ---------- */
+const MESES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+const inicioSemana = ref => { const d = parseD(ref); d.setDate(d.getDate() - d.getDay()); return ymd(d); };
+function mesesDoPeriodo() {
+  const r = S.calRef;
+  if (S.calModo === 'ano') return MESES.map((_, i) => `${r.slice(0, 4)}-${pad(i + 1)}`);
+  if (S.calModo === 'mes') return [r.slice(0, 7)];
+  const a = inicioSemana(r), b = addDays(a, 6);
+  return [...new Set([a.slice(0, 7), b.slice(0, 7)])];
+}
+function resumoDia(k) {
+  const itens = itensDoDia(k).filter(i => i.status !== 'dispensada');
+  const feitos = itens.filter(i => i.status === 'feito').length;
+  return { itens, total: itens.length, feitos, reuniao: itens.some(i => i.t.reuniao) };
+}
+function moverCal(delta) {
+  const d = parseD(S.calRef);
+  if (S.calModo === 'ano') d.setFullYear(d.getFullYear() + delta, 0, 1);
+  else if (S.calModo === 'mes') d.setMonth(d.getMonth() + delta, 1);
+  else d.setDate(d.getDate() + 7 * delta);
+  S.calRef = ymd(d); render();
+}
+
+function renderInicio() {
+  const H = hoje(), hr = new Date().getHours();
+  const saud = hr < 12 ? 'Bom dia' : hr < 18 ? 'Boa tarde' : 'Boa noite';
+  const faltam = mesesDoPeriodo().filter(m => !S.mesesCarregados[m]);
+  if (faltam.length && !S.carregandoCal) {
+    S.carregandoCal = true;
+    Promise.all(faltam.map(m => carregarMes(m).catch(() => { S.mesesCarregados[m] = true; })))
+      .finally(() => { S.carregandoCal = false; if (S.view === 'inicio') render(); });
   }
-  return `<div class="cal">
-    <div class="cal-head">
-      <button class="icon-btn" id="cPrev" title="Mês anterior">${ICON.prev}</button>
-      <h3>${titulo}</h3>
-      <button class="icon-btn" id="cNext" title="Próximo mês">${ICON.next}</button>
+  const ref = parseD(S.calRef);
+  let titulo;
+  if (S.calModo === 'ano') titulo = String(ref.getFullYear());
+  else if (S.calModo === 'mes') titulo = `${MESES[ref.getMonth()]} de ${ref.getFullYear()}`;
+  else {
+    const a = parseD(inicioSemana(S.calRef)), b = parseD(addDays(inicioSemana(S.calRef), 6));
+    titulo = a.getMonth() === b.getMonth() ? `${a.getDate()} a ${b.getDate()} de ${MESES[b.getMonth()].toLowerCase()} de ${b.getFullYear()}`
+      : `${a.getDate()}/${pad(a.getMonth() + 1)} a ${b.getDate()}/${pad(b.getMonth() + 1)} de ${b.getFullYear()}`;
+  }
+  const hj = resumoDia(H);
+  const corpo = S.calModo === 'ano' ? calAno() : S.calModo === 'mes' ? calMes() : calSemana();
+
+  $('#main').innerHTML = `
+    <div class="daybar">
+      <h2 class="day-title">${saud}, ${esc((S.user.nome || '').split(' ')[0])}
+        <small>${parseD(H).toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })} · ${hj.total ? `${hj.feitos} de ${hj.total} tarefa(s) de hoje concluída(s)` : 'nenhuma tarefa hoje'}</small></h2>
     </div>
-    <div class="cal-grid">${cells}</div>
-    <div class="cal-legend"><span>concluídas/total</span><span><i></i>reunião</span></div>
-  </div>`;
+    <section class="calbox ${S.calMin ? 'is-min' : ''}">
+      <div class="calbox-head">
+        <div class="daynav">
+          <button class="icon-btn" id="cPrev" title="Anterior">${ICON.prev}</button>
+          <button class="icon-btn" id="cNext" title="Próximo">${ICON.next}</button>
+        </div>
+        <h3 class="calbox-title">${titulo}</h3>
+        <button class="pill" id="cHoje">Hoje</button>
+        <div class="seg-inline">
+          ${[['ano', 'Ano'], ['mes', 'Mês'], ['semana', 'Semana']].map(([k, n]) => `<button data-m="${k}" class="${S.calModo === k ? 'on' : ''}">${n}</button>`).join('')}
+        </div>
+        <button class="icon-btn" id="cMin" title="${S.calMin ? 'Expandir calendário' : 'Minimizar calendário'}">${S.calMin ? ICON.chevDown : ICON.chevUp}</button>
+      </div>
+      ${S.calMin ? '' : `<div class="calbox-body">${corpo}</div>
+        <div class="cal-legend"><span>concluídas/total</span><span><i></i>tem reunião</span><span><i class="lt"></i>pendências em dia passado</span></div>`}
+    </section>`;
+
+  $('#cPrev').onclick = () => moverCal(-1);
+  $('#cNext').onclick = () => moverCal(1);
+  $('#cHoje').onclick = () => { S.calRef = H; render(); };
+  $('#cMin').onclick = () => { S.calMin = !S.calMin; lsSet('mapaMental.calMin', S.calMin); render(); };
+  document.querySelectorAll('[data-m]').forEach(b => b.onclick = () => { S.calModo = b.dataset.m; lsSet('mapaMental.calModo', S.calModo); render(); });
+  document.querySelectorAll('#main [data-d]').forEach(b => b.onclick = e => { e.stopPropagation(); abrirPopupDia(b.dataset.d); });
+  document.querySelectorAll('[data-ym]').forEach(b => b.onclick = () => { S.calModo = 'mes'; S.calRef = b.dataset.ym + '-01'; lsSet('mapaMental.calModo', 'mes'); render(); });
+}
+
+function clsDia(k, r) {
+  const H = hoje(), c = [];
+  if (k === H) c.push('today');
+  if (r.total) c.push('has');
+  if (r.total && r.feitos === r.total) c.push('full');
+  if (r.total && k < H && r.feitos < r.total) c.push('late');
+  return c.join(' ');
+}
+
+function calMes() {
+  const [y, m] = S.calRef.slice(0, 7).split('-').map(Number);
+  const prim = new Date(y, m - 1, 1), n = new Date(y, m, 0).getDate();
+  let html = DIAS_NOME.map(d => `<div class="cal-dow">${d}</div>`).join('') + '<div class="mcell blank"></div>'.repeat(prim.getDay());
+  for (let d = 1; d <= n; d++) {
+    const k = `${y}-${pad(m)}-${pad(d)}`, r = resumoDia(k);
+    const its = r.itens.sort(cmpHora);
+    html += `<button class="mcell ${clsDia(k, r)}" data-d="${k}">
+      <div class="mcell-top"><span class="n">${d}</span>${r.reuniao ? '<span class="mt"></span>' : ''}${r.total ? `<span class="cnt">${r.feitos}/${r.total}</span>` : ''}</div>
+      <div class="mchips">${its.slice(0, 3).map(i => `<div class="mchip ${i.status}">${i.t.horario ? `<b>${esc(i.t.horario)}</b> ` : ''}${esc(i.t.titulo)}</div>`).join('')}
+      ${its.length > 3 ? `<div class="more">+${its.length - 3} mais</div>` : ''}</div>
+    </button>`;
+  }
+  return `<div class="mgrid">${html}</div>`;
+}
+
+function calAno() {
+  const y = +S.calRef.slice(0, 4);
+  return `<div class="ygrid">${MESES.map((nome, mi) => {
+    const prim = new Date(y, mi, 1), n = new Date(y, mi + 1, 0).getDate();
+    let cells = DIAS_CURTO.map(d => `<span class="ydow">${d}</span>`).join('') + '<span></span>'.repeat(prim.getDay());
+    for (let d = 1; d <= n; d++) {
+      const k = `${y}-${pad(mi + 1)}-${pad(d)}`, r = resumoDia(k);
+      cells += `<button class="ycell ${clsDia(k, r)}" data-d="${k}" title="${parseD(k).toLocaleDateString('pt-BR')} · ${r.total ? `${r.feitos}/${r.total} concluída(s)` : 'sem tarefas'}">${d}</button>`;
+    }
+    return `<div class="ymonth"><button class="ymonth-name" data-ym="${y}-${pad(mi + 1)}">${nome}</button><div class="ydays">${cells}</div></div>`;
+  }).join('')}</div>`;
+}
+
+function calSemana() {
+  const a = inicioSemana(S.calRef);
+  return `<div class="wgrid">${[0, 1, 2, 3, 4, 5, 6].map(i => {
+    const k = addDays(a, i), dt = parseD(k), r = resumoDia(k);
+    const its = r.itens.sort(cmpHora);
+    return `<div class="wcol ${k === hoje() ? 'today' : ''}">
+      <button class="whead" data-d="${k}"><span>${DIAS_NOME[i]}</span><b>${dt.getDate()}/${pad(dt.getMonth() + 1)}</b>${r.total ? `<small>${r.feitos}/${r.total}</small>` : ''}</button>
+      <div class="witems">${its.length ? its.map(it => `<button class="witem ${it.status} p-${faixa(prioNum(it.t))}" data-d="${k}">
+          ${it.t.horario ? `<span class="wh">${esc(it.t.horario)}</span>` : ''}<span class="wt">${esc(it.t.titulo)}</span>
+          ${it.t.reuniao ? '<span class="wtag">Reunião</span>' : ''}</button>`).join('') : '<div class="wempty">—</div>'}</div>
+    </div>`;
+  }).join('')}</div>`;
 }
 
 async function abrirPopupDia(D) {
+  let W; const q = sel => W.querySelector(sel);
   if (!S.registros[D]) { try { await carregarRegistros(D); } catch {} }
   const H = hoje(), dt = parseD(D);
   const tituloData = dt.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
@@ -1043,17 +1352,111 @@ async function abrirPopupDia(D) {
     </div>`;
   }).join('');
 
-  abrirModal(`
+  W = abrirModal(`
     <h2 style="margin-bottom:4px;text-transform:capitalize">${D === H ? 'Hoje · ' : ''}${tituloData}</h2>
     <p class="help" style="margin:0 0 14px">${total ? `${feitos} de ${total} concluída(s)` : 'Nenhuma tarefa neste dia'}</p>
     ${linhas || `<div class="empty" style="padding:30px 16px">Nada programado.</div>`}
     <div class="modal-foot">
-      <button class="btn btn-ghost" onclick="fecharModal()">Fechar</button>
+      <button class="btn btn-ghost" onclick="fecharModal(this)">Fechar</button>
+      <button class="btn btn-ghost" id="popPip" style="margin-right:auto" title="Abre uma janela pequena que fica por cima de tudo">${ICON.pip.replace('<svg', '<svg width="16" height="16"')} Janela flutuante</button>
       <button class="btn btn-ghost" id="popNova">Nova tarefa neste dia</button>
       <button class="btn btn-primary" id="popAbrir">Abrir este dia</button>
     </div>`);
-  $('#popAbrir').onclick = () => { fecharModal(); irParaDia(D); };
-  $('#popNova').onclick = async () => { fecharModal(); await irParaDia(D); formTarefa(); };
+  q('#popAbrir').onclick = () => { fecharModal(W); S.view = 'dia'; irParaDia(D); };
+  q('#popPip').onclick = () => abrirFlutuante();
+  q('#popNova').onclick = async () => { fecharModal(W); S.dia = D; formTarefa(); };
+}
+
+/* ---------- JANELA FLUTUANTE (fica por cima de tudo) ---------- */
+const minutos = hm => { const [h, m] = hm.split(':').map(Number); return h * 60 + m; };
+function proximos() {
+  const agora = new Date(), H = hoje(), nowMin = agora.getHours() * 60 + agora.getMinutes();
+  let evento = null;
+  for (let k = 0; k <= 30 && !evento; k++) {
+    const D = addDays(H, k);
+    const c = itensDoDia(D).filter(i => i.t.horario && ['pendente', 'parcial', 'decidir'].includes(i.status) && (k > 0 || minutos(i.t.horario) >= nowMin - 30));
+    c.sort(cmpHora);
+    if (c.length) evento = { ...c[0], D };
+  }
+  const tarefas = itensDoDia(H).filter(i => !i.t.reuniao && (i.status === 'pendente' || i.status === 'parcial')).sort(cmpPrio);
+  return { evento, tarefas };
+}
+function quandoTxt(D, hm) {
+  const H = hoje(), agora = new Date(), nowMin = agora.getHours() * 60 + agora.getMinutes();
+  if (D === H) {
+    const diff = minutos(hm) - nowMin;
+    if (diff <= 0) return `começou há ${-diff} min`;
+    if (diff < 60) return `em ${diff} min`;
+    return `em ${Math.floor(diff / 60)}h${diff % 60 ? ' ' + pad(diff % 60) + 'min' : ''}`;
+  }
+  if (D === addDays(H, 1)) return `amanhã às ${hm}`;
+  return `${parseD(D).toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit' })} às ${hm}`;
+}
+const PIP_CSS = `
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#11121B;color:#E9EBF3;font-family:'DM Sans',system-ui,sans-serif;font-size:14px;padding:14px;min-height:100vh}
+  .hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .hd b{font-family:'Space Grotesk',sans-serif;font-size:22px;color:#fff}
+  .hd small{color:#9496B0;font-size:12px;text-align:right}
+  .bar{height:5px;background:#2D2E47;border-radius:9px;overflow:hidden;margin-bottom:14px}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,#3E7996,#B9D6E4)}
+  .lbl{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9496B0;margin:0 0 6px}
+  .card{background:#1A1B29;border:1px solid #383A58;border-left:4px solid #6FA3BE;border-radius:10px;padding:10px 12px;margin-bottom:12px}
+  .card.ev{border-left-color:#B9D6E4}
+  .card.p-alta{border-left-color:#fff}.card.p-baixa{border-left-color:#4b4e72}
+  .t{font-weight:600;color:#fff;font-size:15px;line-height:1.3}
+  .m{color:#B9D6E4;font-size:12.5px;margin-top:4px}
+  .m.muted{color:#9496B0}
+  .h{font-family:'Space Grotesk',sans-serif;font-weight:700;color:#B9D6E4;margin-right:6px}
+  .nx{font-size:12.5px;color:#9496B0;padding:3px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .nx b{color:#E9EBF3;font-weight:600}
+  .vazio{color:#9496B0;font-size:13px;padding:6px 0 12px}
+  button{font-family:inherit;background:none;border:1px solid #383A58;color:#B9D6E4;border-radius:8px;padding:5px 10px;font-size:12px;cursor:pointer;margin-top:4px}
+  button:hover{background:#2D2E47}`;
+async function abrirFlutuante() {
+  if (S.pip && !S.pip.closed) { try { S.pip.focus(); } catch {} return; }
+  let pw = null, sempreNoTopo = false;
+  if ('documentPictureInPicture' in window) {
+    try { pw = await documentPictureInPicture.requestWindow({ width: 340, height: 360 }); sempreNoTopo = true; } catch {}
+  }
+  if (!pw) {
+    pw = window.open('', 'mapaMentalFlutuante', 'width=360,height=400');
+    if (!pw) return toast('O navegador bloqueou a janela. Libere pop-ups para este site.');
+    toast('Este navegador não deixa a janela fixa por cima — use Chrome ou Edge no computador');
+  }
+  S.pip = pw;
+  pw.document.head.innerHTML = `<meta charset="UTF-8"><title>Mapa Mental · Próximos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"><style>${PIP_CSS}</style>`;
+  pw.document.body.innerHTML = '<div id="pip"></div>';
+  if (!S.registros[hoje()]) { try { await carregarRegistros(hoje()); } catch {} }
+  atualizarFlutuante();
+  clearInterval(S.pipTimer); clearInterval(S.pipSync);
+  S.pipTimer = setInterval(atualizarFlutuante, 30000);
+  S.pipSync = setInterval(async () => { try { await Promise.all([carregarTarefas(), carregarRegistros(hoje())]); render(); } catch {} }, 120000);
+  pw.addEventListener('pagehide', () => { clearInterval(S.pipTimer); clearInterval(S.pipSync); S.pip = null; });
+}
+function atualizarFlutuante() {
+  const pw = S.pip;
+  if (!pw || pw.closed) return;
+  const el = pw.document.getElementById('pip'); if (!el) return;
+  const { evento, tarefas } = proximos();
+  const r = resumoDia(hoje()), pct = r.total ? Math.round(r.feitos / r.total * 100) : 0;
+  const agora = new Date();
+  const t1 = tarefas[0], resto = tarefas.slice(1, 4);
+  el.innerHTML = `
+    <div class="hd"><b>${pad(agora.getHours())}:${pad(agora.getMinutes())}</b><small>Hoje: ${r.feitos}/${r.total} concluída(s)</small></div>
+    <div class="bar"><i style="width:${pct}%"></i></div>
+    <div class="lbl">Próximo evento</div>
+    ${evento ? `<div class="card ev"><div class="t"><span class="h">${esc(evento.t.horario)}</span>${esc(evento.t.titulo)}</div>
+        <div class="m">${quandoTxt(evento.D, evento.t.horario)}${evento.t.reuniao ? ' · reunião' : ''}</div></div>`
+      : `<div class="vazio">Nenhum evento com horário nos próximos dias.</div>`}
+    <div class="lbl">Próxima tarefa · por prioridade</div>
+    ${t1 ? `<div class="card p-${faixa(prioNum(t1.t))}"><div class="t">${t1.t.horario ? `<span class="h">${esc(t1.t.horario)}</span>` : ''}${esc(t1.t.titulo)}</div>
+        <div class="m muted">Prioridade ${prioNum(t1.t)}${t1.atrasada ? ' · atrasada' : ''}${t1.status === 'parcial' ? ' · parcial' : ''}</div></div>
+        ${resto.length ? `<div class="lbl" style="margin-top:4px">Depois</div>${resto.map(i => `<div class="nx"><b>${prioNum(i.t)}</b> · ${esc(i.t.titulo)}</div>`).join('')}` : ''}`
+      : `<div class="vazio">Nenhuma tarefa pendente hoje. 🎉</div>`}
+    <button id="pipAbrir">Abrir o app</button>`;
+  pw.document.getElementById('pipAbrir').onclick = () => { try { window.focus(); } catch {} S.view = 'dia'; irParaDia(hoje()); };
 }
 
 function cardHTML(it) {
