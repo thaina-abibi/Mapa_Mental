@@ -4,6 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mapa Mental · Tarefas</title>
+<link rel="icon" id="favicon" href="IMG.png">
+<link rel="apple-touch-icon" id="favicon-apple" href="IMG.png">
+<script>
+  // Usa como ícone da aba a imagem "IMG" do repositório (testa as extensões mais comuns)
+  (function () {
+    const nomes = ['IMG.png', 'IMG.jpg', 'IMG.jpeg', 'IMG.ico', 'IMG.svg', 'IMG.webp', 'IMG.PNG', 'IMG.JPG', 'img.png', 'img.jpg', 'img.jpeg', 'img.ico', 'img.svg'];
+    let i = 0;
+    const testar = () => {
+      if (i >= nomes.length) return;
+      const nome = nomes[i++], im = new Image();
+      im.onload = () => { document.getElementById('favicon').href = nome; document.getElementById('favicon-apple').href = nome; };
+      im.onerror = testar;
+      im.src = nome + '?v=1';
+    };
+    testar();
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
