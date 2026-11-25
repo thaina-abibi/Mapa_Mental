@@ -65,7 +65,7 @@
 
   /* ---------- APP ---------- */
   header.top{position:sticky;top:0;z-index:20;background:rgba(17,18,27,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-  .top-inner{max-width:980px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:16px}
+  .top-inner{max-width:1180px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:16px}
   .top-inner .brand{margin:0}
   .top-inner .brand h1{font-size:17px}
   .tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);padding:4px;border-radius:12px;margin-left:auto}
@@ -77,7 +77,7 @@
   .user-chip{display:flex;align-items:center;gap:8px}
   .avatar{width:34px;height:34px;border-radius:50%;background:var(--surface2);display:grid;place-items:center;font-weight:700;color:var(--azul-palido);font-family:'Space Grotesk'}
 
-  main{max-width:980px;margin:0 auto;padding:24px 20px 120px}
+  main{max-width:1180px;margin:0 auto;padding:24px 20px 120px}
 
   .daybar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
   .daynav{display:flex;align-items:center;gap:6px}
@@ -108,6 +108,14 @@
   .task.p-alta{--pcolor:var(--branco)}
   .task.p-media{--pcolor:var(--azul-claro)}
   .task.p-baixa{--pcolor:#4b4e72}
+  .task.p-meet{--pcolor:var(--azul-palido)}
+  .hora{flex:none;font-family:'Space Grotesk';font-weight:700;font-size:13px;color:var(--azul-palido);background:var(--surface2);border-radius:7px;padding:3px 8px;margin-right:8px;vertical-align:1px}
+  .prio-ctl{display:flex;align-items:center;gap:12px}
+  .prio-ctl input[type=range]{flex:1;accent-color:var(--azul-claro);height:28px}
+  .prio-ctl input[type=number]{width:76px;text-align:center}
+  .prio-marks{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:2px;padding-right:88px}
+  .sub-title{font-size:11.5px;font-weight:600;color:var(--muted);margin:14px 0 8px 2px;display:flex;align-items:center;gap:6px}
+  .filters .sep{width:1px;background:var(--line);margin:0 4px}
   .task.done{opacity:.55}
   .task.done .t-title{text-decoration:line-through;text-decoration-color:var(--muted)}
   .task.suggest{border-style:dashed;background:transparent}
@@ -183,6 +191,51 @@
   .spin{width:30px;height:30px;border:3px solid var(--line);border-top-color:var(--azul-claro);border-radius:50%;animation:sp 0.8s linear infinite;margin:0 auto 12px}
   @keyframes sp{to{transform:rotate(360deg)}}
 
+  /* ---------- REUNIÃO / PAUTA ---------- */
+  .badge.meet{background:rgba(185,214,228,.12);color:var(--azul-palido);border:1px solid rgba(185,214,228,.35)}
+  .note.pauta{white-space:pre-wrap}
+  .toggle-row{display:flex;align-items:center;gap:12px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 13px;width:100%;text-align:left}
+  .toggle-row b{display:block;color:var(--branco);font-size:14px}
+  .toggle-row span.h{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+  .pauta-item{border-left:2px solid var(--azul);padding:4px 0 4px 12px;margin-bottom:14px}
+  .pauta-item .d{font-size:12px;font-weight:700;color:var(--azul-palido);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+  .pauta-item .x{white-space:pre-wrap;font-size:14px;line-height:1.5}
+
+  /* ---------- CALENDÁRIO ---------- */
+  .dia-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start}
+  .dia-aside{position:sticky;top:90px}
+  .cal{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+  .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .cal-head h3{font-size:16px;color:var(--branco);text-transform:capitalize}
+  .cal-head .icon-btn{width:32px;height:32px}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+  .cal-dow{font-size:11px;color:var(--muted);text-align:center;font-weight:700;padding:4px 0}
+  .cal-day{aspect-ratio:1;border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:13px;font-weight:600;color:var(--texto);position:relative;border:1px solid transparent;background:var(--bg)}
+  .cal-day:hover{border-color:var(--azul-claro)}
+  .cal-day small{font-size:9.5px;font-weight:600;color:var(--muted);line-height:1}
+  .cal-day.today{background:var(--azul);color:var(--branco)}
+  .cal-day.today small{color:var(--azul-palido)}
+  .cal-day.sel{border-color:var(--branco)}
+  .cal-day.full small{color:var(--azul-palido)}
+  .cal-day.late small{color:var(--branco)}
+  .cal-day .mt{position:absolute;top:4px;right:4px;width:5px;height:5px;border-radius:50%;background:var(--azul-palido)}
+  .cal-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11.5px;color:var(--muted);margin-top:12px}
+  .cal-legend i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--azul-palido);margin-right:4px;vertical-align:1px}
+  .pop-row{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
+  .pop-row:last-child{border-bottom:none}
+  .pop-st{flex:none;width:22px;height:22px;border-radius:50%;border:2px solid var(--azul-claro);display:grid;place-items:center;font-size:11px;font-weight:700;margin-top:1px}
+  .pop-st.feito{background:var(--azul);border-color:var(--azul)}
+  .pop-st.feito svg{width:12px;height:12px}
+  .pop-st.parcial{background:linear-gradient(90deg,var(--azul) 50%,transparent 50%);border-color:var(--azul-palido)}
+  .pop-st.decidir{border-style:dashed;color:var(--azul-palido)}
+  .pop-st.dispensada{border-color:var(--line);color:var(--muted)}
+  .pop-row.off{opacity:.5}
+
+  @media (max-width:900px){
+    .dia-grid{grid-template-columns:1fr}
+    .dia-aside{position:static;order:-1}
+  }
+
   @media (max-width:640px){
     .top-inner{flex-wrap:wrap;padding:12px 14px}
     .tabs{order:3;width:100%;margin-left:0}
@@ -211,10 +264,10 @@ const SESSAO_KEY = 'mapaMental.sessao';
 /* =========================================================
    FIREBASE (REST)
    ========================================================= */
-async function api(path, method = 'GET', body) {
+async function api(path, method = 'GET', body, qs = '') {
   const opts = { method, headers: { 'Content-Type': 'application/json' } };
   if (body !== undefined) opts.body = JSON.stringify(body);
-  const r = await fetch(`${DB_URL}/${path}.json`, opts);
+  const r = await fetch(`${DB_URL}/${path}.json${qs}`, opts);
   if (!r.ok) throw new Error(`Erro ${r.status} ao acessar o banco`);
   return r.json();
 }
@@ -234,7 +287,15 @@ const fmtCurta = s => parseD(s).toLocaleDateString('pt-BR', { day: '2-digit', mo
 const novoId = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 const DIAS_CURTO = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
 const DIAS_NOME = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-const PRIO = { alta: { n: 'Alta', l: 3, o: 0 }, media: { n: 'Média', l: 2, o: 1 }, baixa: { n: 'Baixa', l: 1, o: 2 } };
+// Prioridade numérica 0–100 (reuniões não têm prioridade)
+const PRIO_ANTIGA = { alta: 80, media: 50, baixa: 20 };   // compatibilidade com tarefas antigas
+function prioNum(t) {
+  if (t.reuniao) return null;
+  if (typeof t.prioridade === 'number') return t.prioridade;
+  return PRIO_ANTIGA[t.prioridade] ?? 50;
+}
+const faixa = n => n == null ? 'meet' : n >= 70 ? 'alta' : n >= 40 ? 'media' : 'baixa';
+const FAIXAS = { alta: { n: '70–100', l: 3, c: 'var(--branco)' }, media: { n: '40–69', l: 2, c: 'var(--azul-claro)' }, baixa: { n: '0–39', l: 1, c: 'var(--muted)' } };
 const TIPOS = { diaria: 'Diária', unica: 'Única', complexa: 'Complexa', sugestiva: 'Sugestiva' };
 
 async function sha256(txt) {
@@ -266,7 +327,18 @@ const ICON = {
   out: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>',
   undo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 010 10h-3"/></svg>',
 };
-const prioHTML = p => `<span class="badge outline" style="color:${p === 'alta' ? 'var(--branco)' : p === 'media' ? 'var(--azul-claro)' : 'var(--muted)'}"><span class="prio l${PRIO[p].l}"><i></i><i></i><i></i></span>${PRIO[p].n}</span>`;
+function prioHTML(t) {
+  const n = prioNum(t);
+  if (n == null) return '';
+  const f = FAIXAS[faixa(n)];
+  return `<span class="badge outline" title="Prioridade ${n} de 100" style="color:${f.c}"><span class="prio l${f.l}"><i></i><i></i><i></i></span>Prioridade ${n}</span>`;
+}
+const horaHTML = t => t.horario ? `<span class="hora">${esc(t.horario)}</span>` : '';
+function passaFiltro(t) {
+  if (S.filtro === 'todas') return true;
+  if (S.filtro === 'reuniao') return !!t.reuniao;
+  return faixa(prioNum(t)) === S.filtro;
+}
 const brandHTML = sub => `<div class="brand"><div class="brand-mark">${ICON.logo}</div><div><h1>Mapa Mental</h1><small>${sub}</small></div></div>`;
 
 /* =========================================================
@@ -276,9 +348,13 @@ const S = {
   user: null,
   tarefas: {},
   registros: {},          // registros[YYYY-MM-DD][tarefaId]
+  pautas: {},             // pautas[tarefaId][YYYY-MM-DD] = {texto, em}
   dia: hoje(),
+  calMes: hoje().slice(0, 7),   // mês exibido no calendário (YYYY-MM)
+  mesesCarregados: {},
   view: 'dia',            // 'dia' | 'todas'
-  filtro: 'todas',        // prioridade
+  filtro: 'todas',        // 'todas' | 'alta' | 'media' | 'baixa' | 'reuniao'
+  ordem: lsGet('mapaMental.ordem') || 'horario',   // 'horario' | 'prioridade'
 };
 
 /* =========================================================
@@ -372,25 +448,55 @@ function sair() { lsSet(SESSAO_KEY, null); S.user = null; location.reload(); }
 /* =========================================================
    DADOS
    ========================================================= */
-async function carregarTarefas() { S.tarefas = await api('tarefas') || {}; }
+async function carregarTarefas() {
+  const [t, p] = await Promise.all([api('tarefas'), api('pautas')]);
+  S.tarefas = t || {}; S.pautas = p || {};
+}
 async function carregarRegistros(dia) { S.registros[dia] = await api(`registros/${dia}`) || {}; }
+
+// Carrega os registros do mês inteiro de uma vez (para o calendário)
+async function carregarMes(ym, forcar = false) {
+  if (S.mesesCarregados[ym] && !forcar) return;
+  const q = `?orderBy=${encodeURIComponent('"$key"')}&startAt=${encodeURIComponent(`"${ym}-01"`)}&endAt=${encodeURIComponent(`"${ym}-31"`)}`;
+  const data = await api('registros', 'GET', undefined, q) || {};
+  const [y, m] = ym.split('-').map(Number), n = new Date(y, m, 0).getDate();
+  for (let d = 1; d <= n; d++) {
+    const k = `${ym}-${pad(d)}`;
+    if (forcar || !S.registros[k]) S.registros[k] = data[k] || {};
+  }
+  S.mesesCarregados[ym] = true;
+}
 
 async function iniciarApp() {
   $('#root').innerHTML = `<div class="loader"><div><div class="spin"></div>Carregando tarefas…</div></div>`;
-  await Promise.all([carregarTarefas(), carregarRegistros(S.dia)]);
+  S.calMes = S.dia.slice(0, 7);
+  await Promise.all([carregarTarefas(), carregarRegistros(S.dia), carregarMes(S.calMes)]);
   render();
 }
 
 async function irParaDia(d) {
   S.dia = d;
-  if (!S.registros[d]) { render(); await carregarRegistros(d); }
+  const ym = d.slice(0, 7);
+  if (ym !== S.calMes) S.calMes = ym;
+  if (!S.registros[d] || !S.mesesCarregados[ym]) {
+    render();
+    await Promise.all([S.registros[d] ? null : carregarRegistros(d), carregarMes(ym)]);
+  }
   render();
+}
+
+async function irParaMes(delta) {
+  const [y, m] = S.calMes.split('-').map(Number);
+  const d = new Date(y, m - 1 + delta, 1);
+  S.calMes = `${d.getFullYear()}-${pad(d.getMonth() + 1)}`;
+  render();
+  if (!S.mesesCarregados[S.calMes]) { await carregarMes(S.calMes); render(); }
 }
 
 // Sincroniza quando a aba volta a ficar visível (ex.: usou em outro dispositivo)
 document.addEventListener('visibilitychange', async () => {
   if (document.visibilityState === 'visible' && S.user && !$('.overlay')) {
-    try { await Promise.all([carregarTarefas(), carregarRegistros(S.dia)]); render(); } catch {}
+    try { await Promise.all([carregarTarefas(), carregarRegistros(S.dia), carregarMes(S.calMes, true)]); render(); } catch {}
   }
 });
 
@@ -438,15 +544,66 @@ function itensDoDia(D) {
   return out;
 }
 
-const ordenar = arr => arr.sort((a, b) =>
+const cmpPrio = (a, b) =>
   (b.atrasada ? 1 : 0) - (a.atrasada ? 1 : 0) ||
-  PRIO[a.t.prioridade].o - PRIO[b.t.prioridade].o ||
-  (a.t.criadaEm || 0) - (b.t.criadaEm || 0));
+  (prioNum(b.t) ?? -1) - (prioNum(a.t) ?? -1) ||
+  (a.t.criadaEm || 0) - (b.t.criadaEm || 0);
+const cmpHora = (a, b) =>
+  (a.t.horario ? 0 : 1) - (b.t.horario ? 0 : 1) ||
+  (a.t.horario || '').localeCompare(b.t.horario || '') || cmpPrio(a, b);
+const ordenar = arr => arr.sort(cmpPrio);
+const ordenarDia = arr => arr.sort(S.ordem === 'horario' ? cmpHora : cmpPrio);
 
 /* =========================================================
    AÇÕES NAS TAREFAS
    ========================================================= */
+function estaFeito(id, D) {
+  const t = S.tarefas[id];
+  if (t.tipo === 'unica') return !!t.concluidaEm;
+  if (t.tipo === 'complexa') return t.concluidaEm === D;
+  return !!(S.registros[D] && S.registros[D][id] && S.registros[D][id].feito);
+}
+
+// Ao concluir uma reunião, abre o campo de pauta antes
 function alternarFeito(id) {
+  const t = S.tarefas[id];
+  if (t.reuniao && !estaFeito(id, S.dia)) return abrirPauta(id, S.dia, true);
+  aplicarFeito(id);
+}
+
+function abrirPauta(id, D, concluir) {
+  const t = S.tarefas[id];
+  const atual = (S.pautas[id] && S.pautas[id][D] && S.pautas[id][D].texto) || '';
+  abrirModal(`
+    <h2>Pauta da reunião</h2>
+    <p class="help" style="margin:-8px 0 16px"><b style="color:var(--branco)">${esc(t.titulo)}</b> · ${parseD(D).toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}</p>
+    <div class="field"><label>Pauta / o que foi tratado</label>
+      <textarea class="input" id="ptTexto" style="min-height:160px" placeholder="- Assunto 1&#10;- Decisões&#10;- Próximos passos / responsáveis">${esc(atual)}</textarea></div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="fecharModal()">Cancelar</button>
+      <button class="btn btn-primary" id="ptOk">${concluir ? 'Salvar e concluir' : 'Salvar pauta'}</button>
+    </div>`);
+  $('#ptOk').onclick = () => {
+    const texto = $('#ptTexto').value.trim();
+    S.pautas[id] = S.pautas[id] || {};
+    if (texto) S.pautas[id][D] = { texto, em: Date.now() }; else delete S.pautas[id][D];
+    fecharModal();
+    salvar(() => texto ? api(`pautas/${id}/${D}`, 'PUT', S.pautas[id][D]) : api(`pautas/${id}/${D}`, 'DELETE'));
+    if (concluir) aplicarFeito(id); else render();
+  };
+}
+
+function verPautas(id) {
+  const t = S.tarefas[id], p = S.pautas[id] || {};
+  const datas = Object.keys(p).sort().reverse();
+  abrirModal(`
+    <h2>Pautas · ${esc(t.titulo)}</h2>
+    ${datas.length ? datas.map(d => `<div class="pauta-item"><div class="d">${parseD(d).toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' })}</div><div class="x">${esc(p[d].texto)}</div></div>`).join('')
+      : `<p class="help">Nenhuma pauta registrada ainda.</p>`}
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="fecharModal()">Fechar</button></div>`);
+}
+
+function aplicarFeito(id) {
   const t = S.tarefas[id], D = S.dia;
   const reg = (S.registros[D] = S.registros[D] || {});
   if (t.tipo === 'diaria' || t.tipo === 'sugestiva') {
@@ -526,9 +683,11 @@ function formTarefa(id) {
   const t = id ? S.tarefas[id] : null;
   const f = {
     titulo: t?.titulo || '', descricao: t?.descricao || '',
-    tipo: t?.tipo || 'unica', prioridade: t?.prioridade || 'media',
+    tipo: t?.tipo || 'unica', prioridade: t ? (prioNum({ ...t, reuniao: false })) : 50,
+    horario: t?.horario || '',
     dias: t?.dias ? [...t.dias] : [1, 2, 3, 4, 5],
     data: t?.data || S.dia, inicio: t?.inicio || hoje(),
+    reuniao: !!t?.reuniao,
   };
   const ajuda = {
     diaria: 'Repete nos dias da semana selecionados.',
@@ -558,9 +717,18 @@ function formTarefa(id) {
         <div class="help">${ajuda[f.tipo]}</div>
       </div>
       ${extra}
-      <div class="field"><label>Prioridade</label>
-        <div class="seg three" id="segPrio">${Object.entries(PRIO).map(([k, p]) => `<button type="button" data-v="${k}" class="${f.prioridade === k ? 'on' : ''}"><span class="prio l${p.l}" style="color:${k === 'alta' ? 'var(--branco)' : k === 'media' ? 'var(--azul-claro)' : 'var(--muted)'}"><i></i><i></i><i></i></span> ${p.n}</button>`).join('')}</div>
+      <div class="field"><label>Horário (opcional)</label><input class="input" type="time" id="fHora" value="${esc(f.horario)}" style="max-width:160px"></div>
+      <div class="field">
+        <button type="button" class="toggle-row" id="fReu">
+          <span class="switch ${f.reuniao ? 'on' : ''}"></span>
+          <span><b>É uma reunião</b><span class="h">Ao concluir, abre um campo para registrar a pauta. Reuniões não têm prioridade.</span></span>
+        </button>
       </div>
+      ${f.reuniao ? '' : `<div class="field"><label>Prioridade (0 a 100)</label>
+        <div class="prio-ctl"><input type="range" id="fPrioR" min="0" max="100" step="1" value="${f.prioridade}">
+          <input class="input" type="number" id="fPrio" min="0" max="100" value="${f.prioridade}"></div>
+        <div class="prio-marks"><span>0 · baixa</span><span>50</span><span>100 · máxima</span></div>
+      </div>`}
       <div class="msg err" id="fMsg"></div>
       <div class="modal-foot">
         ${t ? `<button class="btn btn-danger" id="fDel" style="margin-right:auto">Excluir</button>` : ''}
@@ -572,9 +740,15 @@ function formTarefa(id) {
       f.titulo = $('#fTitulo').value; f.descricao = $('#fDesc').value;
       if ($('#fData')) f.data = $('#fData').value;
       if ($('#fInicio')) f.inicio = $('#fInicio').value;
+      f.horario = $('#fHora').value;
+      if ($('#fPrio')) f.prioridade = Math.max(0, Math.min(100, Math.round(+$('#fPrio').value || 0)));
     };
     $('#segTipo').onclick = e => { const b = e.target.closest('button'); if (!b) return; ler(); f.tipo = b.dataset.v; desenhar(); };
-    $('#segPrio').onclick = e => { const b = e.target.closest('button'); if (!b) return; ler(); f.prioridade = b.dataset.v; desenhar(); };
+    $('#fReu').onclick = () => { ler(); f.reuniao = !f.reuniao; desenhar(); };
+    if ($('#fPrioR')) {
+      $('#fPrioR').oninput = e => { $('#fPrio').value = e.target.value; };
+      $('#fPrio').oninput = e => { $('#fPrioR').value = e.target.value; };
+    }
     document.querySelectorAll('.days button').forEach(b => b.onclick = () => {
       ler(); const d = +b.dataset.d;
       f.dias = f.dias.includes(d) ? f.dias.filter(x => x !== d) : [...f.dias, d].sort(); desenhar();
@@ -589,8 +763,8 @@ function formTarefa(id) {
       if (!titulo) return $('#fMsg').textContent = 'Escreva a tarefa.';
       if (f.tipo === 'diaria' && !f.dias.length) return $('#fMsg').textContent = 'Selecione pelo menos um dia.';
       if ((f.tipo === 'unica' || f.tipo === 'complexa') && !f.data) return $('#fMsg').textContent = 'Escolha a data.';
-      const base = { titulo, descricao: f.descricao.trim(), tipo: f.tipo, prioridade: f.prioridade,
-                     dias: null, data: null, inicio: null };
+      const base = { titulo, descricao: f.descricao.trim(), tipo: f.tipo, prioridade: f.reuniao ? null : f.prioridade, horario: f.horario || null,
+                     dias: null, data: null, inicio: null, reuniao: f.reuniao || null };
       if (f.tipo === 'diaria') { base.dias = f.dias; base.inicio = f.inicio || hoje(); }
       if (f.tipo === 'sugestiva') base.inicio = f.inicio || hoje();
       if (f.tipo === 'unica' || f.tipo === 'complexa') base.data = f.data;
@@ -620,8 +794,8 @@ function formTarefa(id) {
 function excluirTarefa(id) {
   const t = S.tarefas[id];
   confirmar('Excluir tarefa?', `"<b>${esc(t.titulo)}</b>" será removida de todos os dias. Essa ação não pode ser desfeita.`, 'Excluir', () => {
-    delete S.tarefas[id]; render(); toast('Tarefa excluída');
-    salvar(() => api(`tarefas/${id}`, 'DELETE'));
+    delete S.tarefas[id]; delete S.pautas[id]; render(); toast('Tarefa excluída');
+    salvar(async () => { await api(`tarefas/${id}`, 'DELETE'); await api(`pautas/${id}`, 'DELETE'); });
   });
 }
 
@@ -699,12 +873,25 @@ function render() {
   S.view === 'dia' ? renderDia() : renderTodas();
 }
 
-function filtrosHTML() {
-  const op = [['todas', 'Todas'], ['alta', 'Alta'], ['media', 'Média'], ['baixa', 'Baixa']];
-  return `<div class="filters">${op.map(([k, n]) => `<button class="pill ${S.filtro === k ? 'on' : ''}" data-f="${k}">${k === 'todas' ? n : `Prioridade ${n.toLowerCase()}`}</button>`).join('')}</div>`;
+function filtrosHTML(comOrdem) {
+  const op = [['todas', 'Todas'], ['alta', 'Prioridade 70–100'], ['media', 'Prioridade 40–69'], ['baixa', 'Prioridade 0–39'], ['reuniao', 'Reuniões']];
+  return `<div class="filters">${op.map(([k, n]) => `<button class="pill ${S.filtro === k ? 'on' : ''}" data-f="${k}">${n}</button>`).join('')}
+    ${comOrdem ? `<span class="sep"></span>
+      <button class="pill ${S.ordem === 'horario' ? 'on' : ''}" data-o="horario">Ordenar por horário</button>
+      <button class="pill ${S.ordem === 'prioridade' ? 'on' : ''}" data-o="prioridade">Ordenar por prioridade</button>` : ''}</div>`;
 }
 function ligarFiltros() {
   document.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { S.filtro = b.dataset.f; render(); });
+  document.querySelectorAll('[data-o]').forEach(b => b.onclick = () => { S.ordem = b.dataset.o; lsSet('mapaMental.ordem', S.ordem); render(); });
+}
+
+// No modo "por horário", separa as tarefas com horário das sem horário
+function listaAbertas(abertas) {
+  if (S.ordem !== 'horario') return abertas.map(cardHTML).join('');
+  const com = abertas.filter(i => i.t.horario), sem = abertas.filter(i => !i.t.horario);
+  if (!com.length || !sem.length) return abertas.map(cardHTML).join('');
+  return `<div class="sub-title">Com horário · ${com.length}</div>${com.map(cardHTML).join('')}
+          <div class="sub-title">Sem horário · ${sem.length}</div>${sem.map(cardHTML).join('')}`;
 }
 
 function renderDia() {
@@ -721,11 +908,11 @@ function renderDia() {
   const decidirN = itens.filter(i => i.status === 'decidir').length;
   const pct = contaveis.length ? Math.round(feitos / contaveis.length * 100) : 0;
 
-  if (S.filtro !== 'todas') itens = itens.filter(i => i.t.prioridade === S.filtro);
-  const decidir = ordenar(itens.filter(i => i.status === 'decidir'));
-  const abertas = ordenar(itens.filter(i => i.status === 'pendente' || i.status === 'parcial'));
-  const feitas = ordenar(itens.filter(i => i.status === 'feito'));
-  const dispensadas = ordenar(itens.filter(i => i.status === 'dispensada'));
+  if (S.filtro !== 'todas') itens = itens.filter(i => passaFiltro(i.t));
+  const decidir = ordenarDia(itens.filter(i => i.status === 'decidir'));
+  const abertas = ordenarDia(itens.filter(i => i.status === 'pendente' || i.status === 'parcial'));
+  const feitas = ordenarDia(itens.filter(i => i.status === 'feito'));
+  const dispensadas = ordenarDia(itens.filter(i => i.status === 'dispensada'));
   const carregando = !S.registros[D];
 
   $('#main').innerHTML = `
@@ -741,6 +928,7 @@ function renderDia() {
       </div>
     </div>
 
+    <div class="dia-grid"><div>
     <div class="progress-card">
       <div class="progress-num">${feitos}<span>/${contaveis.length}</span></div>
       <div style="flex:1">
@@ -753,17 +941,23 @@ function renderDia() {
       </div>
     </div>
 
-    ${filtrosHTML()}
+    ${filtrosHTML(true)}
 
     ${carregando ? `<div class="empty"><div class="spin"></div>Carregando o dia…</div>` :
       !itens.length ? `<div class="empty"><h3>${Object.keys(S.tarefas).length ? 'Nada para este dia' : 'Nenhuma tarefa ainda'}</h3>
-        <p>${Object.keys(S.tarefas).length ? 'Nenhuma tarefa programada aqui' + (S.filtro !== 'todas' ? ' com essa prioridade' : '') + '.' : 'Clique em <b>Nova tarefa</b> para começar.'}</p></div>` : `
+        <p>${Object.keys(S.tarefas).length ? 'Nenhuma tarefa programada aqui' + (S.filtro !== 'todas' ? ' com esse filtro' : '') + '.' : 'Clique em <b>Nova tarefa</b> para começar.'}</p></div>` : `
       ${decidir.length ? `<div class="section-title">Sugestões · vai precisar hoje? <span class="count">${decidir.length}</span></div>${decidir.map(cardHTML).join('')}` : ''}
-      ${abertas.length ? `<div class="section-title">A fazer <span class="count">${abertas.length}</span></div>${abertas.map(cardHTML).join('')}` : ''}
+      ${abertas.length ? `<div class="section-title">A fazer <span class="count">${abertas.length}</span></div>${listaAbertas(abertas)}` : ''}
       ${feitas.length ? `<div class="section-title">Concluídas <span class="count">${feitas.length}</span></div>${feitas.map(cardHTML).join('')}` : ''}
       ${dispensadas.length ? `<div class="section-title">Dispensadas hoje <span class="count">${dispensadas.length}</span></div>${dispensadas.map(cardHTML).join('')}` : ''}
-    `}`;
+    `}
+    </div>
+    <aside class="dia-aside">${calendarioHTML()}</aside>
+    </div>`;
 
+  $('#cPrev').onclick = () => irParaMes(-1);
+  $('#cNext').onclick = () => irParaMes(1);
+  document.querySelectorAll('.cal-day[data-d]').forEach(b => b.onclick = () => abrirPopupDia(b.dataset.d));
   $('#dPrev').onclick = () => irParaDia(addDays(D, -1));
   $('#dNext').onclick = () => irParaDia(addDays(D, 1));
   if ($('#dHoje')) $('#dHoje').onclick = () => irParaDia(H);
@@ -771,18 +965,93 @@ function renderDia() {
   ligarFiltros();
 }
 
+/* ---------- CALENDÁRIO ---------- */
+function calendarioHTML() {
+  const H = hoje();
+  const [y, m] = S.calMes.split('-').map(Number);
+  const primeiro = new Date(y, m - 1, 1), n = new Date(y, m, 0).getDate();
+  const titulo = primeiro.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+  const carregado = S.mesesCarregados[S.calMes];
+  let cells = DIAS_CURTO.map(d => `<div class="cal-dow">${d}</div>`).join('');
+  cells += '<div></div>'.repeat(primeiro.getDay());
+  for (let d = 1; d <= n; d++) {
+    const k = `${S.calMes}-${pad(d)}`;
+    const itens = itensDoDia(k).filter(i => i.status !== 'dispensada');
+    const total = itens.length, feitos = itens.filter(i => i.status === 'feito').length;
+    const cls = ['cal-day'];
+    if (k === H) cls.push('today');
+    if (k === S.dia) cls.push('sel');
+    if (total && feitos === total) cls.push('full');
+    if (total && k < H && feitos < total) cls.push('late');
+    const temReuniao = itens.some(i => i.t.reuniao);
+    cells += `<button class="${cls.join(' ')}" data-d="${k}" title="${total ? `${feitos} de ${total} concluída(s)` : 'Sem tarefas'}">
+      ${temReuniao ? '<span class="mt"></span>' : ''}${d}${total && carregado ? `<small>${feitos}/${total}</small>` : total ? `<small>${total}</small>` : ''}</button>`;
+  }
+  return `<div class="cal">
+    <div class="cal-head">
+      <button class="icon-btn" id="cPrev" title="Mês anterior">${ICON.prev}</button>
+      <h3>${titulo}</h3>
+      <button class="icon-btn" id="cNext" title="Próximo mês">${ICON.next}</button>
+    </div>
+    <div class="cal-grid">${cells}</div>
+    <div class="cal-legend"><span>concluídas/total</span><span><i></i>reunião</span></div>
+  </div>`;
+}
+
+async function abrirPopupDia(D) {
+  if (!S.registros[D]) { try { await carregarRegistros(D); } catch {} }
+  const H = hoje(), dt = parseD(D);
+  const tituloData = dt.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  const itens = itensDoDia(D);
+  const ordem = { decidir: 0, pendente: 1, parcial: 1, feito: 2, dispensada: 3 };
+  itens.sort((a, b) => ordem[a.status] - ordem[b.status] || cmpHora(a, b));
+  const rotulo = { pendente: 'Pendente', parcial: 'Parcial', feito: 'Concluída', decidir: 'Decidir', dispensada: 'Dispensada' };
+  const sim = { pendente: '', parcial: '', feito: ICON.check, decidir: '?', dispensada: '–' };
+  const feitos = itens.filter(i => i.status === 'feito').length;
+  const total = itens.filter(i => i.status !== 'dispensada').length;
+
+  const linhas = itens.map(it => {
+    const { id, t, status } = it;
+    const pauta = t.reuniao && S.pautas[id] && S.pautas[id][D];
+    let extra = TIPOS[t.tipo];
+    if (t.tipo === 'complexa') extra += ` · dia ${it.diaN}`;
+    if (it.atrasada) extra += ` · atrasada desde ${fmtCurta(t.data)}`;
+    return `<div class="pop-row ${status === 'dispensada' ? 'off' : ''}">
+      <span class="pop-st ${status}">${sim[status]}</span>
+      <div class="t-body">
+        <div class="t-title" style="font-size:14.5px">${horaHTML(t)}${esc(t.titulo)}</div>
+        <div class="t-meta">${prioHTML(t)}<span class="badge">${extra}</span>${t.reuniao ? '<span class="badge meet">Reunião</span>' : ''}<span class="badge outline">${rotulo[status]}</span></div>
+        ${pauta ? `<div class="note pauta"><b>Pauta:</b> ${esc(pauta.texto)}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  abrirModal(`
+    <h2 style="margin-bottom:4px;text-transform:capitalize">${D === H ? 'Hoje · ' : ''}${tituloData}</h2>
+    <p class="help" style="margin:0 0 14px">${total ? `${feitos} de ${total} concluída(s)` : 'Nenhuma tarefa neste dia'}</p>
+    ${linhas || `<div class="empty" style="padding:30px 16px">Nada programado.</div>`}
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="fecharModal()">Fechar</button>
+      <button class="btn btn-ghost" id="popNova">Nova tarefa neste dia</button>
+      <button class="btn btn-primary" id="popAbrir">Abrir este dia</button>
+    </div>`);
+  $('#popAbrir').onclick = () => { fecharModal(); irParaDia(D); };
+  $('#popNova').onclick = async () => { fecharModal(); await irParaDia(D); formTarefa(); };
+}
+
 function cardHTML(it) {
   const { id, t, status } = it, D = S.dia;
-  const cls = ['task', 'p-' + t.prioridade];
+  const cls = ['task', 'p-' + faixa(prioNum(t))];
   if (status === 'feito' || status === 'dispensada') cls.push('done');
   if (status === 'decidir') cls.push('suggest');
   if (it.atrasada) cls.push('late');
 
-  const badges = [prioHTML(t.prioridade)];
+  const badges = [prioHTML(t)].filter(Boolean);
   let tipoTxt = TIPOS[t.tipo];
   if (t.tipo === 'diaria') tipoTxt += ' · ' + (t.dias.length === 7 ? 'todos os dias' : t.dias.join() === '1,2,3,4,5' ? 'seg a sex' : t.dias.map(d => DIAS_NOME[d]).join(', '));
   if (t.tipo === 'complexa') tipoTxt += ` · dia ${it.diaN}`;
   badges.push(`<span class="badge">${tipoTxt}</span>`);
+  if (t.reuniao) badges.push(`<span class="badge meet">Reunião</span>`);
   if (it.atrasada) badges.push(`<span class="badge strong">Atrasada · ${fmtCurta(t.data)}</span>`);
   if (it.rolou && status !== 'feito') badges.push(`<span class="badge blue">Desde ${fmtCurta(t.data)}</span>`);
   if (status === 'parcial') badges.push(`<span class="badge blue">Parcial hoje</span>`);
@@ -816,10 +1085,18 @@ function cardHTML(it) {
     }
   }
 
+  // Pauta da reunião (registrada ao concluir)
+  const pauta = t.reuniao && S.pautas[id] && S.pautas[id][D];
+  if (pauta) nota += `<div class="note pauta"><b>Pauta:</b> ${esc(pauta.texto)}</div>`;
+  if (t.reuniao && status === 'feito') {
+    const btn = `<button class="mini" onclick="abrirPauta('${id}','${D}',false)">${pauta ? 'Editar pauta' : 'Registrar pauta'}</button>`;
+    acoes = acoes ? acoes.replace('<div class="t-actions">', '<div class="t-actions">' + btn) : `<div class="t-actions">${btn}</div>`;
+  }
+
   return `<div class="${cls.join(' ')}">
     ${check}
     <div class="t-body">
-      <div class="t-title">${esc(t.titulo)}</div>
+      <div class="t-title">${horaHTML(t)}${esc(t.titulo)}</div>
       ${t.descricao ? `<div class="t-desc">${esc(t.descricao)}</div>` : ''}
       <div class="t-meta">${badges.join('')}</div>
       ${nota}${acoes}
@@ -830,7 +1107,7 @@ function cardHTML(it) {
 
 function renderTodas() {
   let lista = Object.entries(S.tarefas).map(([id, t]) => ({ id, t }));
-  if (S.filtro !== 'todas') lista = lista.filter(i => i.t.prioridade === S.filtro);
+  if (S.filtro !== 'todas') lista = lista.filter(i => passaFiltro(i.t));
   const grupos = Object.keys(TIPOS).map(tipo => ({ tipo, itens: ordenar(lista.filter(i => i.t.tipo === tipo)) })).filter(g => g.itens.length);
 
   const det = t => {
@@ -853,9 +1130,10 @@ function renderTodas() {
           <div class="list-row ${t.ativa === false ? 'off' : ''}">
             <button class="switch ${t.ativa === false ? '' : 'on'}" title="${t.ativa === false ? 'Ativar' : 'Pausar'}" onclick="alternarAtiva('${id}')"></button>
             <div class="t-body">
-              <div class="t-title">${esc(t.titulo)}</div>
-              <div class="t-meta">${prioHTML(t.prioridade)}<span class="badge outline">${det(t)}</span></div>
+              <div class="t-title">${horaHTML(t)}${esc(t.titulo)}</div>
+              <div class="t-meta">${prioHTML(t)}${t.reuniao ? '<span class="badge meet">Reunião</span>' : ''}<span class="badge outline">${det(t)}</span></div>
             </div>
+            ${t.reuniao ? `<button class="mini" onclick="verPautas('${id}')">Pautas (${Object.keys(S.pautas[id] || {}).length})</button>` : ''}
             <div class="t-side">
               <button class="icon-btn" title="Editar" onclick="formTarefa('${id}')">${ICON.edit}</button>
               <button class="icon-btn" title="Excluir" onclick="excluirTarefa('${id}')">${ICON.trash}</button>
