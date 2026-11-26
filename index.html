@@ -391,6 +391,8 @@
   #mapPrev{width:100%;display:block}
 
   /* ---------- USUÁRIOS ---------- */
+  .temp-box{display:flex;align-items:center;gap:12px;background:var(--bg);border:1px solid #4f8aa6;border-radius:12px;padding:12px 14px}
+  .temp-box code{flex:1;font-family:'Space Grotesk',monospace;font-size:24px;font-weight:700;color:#fff;letter-spacing:.06em;user-select:all}
   .user-row{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px}
 
   /* ---------- BARRA LATERAL ---------- */
@@ -596,6 +598,7 @@ async function sha256(txt) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(txt));
   return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
 }
+const senhaTemporaria = () => { const c = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789'; return [...crypto.getRandomValues(new Uint8Array(10))].map(b => c[b % c.length]).join(''); };
 const novoSalt = () => [...crypto.getRandomValues(new Uint8Array(16))].map(b => b.toString(16).padStart(2, '0')).join('');
 
 function lsGet(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }
@@ -706,7 +709,7 @@ async function boot() {
     const sessao = lsGet(SESSAO_KEY);
     if (sessao && sessao.id) {
       const u = await api(`usuarios/${sessao.id}`);
-      if (u && u.hash === sessao.h) { S.user = { id: sessao.id, ...u }; return iniciarApp(); }
+      if (u && u.hash === sessao.h) { S.user = { id: sessao.id, ...u }; return entrar(); }
     }
     telaLogin();
   } catch (e) {
@@ -775,8 +778,40 @@ function telaLogin() {
       if (!entry || (await sha256(entry[1].salt + f.senha)) !== entry[1].hash) throw new Error('Usuário ou senha incorretos.');
       S.user = { id: entry[0], ...entry[1] };
       lsSet(SESSAO_KEY, { id: entry[0], h: entry[1].hash });
-      iniciarApp();
+      entrar();
     } catch (e) { btn.disabled = false; msg.className = 'msg err'; msg.textContent = e.message; }
+  };
+}
+
+function entrar() { return S.user.trocarSenha ? telaTrocarSenha() : iniciarApp(); }
+
+// Primeiro acesso com senha temporária: cria a senha definitiva
+function telaTrocarSenha() {
+  $('#root').innerHTML = `
+  <div class="auth-wrap"><form class="auth-card" id="fTroca" autocomplete="off">
+    ${brandHTML('Organizador de tarefas')}
+    <h2>Crie sua senha</h2>
+    <p class="sub">Olá, ${esc((S.user.nome || '').split(' ')[0])}.</p>
+    <div class="field"><label>Nova senha</label><input class="input" type="password" name="s1" required minlength="6" autofocus></div>
+    <div class="field"><label>Confirmar</label><input class="input" type="password" name="s2" required minlength="6"></div>
+    <button class="btn btn-primary btn-block" type="submit">Salvar e entrar</button>
+    <div class="msg" id="msg"></div>
+  </form></div>`;
+  $('#fTroca').onsubmit = async ev => {
+    ev.preventDefault();
+    const f = Object.fromEntries(new FormData(ev.target)), msg = $('#msg'), btn = ev.target.querySelector('button');
+    msg.className = 'msg err';
+    if (f.s1.length < 6) return msg.textContent = 'Senha com pelo menos 6 caracteres.';
+    if (f.s1 !== f.s2) return msg.textContent = 'As senhas não conferem.';
+    if ((await sha256(S.user.salt + f.s1)) === S.user.hash) return msg.textContent = 'Use uma senha diferente da temporária.';
+    btn.disabled = true;
+    try {
+      const salt = novoSalt(), hash = await sha256(salt + f.s1);
+      await api(`usuarios/${S.user.id}`, 'PATCH', { salt, hash, trocarSenha: null });
+      Object.assign(S.user, { salt, hash }); delete S.user.trocarSenha;
+      lsSet(SESSAO_KEY, { id: S.user.id, h: hash });
+      iniciarApp();
+    } catch (e) { btn.disabled = false; msg.textContent = e.message; }
   };
 }
 
@@ -2011,8 +2046,9 @@ async function renderUsuarios() {
     ${lista.map(([id, u]) => `<div class="user-row">
         <div class="avatar">${esc((u.nome || '?')[0].toUpperCase())}</div>
         <div class="t-body"><div class="t-title">${esc(u.nome)}</div><div class="t-desc">${esc(u.usuario)} · ${esc(u.email)}</div></div>
+        ${u.trocarSenha ? '<span class="badge strong">Senha temporária</span>' : ''}
         <span class="badge ${u.perfil === 'admin' ? 'blue' : 'outline'}">${u.perfil === 'admin' ? 'Administrador' : 'Usuário'}</span>
-        ${id !== S.user.id ? `<button class="mini" onclick="redefinirSenha('${id}')">Redefinir senha</button>
+        ${id !== S.user.id ? `<button class="mini" onclick="redefinirSenha('${id}')">Nova senha temporária</button>
           <button class="icon-btn" title="Excluir" onclick="excluirUsuario('${id}')">${ICON.trash}</button>` : '<span style="width:150px"></span>'}
       </div>`).join('')}`;
 }
@@ -2024,49 +2060,43 @@ function formUsuario() {
       <div class="field"><label>Usuário</label><input class="input" id="uUser"></div>
       <div class="field"><label>E-mail</label><input class="input" type="email" id="uMail"></div>
     </div>
-    <div class="row2">
-      <div class="field"><label>Senha</label><input class="input" type="password" id="uSenha"></div>
-      <div class="field"><label>Confirmar</label><input class="input" type="password" id="uSenha2"></div>
-    </div>
     <div class="msg err" id="uMsg"></div>
     <div class="modal-foot"><button class="btn btn-ghost" onclick="fecharModal(this)">Cancelar</button><button class="btn btn-primary" id="uOk">Adicionar</button></div>`, 'Adicionar usuário');
   q('#uOk').onclick = async () => {
     const nome = q('#uNome').value.trim(), usuario = q('#uUser').value.trim().toLowerCase(), email = q('#uMail').value.trim().toLowerCase();
-    const senha = q('#uSenha').value, senha2 = q('#uSenha2').value, msg = q('#uMsg');
+    const senha = senhaTemporaria(), msg = q('#uMsg');
     if (!nome || !usuario || !email) return msg.textContent = 'Preencha nome, usuário e e-mail.';
     if (!/^[a-z0-9._-]{3,}$/.test(usuario)) return msg.textContent = 'Usuário inválido.';
-    if (senha.length < 6) return msg.textContent = 'Senha com pelo menos 6 caracteres.';
-    if (senha !== senha2) return msg.textContent = 'As senhas não conferem.';
     try {
       const todos = await api('usuarios') || {};
       if (Object.values(todos).some(u => u.usuario === usuario || u.email === email)) return msg.textContent = 'Usuário ou e-mail já cadastrado.';
       const id = novoId('u_'), salt = novoSalt();
-      const u = { nome, usuario, email, perfil: 'usuario', salt, hash: await sha256(salt + senha), criadoEm: Date.now() };
+      const u = { nome, usuario, email, perfil: 'usuario', salt, hash: await sha256(salt + senha), trocarSenha: true, criadoEm: Date.now() };
       await api(`usuarios/${id}`, 'PUT', u);
       S.usuarios = { ...todos, [id]: u };
-      fecharModal(W); render(); toast('Usuário adicionado');
+      fecharModal(W); render(); mostrarSenhaTemp(u, senha);
     } catch (e) { msg.textContent = e.message; }
   };
 }
-function redefinirSenha(id) {
+function mostrarSenhaTemp(u, senha) {
   let W; const q = sel => W.querySelector(sel);
-  const u = S.usuarios[id];
-  W = abrirModal(`<h2>Redefinir senha</h2>
-    <p class="help" style="margin:0 0 14px"><b style="color:var(--branco)">${esc(u.nome)}</b> · ${esc(u.usuario)}</p>
-    <div class="row2">
-      <div class="field"><label>Nova senha</label><input class="input" type="password" id="rS1"></div>
-      <div class="field"><label>Confirmar</label><input class="input" type="password" id="rS2"></div>
-    </div>
-    <div class="msg err" id="rMsg"></div>
-    <div class="modal-foot"><button class="btn btn-ghost" onclick="fecharModal(this)">Cancelar</button><button class="btn btn-primary" id="rOk">Salvar</button></div>`, 'Redefinir senha');
-  q('#rOk').onclick = async () => {
-    const a = q('#rS1').value, b = q('#rS2').value;
-    if (a.length < 6) return q('#rMsg').textContent = 'Senha com pelo menos 6 caracteres.';
-    if (a !== b) return q('#rMsg').textContent = 'As senhas não conferem.';
-    const salt = novoSalt(), hash = await sha256(salt + a);
-    try { await api(`usuarios/${id}`, 'PATCH', { salt, hash }); Object.assign(u, { salt, hash }); fecharModal(W); toast('Senha redefinida'); }
-    catch (e) { q('#rMsg').textContent = e.message; }
+  W = abrirModal(`<h2>Senha temporária</h2>
+    <p class="help" style="margin:0 0 12px"><b style="color:var(--branco)">${esc(u.nome)}</b> · ${esc(u.usuario)}</p>
+    <div class="temp-box"><code id="tSenha">${esc(senha)}</code><button class="btn btn-ghost" id="tCopiar">${ICON.copy.replace('<svg', '<svg width="15" height="15"')} Copiar</button></div>
+    <div class="modal-foot"><button class="btn btn-primary" onclick="fecharModal(this)">OK</button></div>`, 'Senha temporária');
+  q('#tCopiar').onclick = async () => {
+    const txt = `Usuário: ${u.usuario}\nSenha temporária: ${senha}\nAcesso: ${location.origin}`;
+    try { await navigator.clipboard.writeText(txt); toast('Copiado'); } catch { toast('Não foi possível copiar'); }
   };
+}
+
+function redefinirSenha(id) {
+  const u = S.usuarios[id];
+  confirmar('Gerar nova senha temporária?', `<b>${esc(u.nome)}</b> · ${esc(u.usuario)}`, 'Gerar', async () => {
+    const senha = senhaTemporaria(), salt = novoSalt(), hash = await sha256(salt + senha);
+    try { await api(`usuarios/${id}`, 'PATCH', { salt, hash, trocarSenha: true }); Object.assign(u, { salt, hash, trocarSenha: true }); render(); mostrarSenhaTemp(u, senha); }
+    catch (e) { toast(e.message); }
+  });
 }
 function excluirUsuario(id) {
   const u = S.usuarios[id];
