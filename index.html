@@ -1653,10 +1653,8 @@ const PIP_CSS = `
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:#11121B;color:#E9EBF3;font-family:'DM Sans',system-ui,sans-serif;font-size:14px;min-height:100vh;padding:12px}
   button{font-family:inherit;cursor:pointer}
-  /* informações que aparecem só ao passar o mouse */
-  .info{position:fixed;top:0;left:0;right:0;z-index:5;padding:10px 12px 12px;background:rgba(45,46,71,.97);border-bottom:1px solid #383A58;
-    box-shadow:0 8px 24px rgba(0,0,0,.45);opacity:0;transform:translateY(-100%);transition:opacity .18s,transform .18s;pointer-events:none}
-  body:hover .info{opacity:1;transform:none;pointer-events:auto}
+  /* resumo do dia */
+  .info{padding:10px 12px 12px;margin-bottom:12px;background:#2D2E47;border:1px solid #383A58;border-radius:12px}
   .info-top{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12.5px;color:#B9D6E4}
   .info-top b{color:#fff;font-weight:600;text-transform:capitalize}
   .info .bar{height:4px;background:#11121B;border-radius:9px;overflow:hidden;margin-top:8px}
@@ -1835,7 +1833,7 @@ function renderMapa() {
   ];
   const aberta = S.pip && !S.pip.closed ? S.pipModo : null;
   $('#main').innerHTML = `
-    <div class="daybar"><h2 class="day-title">Mapa<small>Abre uma janela que fica fora do app, por cima de tudo. Passe o mouse nela para ver o resumo do dia.</small></h2></div>
+    <div class="daybar"><h2 class="day-title">Mapa<small>Abre uma janela que fica fora do app, por cima de tudo.</small></h2></div>
     <div class="map-btns">
       ${ops.map(o => `<button class="map-btn ${aberta === o.modo ? 'on' : ''}" data-pip="${o.modo}">
         ${ICON.pip}<span><b>${o.nome}</b><small>${aberta === o.modo ? 'aberta agora' : o.desc}</small></span></button>`).join('')}
